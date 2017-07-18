@@ -14,36 +14,11 @@ We use the same general guidelines for introducing a new DIP as specified in [BI
 * Markdown format is the preferred format for DIPs
 * Following a discussion, the proposal should be submitted to the DIPs git repository as a pull request. This draft must be written in BIP/DIP style as described in [BIP 2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki), and named with an alias such as "dip-johndoe-infinitedash" until the editor has assigned it a DIP number (authors MUST NOT self-assign DIP numbers).
 
-## DIP Summary
 
-### Markdown-style table
-
-Number                | Layer                 | Title                                                        | Owner                | Type                  | Status
----------------------- | -------------------- | -------------------------------------------------- | -------------------- | -------------------- | --------------------
-[1](dip-0001.md) | Consensus         | Initial Scaling of the Network                | Darren Tapp       | Standard           | Proposed
-
-
-
-###HMTL-style table
-
-<table>
-	<tr>
-		<th>Number</th>
-		<th>Layer</th>
-		<th>Title</th>
-		<th>Owner</th>
-		<th>Type</th>
-		<th>Status</th>
-	</tr>
-	<tr>
-		<td><a href="dip-0001.md">1</a></td>
-		<td>Consensus</td>
-		<td>Initial Scaling of the Network</td>
-		<td>Darren Tapp</td>
-		<td>Standard</td>
-		<td>Proposed</td>
-	</tr>
-</table>
+## Dash Improvement Proposal Summary
+Number | Layer | Title | Owner | Type | Status
+--- | --- | --- | --- | --- | ---
+[1](dip-0001.md) | Consensus | Initial Scaling of the Network | Darren Tapp | Standard | Proposed
 
 
 ## License
