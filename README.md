@@ -15,6 +15,12 @@ We use the same general guidelines for introducing a new DIP as specified in [BI
 * Following a discussion, the proposal should be submitted to the DIPs git repository as a pull request. This draft must be written in BIP/DIP style as described in [BIP 2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki), and named with an alias such as "dip-johndoe-infinitedash" until the editor has assigned it a DIP number (authors MUST NOT self-assign DIP numbers).
 
 
+## Dash Improvement Proposal Summary
+Number | Layer | Title | Owner | Type | Status
+--- | --- | --- | --- | --- | ---
+[1](dip-0001.md) | Consensus | Initial Scaling of the Network | Darren Tapp | Standard | Proposed
+
+
 ## License
 
 Unless otherwise specified, Dash Improvement Proposals (DIPs) are released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/MIT.
