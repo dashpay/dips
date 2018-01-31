@@ -18,7 +18,7 @@ We use the same general guidelines for introducing a new DIP as specified in [BI
 ## Dash Improvement Proposal Summary
 Number | Layer | Title | Owner | Type | Status
 --- | --- | --- | --- | --- | ---
-[1](dip-0001.md) | Consensus | Initial Scaling of the Network | Darren Tapp | Standard | Proposed
+[1](dip-0001.md) | Consensus | Initial Scaling of the Network | Darren Tapp | Standard | Final
 
 
 ## License
