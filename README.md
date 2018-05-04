@@ -2,7 +2,7 @@
 
 DIP stands for Dash Improvement Proposal. Similar to Bitcoin's [BIPs](https://github.com/bitcoin/bips/), a DIP is a design document providing information to the Dash community, or describing a new feature for Dash or its processes or environment. The DIP should provide a concise technical specification of the feature and a rationale for the feature.
 
-Because Dash is forked from the Bitcoin codebase, many of the BIPs can be applied to Dash as well. The purpose of the DIPs is not to duplicate those which exist as BIPs, but to introduce protocol upgrades or feature specifications which are unique to Dash.
+Because Dash is forked from the Bitcoin codebase, many of the BIPs can be applied to Dash as well (a list of the BIPs updated to include Dash-specific details can be found [here](https://github.com/dashevo/bips)). The purpose of the DIPs is not to duplicate those which exist as BIPs, but to introduce protocol upgrades or feature specifications which are unique to Dash.
 
 
 ## Contributions
@@ -19,6 +19,9 @@ We use the same general guidelines for introducing a new DIP as specified in [BI
 Number | Layer | Title | Owner | Type | Status
 --- | --- | --- | --- | --- | ---
 [1](dip-0001.md) | Consensus | Initial Scaling of the Network | Darren Tapp | Standard | Final
+[2](dip-0002.md) | Consensus | Special Transactions | Samuel Westrich, Alexander Block, Andy Freer | Standard | Proposed
+[3](dip-0003.md) | Consensus | Deterministic Masternode Lists | Samuel Westrich, Alexander Block, Andy Freer, Darren Tapp, Timothy Flynn, Udjinm6, Will Wray | Standard | Proposed
+[4](dip-0004.md) | Consensus | Simplified Verification of Deterministic Masternode Lists | Alexander Block, Samuel Westrich, UdjinM6, Andy Freer | Standard | Proposed
 
 
 ## License
