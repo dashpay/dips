@@ -129,7 +129,7 @@ The size of individual BLS primitives is fixed:
 | BLSSig | 96 | BLS signature
 
 Please note that there is no length field before the primitives serialized data. This is different from ECDSA signatures
-where a compact size integere is prepended.
+where a compact size integer is prepended.
 
 ## Copyright
 
