@@ -110,23 +110,26 @@ We chose to enforce distinct messages when signing with a secret key. Dash’s i
 
 ## BLS Curves used
 
-The BLS signature scheme requires pairing-friendly curves to be used. Multiple curves with different security, performance and space characteristics have been proposed by different parties. At the time this document was written, no decision had been made as to which curve would be used.
-
-However, the choice of the specific curve should have no influence on the scheme itself, how BLS is used or what is possible.
-
-This document will be updated when a decision has been made on which curve to use.
+The BLS signature scheme requires pairing-friendly curves to be used, of which only a few suitable exist. Dash is
+using the BLS12-381 with reversed G1 and G2 groups. A specification can be found in the Chia [bls-signatures](https://github.com/Chia-Network/bls-signatures/blob/master/SPEC.md)
+repository.
 
 ## Serialization format of BLS primitives
 
-It is necessary to serialize BLS primitives into a byte representation so that they can be used inside other serialized data structures. How this is performed depends on the curves and libraries used. This has not been defined yet and this document will be updated later.
+It is necessary to serialize BLS primitives into a byte representation so that they can be used inside other serialized data structures.
+The serialization format is described in the Chia [bls-signatures](https://github.com/Chia-Network/bls-signatures/blob/master/SPEC.md)
+repository.
 
-Until then, all DIPs will use placeholders types for the BLS primitives and assume a fixed size. These placeholder type are:
+The size of individual BLS primitives is fixed:
 
 | Type | Size | Description |
 | -- | -- | -- |
 | BLSSecKey | 32 | BLS secret key
-| BLSPubKey |64 | BLS public key
-| BLSSig |32 | BLS signature
+| BLSPubKey | 48 | BLS public key
+| BLSSig | 96 | BLS signature
+
+Please note that there is no length field before the primitives serialized data. This is different from ECDSA signatures
+where a compact size integer is prepended.
 
 ## Copyright
 
