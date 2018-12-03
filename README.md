@@ -25,6 +25,7 @@ Number | Layer | Title | Owner | Type | Status
 [5](dip-0005.md) | Consensus | Blockchain Users | Alexander Block, Cofresi, Andy Freer, Nathan Marley, Anton Suprunchuk, Darren Tapp, Thephez, Udjinm6, Alex Werner, Samuel Westrich | Standard | Proposed
 [6](dip-0006.md) | Consensus | Long-Living Masternode Quorums | Alexander Block | Standard | Proposed
 [7](dip-0007.md) | Consensus | LLMQ Signing Requests / Sessions | Alexander Block | Standard | Proposed
+[8](dip-0008.md) | Consensus | ChainLocks | Alexander Block | Standard | Proposed
 
 
 ## License
