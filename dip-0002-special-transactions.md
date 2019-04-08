@@ -10,7 +10,7 @@ may introduce more types.
 | 2 | Provider Update Service Transaction (ProUpServTx) | [DIP 003: Deterministic Masternode List](https://github.com/dashpay/dips/blob/master/dip-0003.md) | 1 |	Proposed |
 | 3 | Provider Update Registrar Transaction (ProUpRegTx) | [DIP 003: Deterministic Masternode List](https://github.com/dashpay/dips/blob/master/dip-0003.md) | 1 |	Proposed |
 | 4 | Provider Update Revocation Transaction (ProUpRevTx) | [DIP 003: Deterministic Masternode List](https://github.com/dashpay/dips/blob/master/dip-0003.md) | 1 |	Proposed |
-| 5 | Coinbase Transaction (CbTx) | [DIP 004: Simplified Verification of Deterministic Masternode Lists](https://github.com/dashpay/dips/blob/master/dip-0004.md) | 1 |	Proposed |
+| 5 | Coinbase Transaction (CbTx) | [DIP 004: Simplified Verification of Deterministic Masternode Lists](https://github.com/dashpay/dips/blob/master/dip-0004.md) | 2 |	Proposed |
 | 6 | Quorum Commitment | [DIP 006: Long Living Masternode Quorums](https://github.com/dashpay/dips/blob/master/dip-0006.md) | 1 | Proposed |
 | 8 | Register Subscription Transaction (SubTxRegister) | [DIP 005: Blockchain Users](https://github.com/dashpay/dips/blob/master/dip-0005.md) | 1 |	Proposed |
 | 9 | Topup BU Credit Subscription Transaction (SubTxTopup) | [DIP 005: Blockchain Users](https://github.com/dashpay/dips/blob/master/dip-0005.md) | 1 |	Proposed |
