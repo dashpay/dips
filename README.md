@@ -26,6 +26,7 @@ Number | Layer | Title | Owner | Type | Status
 [6](dip-0006.md) | Consensus | Long-Living Masternode Quorums | Alexander Block | Standard | Active
 [7](dip-0007.md) | Consensus | LLMQ Signing Requests / Sessions | Alexander Block | Standard | Active
 [8](dip-0008.md) | Consensus | ChainLocks | Alexander Block | Standard | Active
+[10](dip-0010.md) | Consensus | LLMQ InstantSend | Alexander Block | Standard | Proposed
 
 
 ## License
