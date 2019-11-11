@@ -84,11 +84,11 @@ The following operations are possible in the BLS signature scheme. Inside Dash, 
 
 ### Sign(secretKey, messageHash, publicKey)
 
-Creates a signature using the secret key and Hash(messageHash, publicKey). Hashing the concatenation of the messageHash and the public key is done to ensure uniqueness of the actually signed message and serves as a protection against the rogue public key attack.
+Creates a signature using the secret key and `SHA256(messageHash, publicKey)`. Hashing the concatenation of the messageHash and the public key is done to ensure uniqueness of the actually signed message and serves as a protection against the rogue public key attack.
 
 ### Verify(sig, messageHash, publicKey)
 
-Verifies the given signature against the public key and Hash(messageHash, publicKey)..
+Verifies the given signature against the public key and `SHA256(messageHash, publicKey)`.
 
 ### VerifyAggregated(aggregatedSig, messageHashes, publicKeys)
 
