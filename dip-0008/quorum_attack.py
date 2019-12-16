@@ -58,7 +58,7 @@ mn = 5000
 Bft = [500,1000,1500]
 
 ##Threshold out of quorum of 400
-thresh = 160
+thresh = 161
 
 for j in range(0,3):
     print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of withholding a chainlock in one trial is ", pcalc(mn,qs,thresh,Bft[j])
@@ -77,7 +77,7 @@ mn=2000
 Bft = [240,400,600]
 
 ##Threshold out of quorum of 400
-thresh = 160
+thresh = 161
 
 for j in range(0,3):
     print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of withholding a chainlock in one trial is ", pcalc(mn,qs,thresh,Bft[j])
@@ -104,3 +104,4 @@ print "5000 Masternodes ", pcalc(5000,400,240,2500)
 print "2000 Masternodes ", pcalc(2000,400,240,1000)
 
 print MegaYear(pcalc(5000,400,240,2000))
+print "For 2000 total nodes with 200 attacking , the chance of witholding a chainlock is,", pcalc(2000,400,161,200)
