@@ -99,7 +99,7 @@ print "malicious chainlock is ", ZettaYear(pcalc(5000,400,240,1500))
 print "In an extreem case the chance of quorum control with 40% of nodes:"
 print "5000 Masternodes ", pcalc(5000,400,240,2000)
 print "2000 Masternodes ", pcalc(2000,400,240,800)
-print "In an even more extreem case the chance of quorum control with 50% of nodes:"
+print "In an even more extreme case the chance of quorum control with 50% of nodes:"
 print "5000 Masternodes ", pcalc(5000,400,240,2500)
 print "2000 Masternodes ", pcalc(2000,400,240,1000)
 
