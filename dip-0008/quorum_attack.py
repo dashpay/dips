@@ -25,7 +25,7 @@ def pcalc(masternodes,quorumsize,attacksuccess,Byznodes):
     pctemp=0
     for x in range(attacksuccess, quorumsize+1):
         pctemp = pctemp + binom(Byznodes,x)*binom(masternodes-Byznodes,quorumsize-x)
-    #at this junctiure the answer is pctemp/SampleSpace
+    #at this juncture the answer is pctemp/SampleSpace
     #but that will produce an overflow error.  We use logarithims to
     #calculate this value
     return 10 ** (log(pctemp,10)- log(SampleSpace,10))
