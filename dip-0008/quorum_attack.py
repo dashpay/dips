@@ -86,7 +86,7 @@ for j in range(0,3):
 thresh = 240
 
 for j in range(0,3):
-    print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of producing a malicious chainlock is ", pcalc(mn,qs,thresh,Bft[j])
+    print "For ", mn, " masternodes with ", Bft[j],"Byzantine the chance of producing a malicious ChainLock is ", pcalc(mn,qs,thresh,Bft[j])
 
 
 print "Security interpertaion:"
