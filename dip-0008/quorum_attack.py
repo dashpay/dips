@@ -18,7 +18,7 @@ def binom(x, y):
 
 
 ###This function takes inputs and outputs the probability
-#of sucess in one trial
+#of success in one trial
 #pcalc is short for probability calculation
 def pcalc(masternodes,quorumsize,attacksuccess,Byznodes):
     SampleSpace = binom(masternodes,quorumsize)
