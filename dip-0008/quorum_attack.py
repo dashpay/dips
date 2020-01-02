@@ -54,7 +54,7 @@ qs = 400
 ##Number of masternodes
 mn = 5000
 
-##Number of Byzintine nodes assuming 5000 nodes
+##Number of Byzantine nodes assuming 5000 nodes
 Bft = [500,1000,1500]
 
 ##Threshold out of quorum of 400
