@@ -73,7 +73,7 @@ for j in range(0,3):
 #In the case of a smaller number of masternodes
 mn=2000
 
-##Number of Byzintine nodes assuming 2000 nodes
+##Number of Byzantine nodes assuming 2000 nodes
 Bft = [240,400,600]
 
 ##Threshold out of quorum of 400
