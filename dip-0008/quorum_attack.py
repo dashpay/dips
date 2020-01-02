@@ -104,4 +104,4 @@ print "5000 Masternodes ", pcalc(5000,400,240,2500)
 print "2000 Masternodes ", pcalc(2000,400,240,1000)
 
 print MegaYear(pcalc(5000,400,240,2000))
-print "For 2000 total nodes with 200 attacking , the chance of witholding a chainlock is,", pcalc(2000,400,161,200)
+print "For 2000 total nodes with 200 attacking , the chance of withholding a ChainLock is,", pcalc(2000,400,161,200)
