@@ -42,7 +42,7 @@ def MegaYear(probability):
 
 
 
-##We evauate the function pcalc(10,5,3,4)
+##We evaluate the function pcalc(10,5,3,4)
 ##print pcalc(10,5,3,4)
 ##as a test vector
 ##The answer would be [binom(3,4)*binom(2,6)+(binom(4,4)*binom(1,6)]/binom(10,5)
