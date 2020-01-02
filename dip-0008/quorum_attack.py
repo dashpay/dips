@@ -80,7 +80,7 @@ Bft = [240,400,600]
 thresh = 161
 
 for j in range(0,3):
-    print "For ", mn, " masternodes with ", Bft[j],"Byzintine the chance of withholding a chainlock in one trial is ", pcalc(mn,qs,thresh,Bft[j])
+    print "For ", mn, " masternodes with ", Bft[j],"Byzantine the chance of withholding a ChainLock in one trial is ", pcalc(mn,qs,thresh,Bft[j])
 
 ##Now change the # threshold
 thresh = 240
