@@ -91,7 +91,7 @@ for j in range(0,3):
 
 print "Security interpretation:"
 
-print "For 5000 masternodes with 1500 Byzintine nodes the chance of producing a malicious chainlock is ", pcalc(5000,400,240,1500)
+print "For 5000 masternodes with 1500 Byzantine nodes the chance of producing a malicious ChainLock is ", pcalc(5000,400,240,1500)
 print "Which means in a Zettayear the chances of a "
 print "malicious chainlock is ", ZettaYear(pcalc(5000,400,240,1500))
 
