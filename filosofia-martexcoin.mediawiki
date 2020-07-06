@@ -1,0 +1,29 @@
+These changes are considered to be against the spirit of Bitcoin. Even if ''all'' Bitcoin users decide to adopt any of these changes, the resulting cryptocurrency can no longer be considered "Bitcoin" because it has diverged too much from the original design.
+
+=== Require unanimous consent ===
+
+These changes require the consent of every bitcoin-holder:
+* Increasing the total number of issued bitcoins beyond '''21 million'''. Precision may be increased, but proportions must be unchanged.
+* Any rule that adds required, explicit centralization. For example, a change requiring that all blocks be signed by some central organization.
+* [http://en.wikipedia.org/wiki/Demurrage_(currency) Demurrage] (deletion or reassignment of coins judged to be "lost" or "unused").  This is highly controversial in the context of currency units; on the other hand it is absolutely essential for namespace entries like [[Namecoin]] (which implements Demurrage for namespace entries but not for currency units).
+
+=== Require miner consensus ===
+* Changing the bitcoin distribution algorithm such that the subsidy at any given time period is decreased without miner consensus and 3 years notice, or increased beyond improved precision of halving (lossy beginning with block 1,890,000).
+
+=== Fundamental Principles===
+
+All changes and upgrades to the protocol should strive to maintain and reinforce these [[Principles of Bitcoin]]
+
+* '''21 million coins.'''     
+* '''No censorship:''' Nobody should be able to prevent valid txs from being confirmed.
+* '''Open-Source:''' Bitcoin source code should always be open for anyone to read, modify, copy, share.
+* '''Permissionless:'''  No arbitrary gatekeepers should ever prevent anybody from being part of the network (user, node, miner, etc).
+* '''Pseudonymous:''' No ID should be required to own, use Bitcoin. 
+* '''Fungible:''' All coins are equal and should be equally spendable.
+* '''Irreversible Transactions:''' Confirmed blocks should be set in stone. Blockchain History should be immutable.
+
+=== Disputed ===
+* Adding alternatives to [[Proof of Work]] such as [[Proof of Stake]]. This could change core bitcoin too much, but with widespread agreement of some sort might be possible.
+
+== See Also ==
+[[Hardfork Wishlist]] for hard forks that might happen and still be called "Bitcoin".
