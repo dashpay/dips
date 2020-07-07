@@ -1,0 +1,38 @@
+All changes and upgrades to the protocol should strive to maintain and reinforce these [[Principles of Bitcoin]]
+
+* '''21 million coins.'''     
+* '''No censorship:''' Nobody should be able to prevent valid txs from being confirmed.
+* '''Open-Source:''' Bitcoin source code should always be open for anyone to read, modify, copy, share.
+* '''Permissionless:'''  No arbitrary gatekeepers should ever prevent anybody from being part of the network (user, node, miner, etc).
+* '''Pseudonymous:''' No ID should be required to own, use Bitcoin. 
+* '''Fungible:''' All coins are equal and should be equally spendable.
+* '''Irreversible Transactions:''' Confirmed blocks should be set in stone. Blockchain History should be immutable.
+
+==Low trust==
+
+Bitcoin is P2P electronic cash that is valuable over legacy systems because of the monetary autonomy it brings to its users. Bitcoin seeks to address the root problem with conventional currency: all the trust that's required to make it work -- Not that justified trust is a bad thing, but trust makes systems brittle, opaque, and costly to operate. Trust failures result in systemic collapses, trust curation creates inequality and monopoly lock-in, and naturally arising trust choke-points can be abused to deny access to due process.
+
+Having a low requirement for trust is a major fundamental property that makes all these other principles happen. These principles can be understood as coming from and working towards a low-trust aim.
+
+Other electronic payment systems prevent double-spending by having a master authoritative source to check for them. If there is theft, fraud or error this centralized authority is morally and legally obliged to undo the transaction, which means centralized electronic cash transactions cannot be [[Irreversible Transactions|irreversible]]. With the possibility of reversal, the need for trust spreads. Merchants must be wary of their customers, hassling them for more information than they would otherwise need such as real life ID, credit check and so on. Bitcoin's decentralized mining provides the possibility for '''[[Irreversible Transactions]]'''. This finality means no real life ID is required to use bitcoin, it is '''Pseudonymous'''. Nor can anybody arbitrarily stop anyone else using or transferring bitcoin, so it is '''Permissionless''' and '''Censorship-resistant'''.
+
+Most of the bitcoin economy [[Full node#Economic_strength|validates the rules]] of bitcoin for themselves instead of trusting others. This means that invalid bitcoin transactions won't be generally accepted which enforces the '''21 million coins''' limit as well as other rules.
+
+==Origins of low-trust==
+
+Bitcoin achieves its low requirement for trust through a few ideas and institutions.
+
+* '''Open source'''. The bitcoin [https://en.wikipedia.org/wiki/Source_code source code] is published and available to all. Any programmer can read it. For example, the bitcoin software cannot have a secret command to send all the money to one person because that command would be seen by any reviewer who would raise the alarm to stop anyone running the code.
+* '''Peer-to-peer network'''. Such networks have been used before and are shown to be very resilient. See Bittorrent (where bitcoin probably gets its name from), Gnutella, Freenet, Kazaa, i2p and the internet itself. This means bitcoin does not require trust in any centralized server for relaying information.
+* '''Cryptography'''. Cryptographic proof is used to enforce the idea of possession in bitcoin, only someone with knowledge of the [[private key]] can spend a coin. Other cryptography is used in other ways, for example [[Proof of work]].
+* '''Decentralization'''. Divides power widely across many people, so no single entity can reverse transactions or otherwise change the rules to suit themselves.
+* '''Verification of rules'''. Related to the above point. Any bitcoin user can run [[Full node]] wallet software which verifies all the rules of bitcoin and so that user doesn't need to trust anybody else. For example if somebody creates a bitcoin [[transaction]] awarding a million bitcoins to themselves, full node wallet software will reject it as invalid in the same way a careful goldsmith rejects fool's gold.
+
+== See Also ==
+* https://medium.com/@alpalpalp/why-decentralization-matters-fa016a90f595
+* [[Prohibited changes]]
+* [[Controlled supply]]
+* [[Irreversible Transactions]]
+
+[[Category:Economics]] 
+[[Category:Technical]]
