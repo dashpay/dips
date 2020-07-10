@@ -10,6 +10,7 @@ Because MarteX is forked from the Bitcoin and Dashcoin codebase, many of the BIP
 We use the same general guidelines for introducing a new MIP as specified in [BIP 2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki), with a few differences. Specifically:
 
 * Before you propose some MIP, you must readme these two links: [Principles-of-MarteXcoin](./Principles-of-MarteXcoin.mediawiki), [Prohibited-changes](./Prohibited-changes.mediawiki).
+* After investigating past work, the best way to proceed is by posting about the new idea to the [MarteXcoin Developer and MIPs mailing list](https://groups.google.com/d/forum/martexcoin-developers-and-mips).
 * Instead of the BIP editor, initiate contact with the MarteX Core development team and your request should be routed to the MIP editor(s). The MIP workflow mimics the BIP workflow.
 * Recommended licenses include the MIT license
 * Markdown format is the preferred format for MIPs
