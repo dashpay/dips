@@ -14,25 +14,21 @@ MarteXcoin is P2P electronic cash that is valuable over legacy systems because o
 
 Having a low requirement for trust is a major fundamental property that makes all these other principles happen. These principles can be understood as coming from and working towards a low-trust aim.
 
-Other electronic payment systems prevent double-spending by having a master authoritative source to check for them. If there is theft, fraud or error this centralized authority is morally and legally obliged to undo the transaction, which means centralized electronic cash transactions cannot be [[Irreversible Transactions|irreversible]]. With the possibility of reversal, the need for trust spreads. Merchants must be wary of their customers, hassling them for more information than they would otherwise need such as real life ID, credit check and so on. MarteXcoin's decentralized mining provides the possibility for '''[[Irreversible Transactions]]'''. This finality means no real life ID is required to use martexcoin, it is '''Pseudonymous'''. Nor can anybody arbitrarily stop anyone else using or transferring martexcoin, so it is '''Permissionless''' and '''Censorship-resistant'''.
+Other electronic payment systems prevent double-spending by having a master authoritative source to check for them. If there is theft, fraud or error this centralized authority is morally and legally obliged to undo the transaction, which means centralized electronic cash transactions cannot be [https://en.bitcoin.it/wiki/Irreversible_Transactions irreversible]. With the possibility of reversal, the need for trust spreads. Merchants must be wary of their customers, hassling them for more information than they would otherwise need such as real life ID, credit check and so on. MarteXcoin's decentralized mining provides the possibility for '''[https://en.bitcoin.it/wiki/Irreversible_Transactions Irreversible Transactions]'''. This finality means no real life ID is required to use martexcoin, it is '''Pseudonymous'''. Nor can anybody arbitrarily stop anyone else using or transferring martexcoin, so it is '''Permissionless''' and '''Censorship-resistant'''.
 
-Most of the martexcoin economy [[Full node#Economic_strength|validates the rules]] of martexcoin for themselves instead of trusting others. This means that invalid martexcoin transactions won't be generally accepted which enforces the '''21 million coins''' limit as well as other rules.
+Most of the martexcoin economy [https://en.bitcoin.it/wiki/Full_node#Economic_strength validates the rules] of martexcoin for themselves instead of trusting others. This means that invalid martexcoin transactions won't be generally accepted which enforces the '''21 million coins''' limit as well as other rules.
 
 ==Origins of low-trust==
 
 MarteXcoin achieves its low requirement for trust through a few ideas and institutions.
 
-* '''Open source'''. The martexcoin [https://en.wikipedia.org/wiki/Source_code source code] is published and available to all. Any programmer can read it. For example, the bitcoin software cannot have a secret command to send all the money to one person because that command would be seen by any reviewer who would raise the alarm to stop anyone running the code.
+* '''Open source'''. The martexcoin [https://en.wikipedia.org/wiki/Source_code source code] is published and available to all. Any programmer can read it. For example, the martexcoin software cannot have a secret command to send all the money to one person because that command would be seen by any reviewer who would raise the alarm to stop anyone running the code.
 * '''Peer-to-peer network'''. Such networks have been used before and are shown to be very resilient. See Bittorrent , Gnutella, Freenet, Kazaa, i2p and the internet itself. This means martexcoin does not require trust in any centralized server for relaying information.
-* '''Cryptography'''. Cryptographic proof is used to enforce the idea of possession in bitcoin, only someone with knowledge of the [[private key]] can spend a coin. Other cryptography is used in other ways, for example [[Proof of work]].
+* '''Cryptography'''. Cryptographic proof is used to enforce the idea of possession in martexcoin, only someone with knowledge of the [https://en.bitcoin.it/wiki/Private_key private key] can spend a coin. Other cryptography is used in other ways, for example [https://en.bitcoin.it/wiki/Proof_of_Stake Proof of Stake].
 * '''Decentralization'''. Divides power widely across many people, so no single entity can reverse transactions or otherwise change the rules to suit themselves.
-* '''Verification of rules'''. Related to the above point. Any martexcoin user can run [[Full node]] wallet software which verifies all the rules of martexcoin and so that user doesn't need to trust anybody else. For example if somebody creates a martexcoin [[transaction]] awarding a million martexcoins to themselves, full node wallet software will reject it as invalid in the same way a careful goldsmith rejects fool's gold.
+* '''Verification of rules'''. Related to the above point. Any martexcoin user can run [https://en.bitcoin.it/wiki/Full_node Full node] wallet software which verifies all the rules of martexcoin and so that user doesn't need to trust anybody else. For example if somebody creates a martexcoin [https://en.bitcoin.it/wiki/Transaction transaction] awarding a million martexcoins to themselves, full node wallet software will reject it as invalid in the same way a careful goldsmith rejects fool's gold.
 
 == See Also ==
 * https://medium.com/@alpalpalp/why-decentralization-matters-fa016a90f595
-* [[Prohibited changes]]
-* [[Controlled supply]]
-* [[Irreversible Transactions]]
-
-[[Category:Economics]] 
-[[Category:Technical]]
+* [[Prohibited-changes.mediawiki]]
+* [https://en.bitcoin.it/wiki/Irreversible_Transactions Irreversible Transactions]
