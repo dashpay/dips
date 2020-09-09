@@ -50,7 +50,7 @@ References:
     Opcode (decimal): 127
     Opcode (hex): 0x7f
     
-`OP_SPLIT` is inverse of `OP_CAT` and a replacement operation for disabled opcodes `OP_SUBSTR`, `OP_LEFT` and `OP_RIGHT`.
+`OP_SPLIT` is the inverse of `OP_CAT` and a replacement operation for disabled opcodes `OP_SUBSTR`, `OP_LEFT` and `OP_RIGHT`.
 
 `OP_SPLIT` takes a byte array, splits it at the position `n` (a number) and returns two byte arrays.
 
