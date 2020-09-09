@@ -34,7 +34,7 @@ Several opcodes were disabled in the Bitcoin scripting system due to the discove
     Opcode (decimal): 126
     Opcode (hex): 0x7e
 
-`OP_CAT` takes two byte arrays from the stack, concates and pushes the result back to the stack.
+`OP_CAT` takes two byte arrays from the stack, concatenates them and pushes the result back to the stack.
 
 	x1 x2 OP_CAT → out
 
