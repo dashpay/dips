@@ -12,7 +12,7 @@ License: MIT License
 This DIP describes reactivation of several disabled opcodes (`OP_CAT`, `OP_AND`, `OP_OR`, `OP_XOR`, `OP_DIV`, `OP_MOD`) and activation of several new opcodes (`OP_SPLIT`, `OP_BIN2NUM`, `OP_NUM2BIN`, `OP_CHECKDATASIG` and `OP_CHECKDATASIGVERIFY`) to expand the use of the Dash scripting system.
 
 # Motivation
-Several opcodes were disabled in the Bitcoin scripting system due to discovery of series of bugs in early days of Bitcoin. The functionality of these opcodes has been re-examined by Bitcoin Cash developers few years ago. Many of the disabled opcodes have been enabled and few of them re-designed to replace the original ones. In addition, couple of new opcodes have been written and implemented to improve Bitcoin scripting system in Bitcoin Cash even further. Implementing these opcodes into Dash is necessary for broadening the functionality of the system and enabling developers to build new solutions, which in turn would expand the use of Dash.
+Several opcodes were disabled in the Bitcoin scripting system due to the discovery of a series of bugs in the early days of Bitcoin. The functionality of these opcodes was re-examined by Bitcoin Cash developers few years ago. Many of the disabled opcodes have been enabled and several of them re-designed to replace the original ones. In addition, several new opcodes have been written and implemented to further improve the Bitcoin scripting system in Bitcoin Cash. Implementing these opcodes into Dash is necessary for broadening the functionality of the system and enabling developers to build new solutions, which in turn would expand the use of Dash.
 
 # Specification
 |Word                  |OpCode |Hex |Input |Output  | Description                                           |
