@@ -28,6 +28,8 @@ Number | Layer | Title | Owner | Type | Status
 [8](dip-0008.md) | Consensus | ChainLocks | Alexander Block | Standard | Final
 [9](dip-0009.md) | Applications | Feature Derivation Paths | Samuel Westrich | Informational | Proposed
 [10](dip-0010.md) | Consensus | LLMQ InstantSend | Alexander Block | Standard | Final
+[11](dip-0011.md) | Consensus | Identities | Ivan Shumkov, Anton Suprunchuk, Samuel Westrich, Cofresi | Standard | Proposed
+[12](dip-0012.md) | Consensus | Dash Platform Name Service | Ivan Shumkov, Anton Suprunchuk | Standard | Proposed
 
 
 ## License

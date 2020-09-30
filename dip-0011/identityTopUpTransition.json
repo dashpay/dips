@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "identityId": {
+            "type": "string",
+            "contentEncoding": "base58",
+            "minLength": 42,
+            "maxLength": 44,
+            "pattern": "^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$",
+            "description": "Identity ID that should be topped up",
+            "$comment": "Identity with specified ID must exist, be enabled and contain the key that was used to sign the state transition"
+        },
+        "protocolVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 0,
+            "$comment": "Maximum equals the latest Identity protocol version"
+        },
+        "lockedOutPoint": {
+            "type": "string",
+            "contentEncoding": "binary",
+            "minLength": 48,
+            "maxLength": 48,
+            "description": "Asset Lock Transaction's outpoint",
+            "$comment": "Asset Lock Transaction must be finalized. Output must be present in the transaction and contain an OP_ASSET_LOCK. The ST must be signed by the key corresponding to the public key hash in the OP_ASSET_LOCK. The output can be used only once. The output amount must be > ST fee + credits dust"
+        },
+    },
+    "required": [
+        "protocolVersion",
+        "identityId",
+        "lockedOutPoint",
+    ]
+}
