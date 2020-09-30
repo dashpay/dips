@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "protocolVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 0,
+            "$comment": "Maximum equals the latest Identity Create Transition protocol version"
+        },
+        "lockedOutPoint": {
+            "type": "string",
+            "contentEncoding": "base64",
+            "minLength": 48,
+            "maxLength": 48,
+            "pattern": "^([A-Za-z0-9+/])*$",
+            "description": "Asset Lock Transaction's outpoint",
+            "$comment": "Asset Lock Transaction must be finalized. Output must be present in the transaction and contain an OP_ASSET_LOCK. The ST must be signed by the key corresponding to the public key hash in the OP_ASSET_LOCK. The output can be used only once. The output amount must be > ST fee + credits dust"
+        },
+        "publicKeys": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 4096,
+            "uniqueItems": true,
+            "items": IdentityPublicKey,
+            "$comment": "The first public key can't be used as the first public key of any other identity"
+        },
+    },
+    "required": [
+        "protocolVersion",
+        "lockedOutPoint",
+        "publicKeys"
+    ],
+    "additionalProperties": false
+}

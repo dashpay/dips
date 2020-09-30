@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "protocolVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 0,
+            "$comment": "Maximum equals the latest Identity protocol version"
+        },
+        "identityId": {
+            "type": "string",
+            "contentEncoding": "base58",
+            "minLength": 42,
+            "maxLength": 44,
+            "pattern": "^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$",
+            "description": "Identity ID that should be updated.",
+            "$comment": "Identity with the specified ID must exist, be enabled and contain the key that was used to sign the state transition"
+        },
+        "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Identity update revision",
+            "$comment": "Must be incremented by one with each update"
+        },
+        "addPublicKeys": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4096,
+            "uniqueItems": true,
+            "items": IdentityPublicKey,
+            "description": "Public keys to add",
+            "$comment": "The overall number of identity public keys must not be greater than 4096"
+        },
+        "disablePublicKeys": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4096,
+            "uniqueItems": true,
+            "items": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Identity public key ID",
+                "$comment": "Provided key(s) must exist and be enabled"
+            }
+        },
+        "publicKeysDisabledAt": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Timestamp when keys were disabled",
+            "$comment": "The timestamp validates against the platform chain block time and must be within a window of 5 minutes before and after"
+        }
+    },
+    "anyOf": [
+        {
+            "required": [
+                "addPublicKeys"
+            ]
+        },
+        {
+            "required": [
+                "disablePublicKeys"
+            ]
+        }
+    ],
+    "dependencies": {
+        "disablePublicKeys": [
+            "publicKeysDisabledAt"
+        ],
+        "publicKeysDisabledAt": {
+            "not": {
+                "required": [
+                    "disablePublicKeys"
+                ]
+            }
+        }
+    },
+    "required": [
+        "protocolVersion",
+        "identityId",
+        "revision"
+    ]
+}
