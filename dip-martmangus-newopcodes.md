@@ -1,4 +1,5 @@
 <pre>
+DIP: 0020
 Title: Activating old and implementing new opcodes
 Author: Mart Mangus
 Comments: https://github.com/Dash-Dev-EE/DIP-draft/issues
