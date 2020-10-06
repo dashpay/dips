@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "protocolVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 0,
+            "$comment": "Maximum equals the latest Identity protocol version. Minimum equals the latest supported version"
+        },
+        "id": {
+            "type": "string",
+            "contentEncoding": "base58",
+            "minLength": 42,
+            "maxLength": 44,
+            "pattern": "^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$",
+            "description": "Unique identity ID",
+            "$comment": "Hash of the Asset Lock transaction outpoint"
+        },
+        "publicKeys": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 255,
+            "uniqueItems": true,
+            "items": IdentityPublicKey,
+        },
+        "balance": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Identity balance in Platform Credits"
+        },
+        "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Identity update revision",
+            "$comment": "Incremented by one with each new update so that the update will fail if the underlying data is modified between reading and writing"
+        },
+        "isEnabled": {
+            "type": "boolean",
+            "$comment": "A disabled identity can't be updated, used for State Transition signing or any other operations"
+        },
+    },
+    "required": [
+        "id",
+        "publicKeys",
+        "balance",
+        "revision",
+        "isEnabled"
+    ]
+}
