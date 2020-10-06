@@ -28,6 +28,7 @@ Number | Layer | Title | Owner | Type | Status
 [8](dip-0008.md) | Consensus | ChainLocks | Alexander Block | Standard | Final
 [9](dip-0009.md) | Applications | Feature Derivation Paths | Samuel Westrich | Informational | Proposed
 [10](dip-0010.md) | Consensus | LLMQ InstantSend | Alexander Block | Standard | Final
+[20](dip-0020.md) | Consensus | Dash Core Opcode updates | Mart Mangus | Standard | Proposed
 
 
 ## License
