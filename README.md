@@ -33,7 +33,6 @@ Number | Layer | Title | Owner | Type | Status
 [20](dip-0020.md) | Consensus | Dash Core Opcode Updates | Mart Mangus | Standard | Proposed
 
 
-
 ## License
 
 Unless otherwise specified, Dash Improvement Proposals (DIPs) are released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/MIT.
