@@ -30,6 +30,7 @@ Number | Layer | Title | Owner | Type | Status
 [10](dip-0010.md) | Consensus | LLMQ InstantSend | Alexander Block | Standard | Final
 [11](dip-0011.md) | Consensus | Identities | Ivan Shumkov, Anton Suprunchuk, Samuel Westrich, Cofresi | Standard | Proposed
 [12](dip-0012.md) | Consensus | Dash Platform Name Service | Ivan Shumkov, Anton Suprunchuk | Standard | Proposed
+[20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Proposed
 
 
 ## License
