@@ -32,6 +32,7 @@ Number | Layer | Title | Owner | Type | Status
 [12](dip-0012.md) | Consensus | Dash Platform Name Service | Ivan Shumkov, Anton Suprunchuk | Standard | Proposed
 [13](dip-0013.md) | Applications | Identities in Hierarchical Deterministic Wallets | Samuel Westrich | Standard | Proposed
 [14](dip-0014.md) | Applications | Extended Key Derivation using 256-Bit Unsigned Integers | Samuel Westrich | Informational | Proposed
+[16](dip-0016.md) | Applications | Headers First Synchronization on Simple Payment Verification Wallets | Samuel Westrich | Informational | Proposed
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Proposed
 
 
