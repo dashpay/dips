@@ -4,7 +4,6 @@ DIP stands for Dash Improvement Proposal. Similar to Bitcoin's [BIPs](https://gi
 
 Because Dash is forked from the Bitcoin codebase, many of the BIPs can be applied to Dash as well (a list of the BIPs updated to include Dash-specific details can be found [here](https://github.com/dashevo/bips)). The purpose of the DIPs is not to duplicate those which exist as BIPs, but to introduce protocol upgrades or feature specifications which are unique to Dash.
 
-
 ## Contributions
 
 We use the same general guidelines for introducing a new DIP as specified in [BIP 2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki), with a few differences. Specifically:
@@ -14,8 +13,8 @@ We use the same general guidelines for introducing a new DIP as specified in [BI
 * Markdown format is the preferred format for DIPs
 * Following a discussion, the proposal should be submitted to the DIPs git repository as a pull request. This draft must be written in BIP/DIP style as described in [BIP 2](https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki), and named with an alias such as "dip-johndoe-infinitedash" until the editor has assigned it a DIP number (authors MUST NOT self-assign DIP numbers).
 
-
 ## Dash Improvement Proposal Summary
+
 Number | Layer | Title | Owner | Type | Status
 --- | --- | --- | --- | --- | ---
 [1](dip-0001.md) | Consensus | Initial Scaling of the Network | Darren Tapp | Standard | Final
@@ -36,7 +35,6 @@ Number | Layer | Title | Owner | Type | Status
 [16](dip-0016.md) | Applications | Headers First Synchronization on Simple Payment Verification Wallets | Samuel Westrich | Informational | Proposed
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Proposed
 
-
 ## License
 
-Unless otherwise specified, Dash Improvement Proposals (DIPs) are released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/MIT.
+Unless otherwise specified, Dash Improvement Proposals (DIPs) are released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see the [MIT License](https://opensource.org/licenses/MIT).
