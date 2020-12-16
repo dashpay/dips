@@ -30,6 +30,7 @@ Number | Layer | Title | Owner | Type | Status
 [11](dip-0011.md) | Consensus | Identities | Ivan Shumkov, Anton Suprunchuk, Samuel Westrich, Cofresi | Standard | Proposed
 [12](dip-0012.md) | Consensus | Dash Platform Name Service | Ivan Shumkov, Anton Suprunchuk | Standard | Proposed
 [13](dip-0013.md) | Applications | Identities in Hierarchical Deterministic Wallets | Samuel Westrich | Informational | Proposed
+[15](dip-0015.md) | Applications | DashPay | Samuel Westrich | Standard | Proposed
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Proposed
 
 ## License
