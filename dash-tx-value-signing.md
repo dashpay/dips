@@ -25,7 +25,7 @@ The proposed digest algorithm is adapted from BIP143[[1]](#bip143) as it minimiz
 
 # Motivation
 
-There are 4 ECDSA signature verification codes in the original DASH script system: <code>CHECKSIG</code>, <code>CHECKSIGVERIFY</code>, <code>CHECKMULTISIG</code>, <code>CHECKMULTISIGVERIFY</code> (“sigops”). According to the sighash type (<code>ALL</code>, <code>NONE</code>, <code>SINGLE</code>, <code>ANYONECANPAY</code>), a transaction digest is generated with a double SHA256 of a serialized subset of the transaction, and the signature is verified against this digest with a given public key.
+There are 4 ECDSA signature verification codes in the original DASH script system: `CHECKSIG`, `CHECKSIGVERIFY`, `CHECKMULTISIG`, `CHECKMULTISIGVERIFY` (“sigops”). According to the sighash type (`ALL`, `NONE`, `SINGLE`, `ANYONECANPAY`), a transaction digest is generated with a double SHA256 of a serialized subset of the transaction, and the signature is verified against this digest with a given public key.
 
 Unfortunately, there are at least 2 weaknesses in the original Signature Hash transaction digest algorithm:
 
