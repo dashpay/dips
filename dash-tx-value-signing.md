@@ -9,13 +9,13 @@ License: MIT License
 </pre>
 
 # Table of Contents
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Specification](#specification)
-- [Implementation](#implementation)
-- [Test](#test)
-- [References](#references)
 
+* [Abstract](#abstract)
+* [Motivation](#motivation)
+* [Specification](#specification)
+* [Implementation](#implementation)
+* [Test](#test)
+* [References](#references)
 
 # Abstract
 
@@ -47,50 +47,50 @@ The proposed digest algorithm computes the double SHA256 of the serialization of
 9. nLockTime of the transaction (4-byte uint32_t)
 10. sighash type of the signature (4-byte uint32_t)
 
-#### nVersion
+## nVersion
 
-* This is the transaction number; currently version `3`. 
+* This is the transaction number; currently version `3`.
 
-#### hashPrevouts
+## hashPrevouts
 
 * If the `ANYONECANPAY` flag is not set, `hashPrevouts` is the double SHA256 of the serialization of all input `outpoints`;
 * Otherwise, `hashPrevouts` is a `uint256` of `0x0000......0000`.
 
-#### hashSequence
+## hashSequence
 
 * If none of the `ANYONECANPAY`, `SINGLE`, `NONE` sighash type is set, `hashSequence` is the double SHA256 of the serialization of `nSequence` of all inputs;
 * Otherwise, `hashSequence` is a `uint256` of `0x0000......0000`.
 
-#### outpoint
+## outpoint
 
 * Single transactions can include multiple outputs.
 * The `outpoint` structure includes both a `TXID` and an output `index` number to refer to specific output.
 
-#### scriptCode
+## scriptCode
 
 * If the `script` does not contain any `OP_CODESEPARATOR`, the `scriptCode` is the `script` serialized as scripts inside `CTxOut`.
 * If the `script` contains any `OP_CODESEPARATOR`, the `scriptCode` is the `script` but removing everything up to and including the last executed `OP_CODESEPARATOR` before the signature checking opcode being executed, serialized as scripts inside CTxOut.
 
-#### value
+## value
 
 * The 8-byte `value` of the `amount` of `duffs` the input contains.
 
-#### nSequence
+## nSequence
 
-* This is the `sequence` number. 
+* This is the `sequence` number.
 * Default is `0xffffffff`.
 
-#### hashOutputs
+## hashOutputs
 
 * If the sighash type is neither `SINGLE` nor `NONE`, `hashOutputs` is the double SHA256 of the serialization of all output `values` (8-byte int64_t) paired up with their `scriptPubKey` (serialized as scripts inside `CTxOuts`);
 * If sighash type is `SINGLE` and the input `index` is smaller than the number of outputs, `hashOutputs` is the double SHA256 of the output `amount` with `scriptPubKey` of the same `index` as the input;
 * Otherwise, `hashOutputs` is a `uint256` of `0x0000......0000`.
 
-#### nLockTime
+## nLockTime
 
 * Time (Unix epoch time) or block number.
 
-#### sighash type
+## sighash type
 
 ````cpp
   ss << nHashType;
