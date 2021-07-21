@@ -1,6 +1,6 @@
 <pre>
 DIP: tx-value-signing
-Title: Transaction value signing analogous to BIP143 as implemented in Bitcoin Cash 
+Title: Transaction value signing analogous to BIP143 as implemented in Bitcoin Cash
 Authors: greatwolf, mayoree
 Status: Draft
 Layer: Consensus (hard fork)
@@ -9,13 +9,13 @@ License: MIT License
 </pre>
 
 # Table of Contents
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Specification](#specification)
-- [Implementation](#implementation)
-- [Test](#test)
-- [References](#references)
 
+* [Abstract](#abstract)
+* [Motivation](#motivation)
+* [Specification](#specification)
+* [Implementation](#implementation)
+* [Test](#test)
+* [References](#references)
 
 # Abstract
 
@@ -24,17 +24,18 @@ This DIP describes a digest algorithm that implements the signature covers value
 The proposed digest algorithm is adapted from BIP143[[1]](#bip143) as it minimizes redundant data hashing in verification, covers the input value by the signature and is already implemented in a wide variety of applications[[2]](#bip143Motivation).
 
 # Motivation
-There are 4 ECDSA signature verification codes in the original DASH script system: <code>CHECKSIG</code>, <code>CHECKSIGVERIFY</code>, <code>CHECKMULTISIG</code>, <code>CHECKMULTISIGVERIFY</code> (“sigops”). According to the sighash type (<code>ALL</code>, <code>NONE</code>, <code>SINGLE</code>, <code>ANYONECANPAY</code>), a transaction digest is generated with a double SHA256 of a serialized subset of the transaction, and the signature is verified against this digest with a given public key.
+
+There are 4 ECDSA signature verification codes in the original DASH script system: `CHECKSIG`, `CHECKSIGVERIFY`, `CHECKMULTISIG`, `CHECKMULTISIGVERIFY` (“sigops”). According to the sighash type (`ALL`, `NONE`, `SINGLE`, `ANYONECANPAY`), a transaction digest is generated with a double SHA256 of a serialized subset of the transaction, and the signature is verified against this digest with a given public key.
 
 Unfortunately, there are at least 2 weaknesses in the original Signature Hash transaction digest algorithm:
 
-* For the verification of each signature, the amount of data hashing is proportional to the size of the transaction. Therefore, data hashing grows in O(n<sup>2</sup>) as the number of sigops in a transaction increases. This could be fixed by optimizing the digest algorithm by introducing some reusable “midstate”, so the time complexity becomes O(n). 
+* For the verification of each signature, the amount of data hashing is proportional to the size of the transaction. Therefore, data hashing grows in O(n<sup>2</sup>) as the number of sigops in a transaction increases. This could be fixed by optimizing the digest algorithm by introducing some reusable “midstate”, so the time complexity becomes O(n).
 * The algorithm does not involve the amount of DASH being spent by the input. This is usually not a problem for online network nodes as they could request for the specified transaction to acquire the output value. For an offline transaction signing device (cold wallet"), however, the unknowing of input amount makes it impossible to calculate the exact amount being spent and the transaction fee. To cope with this problem a cold wallet must also acquire the full transaction being spent, which could be a big obstacle in the implementation of lightweight, air-gapped wallet. By including the input value of part of the transaction digest, a cold wallet may safely sign a transaction by learning the value from an untrusted source. In the case that a wrong value is provided and signed, the signature would be invalid and no funding might be lost. <ref>[https://bitcointalk.org/index.php?topic=181734.0 SIGHASH_WITHINPUTVALUE: Super-lightweight HW wallets and offline data]</ref>
-
 
 # Specification
 
 The proposed digest algorithm computes the double SHA256 of the serialization of:
+
 1. nVersion of the transaction (2-byte uint16_t)
 2. hashPrevouts (32-byte hash)
 3. hashSequence (4-byte hash)
@@ -43,53 +44,53 @@ The proposed digest algorithm computes the double SHA256 of the serialization of
 6. value of the output spent by this input (8-byte int64_t)
 7. nSequence of the input (8-byte int64_t)
 8. hashOutputs (32-byte hash)
-9. nLockTime of the transaction (4-byte uint32_t) 
-10. sighash type of the signature (4-byte uint32_t) 
+9. nLockTime of the transaction (4-byte uint32_t)
+10. sighash type of the signature (4-byte uint32_t)
 
-#### nVersion
+## nVersion
 
-* This is the transaction number; currently version `3`. 
+* This is the transaction number; currently version `3`.
 
-#### hashPrevouts
+## hashPrevouts
 
 * If the `ANYONECANPAY` flag is not set, `hashPrevouts` is the double SHA256 of the serialization of all input `outpoints`;
 * Otherwise, `hashPrevouts` is a `uint256` of `0x0000......0000`.
 
-#### hashSequence
+## hashSequence
 
 * If none of the `ANYONECANPAY`, `SINGLE`, `NONE` sighash type is set, `hashSequence` is the double SHA256 of the serialization of `nSequence` of all inputs;
 * Otherwise, `hashSequence` is a `uint256` of `0x0000......0000`.
 
-#### outpoint
+## outpoint
 
 * Single transactions can include multiple outputs.
 * The `outpoint` structure includes both a `TXID` and an output `index` number to refer to specific output.
 
-#### scriptCode
+## scriptCode
 
 * If the `script` does not contain any `OP_CODESEPARATOR`, the `scriptCode` is the `script` serialized as scripts inside `CTxOut`.
 * If the `script` contains any `OP_CODESEPARATOR`, the `scriptCode` is the `script` but removing everything up to and including the last executed `OP_CODESEPARATOR` before the signature checking opcode being executed, serialized as scripts inside CTxOut.
 
-#### value
+## value
 
 * The 8-byte `value` of the `amount` of `duffs` the input contains.
 
-#### nSequence
+## nSequence
 
-* This is the `sequence` number. 
+* This is the `sequence` number.
 * Default is `0xffffffff`.
 
-#### hashOutputs
+## hashOutputs
 
 * If the sighash type is neither `SINGLE` nor `NONE`, `hashOutputs` is the double SHA256 of the serialization of all output `values` (8-byte int64_t) paired up with their `scriptPubKey` (serialized as scripts inside `CTxOuts`);
 * If sighash type is `SINGLE` and the input `index` is smaller than the number of outputs, `hashOutputs` is the double SHA256 of the output `amount` with `scriptPubKey` of the same `index` as the input;
 * Otherwise, `hashOutputs` is a `uint256` of `0x0000......0000`.
 
-#### nLockTime
+## nLockTime
 
 * Time (Unix epoch time) or block number.
 
-#### sighash type
+## sighash type
 
 ````cpp
   ss << nHashType;
@@ -177,7 +178,8 @@ uint256 GetOutputsHash(const CTransaction &txTo) {
 # Test
 
 To ensure consistency in consensus-critical behaviour, developers should test their implementations against the test below.
-  ````
+
+````text
   The following is an unsigned transaction:
     0100000002fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f0000000000eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac11000000
     
@@ -233,13 +235,9 @@ To ensure consistency in consensus-critical behaviour, developers should test th
                   9093510d00000000 1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac
     nLockTime: 11000000
 ````
-                      
 
 # References
 
 <a name="bip143">[1]</a> https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki
 
 <a name="bip143Motivation">[2]</a> https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#Motivation
-
-
-
