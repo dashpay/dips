@@ -16,6 +16,7 @@ License: MIT License
 * [Implementation](#implementation)
 * [Test](#test)
 * [References](#references)
+* [Copyright](#copyright)
 
 # Abstract
 
@@ -241,3 +242,9 @@ To ensure consistency in consensus-critical behaviour, developers should test th
 <a name="bip143">[1]</a> https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki
 
 <a name="bip143Motivation">[2]</a> https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#Motivation
+
+# Copyright
+
+This document is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+
