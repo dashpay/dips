@@ -1,5 +1,5 @@
 <pre>
-  DIP: 00xx
+  DIP: 0022
   Title: Enhanced Hard Fork Mechanism
   Author(s): Pasta
   Special-Thanks:
