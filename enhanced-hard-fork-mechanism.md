@@ -47,15 +47,15 @@ The `mn_hf_sig` message should look like:
 
     masternode_activation_height = mined_height - (mined_height % 4032) + 4032
 
-This cycle’s threshold is `nThresholdStart` (the maximum threshold value). Each subsequent cycle will see it’s threshold decreased until it reaches `nThresholdMin` (the minimum threshold value).
+This cycle’s threshold is `nThresholdStart` (the maximum threshold value). Each subsequent cycle will see its threshold decreased until it reaches `nThresholdMin` (the minimum threshold value).
 
 Regardless of miner signalling, activation only occurs once the height defined by the `min_activation_height` parameter is met. This is set to be 6 signalling windows (~6 weeks) after the `masternode_activation_height`. It is calculated as shown here:
 
-    min_activation_height = masternode_activation_height + 4032 * 6.  \
+    min_activation_height = masternode_activation_height + 4032 * 6
 
 If the threshold is met at the end of a cycle activation_height is calculated as shown here:
 
-    activation_height = max((height + 4032), min_activation_height).
+    activation_height = max((height + 4032), min_activation_height)
 
 # Copyright
 
