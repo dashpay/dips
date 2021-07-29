@@ -43,34 +43,34 @@ than the masternodes. This could lead to a situation where the miners fork, yet 
 ChainLocks on the “legacy” fork. In practice this has never been an issue, but it could be. Second,
 it is possible that this system results in very quick upgrades and forks (as quick as only 2 weeks)
 which are disruptive for services utilizing Dash. In practice this has resulted in the developers
-setting the startTime to a month or two after the release.
+setting the start timestamp to a month or two after the release.
 
 ## New System
 
-**Stage 0:** Miners signal, however this signalling does not have any effect on consensus. It is
-impossible to lock-in at this point. The purpose of this signalling is to enable monitoring of which
-miners have upgraded their software and get an idea of the adoption rate. Additionally, it is
-important to note that this signalling does not take up any space, and as such there is no incentive
-to minimize the time where signalling is done.
+**Stage 0:** Miners signal without any effect on consensus. It is impossible to lock-in at this
+point. The purpose of this signalling is to enable monitoring of which miners have upgraded their
+software and get an idea of the adoption rate. Additionally, it is important to note that this
+signalling does not take up any space, and as such there is no incentive to minimize the time where
+signalling is done.
 
-**Stage 1:** Any valid `LLMQ_400_85` must produce an `mn_hf_sig` message signalling that the
-masternode network has been upgraded. Since this is done by the `LLMQ_400_85` quorum, it will in
-effect only occur once 85% of the masternode network has upgraded to this version. Once this message
-has been created, it should be included in a block as a zero fee special transaction, similar to
-quorum commitments. This can be done by any miner in any block, but should only be included once.
-For testnet the `LLMQ_50_60` quorum should be used instead.
+**Stage 1:** Any valid `LLMQ_400_85` produces a `mn_hf_sig` message to signal that the masternode
+network has been upgraded. Since this is done by the `LLMQ_400_85` quorum, it will in effect only
+occur once 85% of the masternode network has upgraded to this version. Once this message has been
+created, it should be included in a block as a zero fee special transaction, similar to quorum
+commitments. This can be done by any miner in any block, but it should only be included once. For
+testnet the `LLMQ_50_60` quorum should be used instead.
 
 The `mn_hf_sig` message should look like:
 
 | Field | Type | Size | Description |
 |-|-|-|-|
 | version | uint8_t | 1 | The version bits associated with the hard fork |
-| quorumHash | uint256 | 32 | `quorumHash` of the quorum signing this message |
-| sig | CBLSSig | 96 | BLS signature on version by public key associated with the quorum associated with `quorumHash` |
+| quorumHash | uint256 | 32 | Hash of the quorum signing this message |
+| sig | CBLSSig | 96 | BLS signature on `version` by a public key associated with the quorum referenced by `quorumHash` |
 
 **Stage 2:** Once this `mn_hf_sig` message has been mined, two parameters are set:
 `masternode_activation_height` and `min_activation_height`. The cycle beginning at
-`masternode_activation_height` is the first cycle where mining signalling matters. It’s starting
+`masternode_activation_height` is the first cycle where miner signalling matters. Its starting
 height is calculated based on the `mn_hf_sig` message height as shown here:
 
     masternode_activation_height = mined_height - (mined_height % 4032) + 4032
@@ -84,7 +84,7 @@ the `masternode_activation_height`. It is calculated as shown here:
 
     min_activation_height = masternode_activation_height + 4032 * 6
 
-If the threshold is met at the end of a cycle activation_height is calculated as shown here:
+If the threshold is met at the end of a cycle, `activation_height` is calculated as shown here:
 
     activation_height = max((height + 4032), min_activation_height)
 
