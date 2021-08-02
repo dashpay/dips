@@ -32,11 +32,11 @@ The `messageHash` for `islock` messages should now be calculated as `SHA256(vers
 
 ## QuorumHash vs CycleHash
 
-The naive approach to fixing this problem would be to include the QuorumHash in the `islock` message. An `islock` would then be easily verifiable since the quorum that signed it would always be known. The drawback of this approach is that any quorum could sign any `islock` even if it were not responsible to do so for that quorum cycle.
+The naive approach to fixing this problem would be to include the `quorumHash` in the `islock` message. An `islock` would then be easily verifiable since the quorum that signed it would always be known. The drawback of this approach is that any quorum could sign any `islock` even if it were not responsible to do so for that quorum cycle.
 
-A quorum cycle begins at a `quorumBlock` (as per [DIP-0006](https://github.com/dashpay/dips/blob/master/dip-0006.md#parametersvariables-of-a-llmq-and-dkg)) and lasts for a number of blocks that is equal to the `quorumDkgInterval`. During this time the set of valid quorums are not modified for a given quorum type. If the `quorumDkgInterval` is set to 24 blocks then from block 100 to block 124 quorums of that type stay the same. During this period the quorum that is in charge of signing a specific `islock` will also always be the same. CycleHash is the `blockHash` of the first block in a cycle.
+A quorum cycle begins at a `quorumBlock` (as per [DIP-0006](https://github.com/dashpay/dips/blob/master/dip-0006.md#parametersvariables-of-a-llmq-and-dkg)) and lasts for a number of blocks that is equal to the `quorumDkgInterval`. During this time the set of valid quorums are not modified for a given `quorumType`. If the `quorumDkgInterval` is set to 24 blocks then from block 100 to block 124 quorums of that type stay the same. During this period the quorum that is in charge of signing a specific `islock` will also always be the same. CycleHash is the `blockHash` of the first block in a cycle.
 
-By adding the CycleHash to the `islock` message, any node can follow the steps required to determine the appropriate `quorumHash` and verify the signature.
+By adding the `cycleHash` to the `islock` message, any node can follow the steps required to determine the appropriate `quorumHash` and verify the signature.
 
 ## Verification of the signature
 
