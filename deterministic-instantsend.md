@@ -56,9 +56,9 @@ Nodes receiving "islock" messages should verify them by using the above steps. O
 
 When a masternode receives a recovered signature for a signing request in the quorum where it is active, it should use the signature to create a new p2p message, which is the `ISDLOCK` message. To figure out the cycle hash, take the quorum hash corresponding to the LLMQ that created the recovered signature. Then find the last known block where this quorum was responsible for signing the "islock" message. Often this is the current block, but in rare situations it might be a prior one if quorums have just cycled. From this last known block, find the first block of that cycle. This is the last block before quorums changed for the quorum type used for "islock" messages.
 
-It is possible that a quorum is active before and after quorum cycling. It is also possible that the quorum responsible for a signing request before and after cycling is the same. This could lead to the creation of two "islock" messages, distinct only by the fact that their cycle hash is different.
+It is possible that a quorum is active before and after quorum cycling. It is also possible that the quorum responsible for a signing request before and after cycling is the same. This could lead to the creation of two `islock` messages, distinct only by the fact that their cycle hash is different.
 
-The new message has the following structure:
+The new message has the following structure (fields in bold are not present in the previously used `islock` message):
 
 | Field | Type | Size | Description |
 |-|-|-|-|
@@ -66,7 +66,7 @@ The new message has the following structure:
 | inputCount | compactSize uint | 1 - 9 | Number of inputs in the transaction |
 | inputs | COutpoint[] | `inputCount` * 36 | Inputs of the transaction. COutpoint is a uint256 (hash of previous transaction) and a uint32 (output index) |
 | txid | uint256 | 32 | Transaction id (hash of the transaction) |
-| **cycleHash** | uint256 | 32 | Block hash of first block of the cycle in which the quorum signing this `islock` is active
+| **cycleHash** | uint256 | 32 | Block hash of first block of the cycle in which the quorum signing this `islock` is active |
 | sig | BLSSig | 96 | Recovered signature from the signing request/session |
 
 ### **Choosing the active LLMQ to perform signing**
