@@ -1,19 +1,22 @@
-## DIP 00XX: Making InstantSend Deterministic with use of Quorum Cycles
-
-Authors: Samuel Westrich, UdjinM6
-
-Special Thanks: Virgile Bartolo, Thephez
-
+<pre>
+DIP: 00xx
+Title: Making InstantSend Deterministic with use of Quorum Cycles
+Author: Samuel Westrich, UdjinM6
+Special-Thanks: Thephez, Virgile Bartolo
+Comments: No comments yet.
+Status: Draft
+Layer: Consensus (hard fork)
+Created: 2020-08-02
+License: MIT License
+</pre>
 
 ## Abstract
 
 This DIP aims to improve InstantSend messages to make them deterministically verifiable.
 
-
 ## Motivation
 
 LLMQ based InstantSend was introduced in DIP 10. In that implementation InstantSend locks are only verifiable by recent quorums, because the InstantSend lock does not include any block or time based information. In Dash Platform InstantSend Locks are used to add credit to Identities as they provide input finality. When blocks are replayed on the Platform Chain, all State Transitions need to be re-validated; it is possible that InstantSend signatures will need to be rechecked. However to recheck them one needs to know the quorum that signed them. In this DIP we will provide a mechanism to that end.
-
 
 ## Previous work
 
@@ -23,13 +26,11 @@ LLMQ based InstantSend was introduced in DIP 10. In that implementation InstantS
 
 [DIP-0010: LLMQ InstantSend](https://github.com/dashpay/dips/blob/master/dip-0010.md)
 
-
 ## Versioning of ISLock messages
 
 Since "islock" messages were never versioned, a new message “ISDLock” will be created and the "islock" message will be deprecated. ISD stands for InstantSend Deterministic. The version of the ISDLock used in this document will be 1. We will still refer to "islock" messages, even though the message name has been changed.
 
 The “messageHash” for "islock" messages should now be calculated as `SHA256(version, txHash).`
-
 
 ## QuorumHash vs CycleHash
 
@@ -39,12 +40,9 @@ A quorum cycle begins at a quorumBlock (as per [DIP-0006](https://github.com/das
 
 By adding the CycleHash to the "islock" message, any node can follow the steps required to determine the appropriate quorumHash and verify the signature.
 
-
 ## Verification of the signature
 
 To calculate which LLMQ was responsible for the "islock" the verifier should perform the following:
-
-
 
 1. Take the LLMQ set that corresponds to the quorum cycle defined by cycle hash in the "islock" message.
 2. Calculate the RequestID from data in the "islock" message by calculating `SHA256("islock", inputCount, prevTxHash1, prevTxOut1, prevTxHash2, prevTxOut2, ...)`
@@ -56,7 +54,6 @@ To calculate which LLMQ was responsible for the "islock" the verifier should per
 
 Nodes receiving "islock" messages should verify them by using the above steps. Only `ISDLOCK` messages with valid signatures should be propagated further using the inventory system.
 
-
 ## The new ISDLock message
 
 When a masternode receives a recovered signature for a signing request in the quorum where it is active, it should use the signature to create a new p2p message, which is the `ISDLOCK` message. To figure out the cycle hash, take the quorum hash corresponding to the LLMQ that created the recovered signature. Then find the last known block where this quorum was responsible for signing the "islock" message. Often this is the current block, but in rare situations it might be a prior one if quorums have just cycled. From this last known block, find the first block of that cycle. This is the last block before quorums changed for the quorum type used for "islock" messages.
@@ -64,7 +61,6 @@ When a masternode receives a recovered signature for a signing request in the qu
 It is possible that a quorum is active before and after quorum cycling. It is also possible that the quorum responsible for a signing request before and after cycling is the same. This could lead to the creation of two "islock" messages, distinct only by the fact that their cycle hash is different.
 
 The new message has the following structure:
-
 
 <table>
   <tr>
@@ -139,12 +135,9 @@ The new message has the following structure:
   </tr>
 </table>
 
-
-
 ### **Choosing the active LLMQ to perform signing**
 
-Choosing the active LLMQ to perform signing should follow the same steps as defined in [DIP-0007 - Choosing the active LLMQ to perform signing](https://github.com/dashpay/dips/blob/master/dip-0007.md#choosing-the-active-llmq-to-perform-signing). 
-
+Choosing the active LLMQ to perform signing should follow the same steps as defined in [DIP-0007 - Choosing the active LLMQ to perform signing](https://github.com/dashpay/dips/blob/master/dip-0007.md#choosing-the-active-llmq-to-perform-signing).
 
 <table>
   <tr>
