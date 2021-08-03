@@ -1,6 +1,6 @@
 <pre>
 DIP: 00xx
-Title: Making InstantSend Deterministic with use of Quorum Cycles
+Title: Making InstantSend Deterministic using Quorum Cycles
 Author: Samuel Westrich, UdjinM6
 Special-Thanks: Thephez, Virgile Bartolo
 Comments: No comments yet.
