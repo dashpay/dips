@@ -16,7 +16,7 @@ This DIP aims to improve InstantSend messages to make them deterministically ver
 
 ## Motivation
 
-LLMQ based InstantSend was introduced in DIP10. In that implementation InstantSend locks are only verifiable by recent quorums, because the InstantSend lock does not include any block or time based information. In Dash Platform InstantSend Locks are used to add credit to Identities as they provide input finality. When blocks are replayed on the Platform Chain, all State Transitions need to be re-validated and it is possible that InstantSend signatures will need to be rechecked. However, to recheck them one needs to know the quorum that signed them. In this DIP we will provide a mechanism to that end.
+LLMQ based InstantSend was introduced in DIP10. In that implementation InstantSend locks are only verifiable by recent quorums because the InstantSend lock does not include any block or time based information. In Dash Platform InstantSend Locks are used to add credit to Identities as they provide input finality. When blocks are replayed on the Platform Chain, all State Transitions need to be re-validated and it is possible that InstantSend signatures will need to be rechecked. However, to recheck them one needs to know the quorum that signed them. In this DIP we will provide a mechanism to that end.
 
 ## Previous work
 
@@ -26,7 +26,7 @@ LLMQ based InstantSend was introduced in DIP10. In that implementation InstantSe
 
 ## Versioning of ISLock messages
 
-Since `islock` messages were never versioned, a new `ISDLOCK` message will be created and the `islock` message will be deprecated. ISD stands for InstantSend Deterministic. The version of the `ISDLOCK` used in this document will be 1. We will still refer to `islock` messages, even though the message name has been changed.
+Since `islock` messages were never versioned, a new `ISDLOCK` message will be created and the `islock` message will be deprecated. ISD stands for InstantSend Deterministic. The version of the `ISDLOCK` used in this document will be `1`. We will still refer to `islock` messages, even though the message name has been changed.
 
 The `messageHash` for `islock` messages should now be calculated as `SHA256(version, txHash).`
 
@@ -40,7 +40,7 @@ By adding the `cycleHash` to the `islock` message, any node can follow the steps
 
 ## Verification of the signature
 
-To calculate which LLMQ was responsible for the `islock` the verifier should perform the following:
+To calculate which LLMQ was responsible for the `islock`, the verifier should perform the following:
 
 1. Take the LLMQ set that corresponds to the quorum cycle defined by the cycle hash in the `islock` message
 2. Calculate the RequestID from data in the `islock` message by calculating `SHA256("islock", inputCount, prevTxHash1, prevTxOut1, prevTxHash2, prevTxOut2, ...)`
@@ -48,7 +48,7 @@ To calculate which LLMQ was responsible for the `islock` the verifier should per
 4. Sort the list of LLMQs based on the result of step 3 in ascending order
 5. Use the first entry of the sorted list as the responsible LLMQ
 6. Create the SignID by calculating `SHA256(quorumHash, requestId, SHA256(version, txHash))`
-7. Use the public key of responsible LLMQ and verify the signature against the SignID
+7. Use the public key of the responsible LLMQ and verify the signature against the SignID
 
 Nodes receiving `islock` messages should verify them by using the above steps. Only `ISDLOCK` messages with valid signatures should be propagated further using the inventory system.
 
