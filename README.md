@@ -35,7 +35,7 @@ Number | Layer | Title | Owner | Type | Status
 [16](dip-0016.md) | Applications | Headers First Synchronization on Simple Payment Verification Wallets | Samuel Westrich | Informational | Proposed
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Proposed
 [21](dip-0021.md) | Consensus | LLMQ DKG Data Sharing | dustinface | Standard | Proposed
-[22](dip-0023.md) | Consensus | Enhanced Hard Fork Mechanism | Pasta | Standard | Proposed
+[23](dip-0023.md) | Consensus | Enhanced Hard Fork Mechanism | Pasta | Standard | Proposed
 
 ## License
 
