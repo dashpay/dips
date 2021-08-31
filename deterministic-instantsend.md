@@ -105,8 +105,3 @@ The new message has the following structure (fields in bold are not present in t
 Choosing the active LLMQ to perform signing should follow the same steps as defined in [DIP-0007 -
 Choosing the active LLMQ to perform
 signing](https://github.com/dashpay/dips/blob/master/dip-0007.md#choosing-the-active-llmq-to-perform-signing).
-
-| Field | Type | Size | Description |
-|-|-|-|-|
-| txid | uint256 | 32 | Transaction id (hash of the transaction)
-| sig | BLSSig | 96 | Recovered signature from the signing request/session
