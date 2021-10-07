@@ -37,7 +37,6 @@ Since `islock` messages were never versioned, a new `ISDLOCK` message will be cr
 `ISDLOCK` used in this document will be `1`. We will still refer to `islock` messages, even though
 the message name has been changed.
 
-
 ## QuorumHash vs CycleHash
 
 The naive approach to fixing this problem would be to include the `quorumHash` in the `islock`
