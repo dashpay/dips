@@ -37,7 +37,6 @@ Since `islock` messages were never versioned, a new `ISDLOCK` message will be cr
 `ISDLOCK` used in this document will be `1`. We will still refer to `islock` messages, even though
 the message name has been changed.
 
-The `messageHash` for `islock` messages should now be calculated as `SHA256(version, txHash).`
 
 ## QuorumHash vs CycleHash
 
