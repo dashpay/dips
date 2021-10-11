@@ -1,5 +1,5 @@
 <pre>
-DIP: 00xx
+DIP: 0022
 Title: Making InstantSend Deterministic using Quorum Cycles
 Author: Samuel Westrich, UdjinM6
 Special-Thanks: Thephez, Virgile Bartolo
