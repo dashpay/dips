@@ -66,7 +66,7 @@ To calculate which LLMQ was responsible for the `islock`, the verifier should pe
 3. For each LLMQ of this quorum cycle’s set, calculate `SHA256(quorumType, quorumHash, requestId)`
 4. Sort the list of LLMQs based on the result of step 3 in ascending order
 5. Use the first entry of the sorted list as the responsible LLMQ
-6. Create the SignID by calculating `SHA256(quorumHash, requestId, SHA256(version, txHash))`
+6. Create the SignID by calculating `SHA256(quorumHash, requestId, txHash)`
 7. Use the public key of the responsible LLMQ and verify the signature against the SignID
 
 Nodes receiving `islock` messages should verify them by using the above steps. Only `ISDLOCK`
