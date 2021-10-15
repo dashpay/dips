@@ -99,7 +99,7 @@ The ProRegTx also specifies a new field, shareHolders, that contains the address
 The transaction consists of the following data in the payload area:
 
 | Field | Type | Size | Description | (DIP) |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | version | uint_16 | 2 | Provider transaction version number.  Currently set to 1. | DIP0003 |
 | type | uint_16 | 2 | Masternode type. Default set to 0. | DIP0003 |
 | mode | uint_16 | 2 | Masternode mode. Default set to 0. | DIP0003 |
