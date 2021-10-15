@@ -87,7 +87,8 @@ P2PK/P2PKH/P2SH script, `<payoutStr>` must be set to the hex representation of t
 6. `<sharedReward>`: (NEW) the sharedReward field of the ProRegTx.
 7. `<payloadHash>`: (DIP3) The SHA256 hash of the ProRegTx payload with the payloadSig being empty.
 
-The ProRegTx descretely specifies 2 rewards, the operatorReward and the sharedReward. The combined calculation of these two rewards then defines the owner's reward:
+The ProRegTx discretely specifies 2 rewards, the operatorReward and the sharedReward. The combined calculation of these two rewards then defines the owner's reward:
+
 * The percentage of the masternode reward paid to the operator is calculated by dividing the operatorReward field by 100.
 * The total percentage of the masternode reward to be paid to shareHolders is calculated by dividing the sharedReward field by 100.
 * The remainder of the masternode reward is paid fully to the owner address.
