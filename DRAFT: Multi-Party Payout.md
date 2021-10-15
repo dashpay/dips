@@ -112,11 +112,11 @@ The transaction consists of the following data in the payload area:
 | operatorReward | uint_16 | 2 | A value from 0 to 10000. | DIP0003 |
 | sharedReward | uint_16 | 2 | A value from 0 to 10000. | current |
 | shareHolders | Array | Variable | An array of length between 1 - 100 of key value pairs `shareHolder address` : `percentage of sharedReward` (expressed an an integer from 1-100) | current |
-| scriptPayoutSize | compactSize uint | 1-9 | Size of the Payee Script. |
-| scriptPayout | Script | Variable | Payee script (p2pkh/p2sh) |
-| inputsHash | uint256 | 32 | The SHA256 hash of all the outpoints of the transaction inputs |
-| payloadSigSize | compactSize uint | 1-9 | Size of the Signature |
-| payloadSig | unsigned char[] | Variable | Signature of the hash of the ProTx fields. Signed with the key corresponding to the collateral outpoint in case the collateral is not part of the ProRegTx itself, empty otherwise. |
+| scriptPayoutSize | compactSize uint | 1-9 | Size of the Payee Script. | DIP0003 |
+| scriptPayout | Script | Variable | Payee script (p2pkh/p2sh) | DIP0003 |
+| inputsHash | uint256 | 32 | The SHA256 hash of all the outpoints of the transaction inputs | DIP0003 |
+| payloadSigSize | compactSize uint | 1-9 | Size of the Signature | DIP0003 |
+| payloadSig | unsigned char[] | Variable | Signature of the hash of the ProTx fields. Signed with the key corresponding to the collateral outpoint in case the collateral is not part of the ProRegTx itself, empty otherwise. | DIP0003 |
 
 ## Updating Masternode Information
 
@@ -133,7 +133,7 @@ The special transaction type used for ProUpRegTx Transactions is 3.
 The transaction consists of the following data in the payload area:
 
 | Field | Type | Size | Description | DIP |
-| ----- | ---- | ---- | ----------- | DIP3 |
+| ----- | ---- | ---- | ----------- | --- |
 | version | uint_16 | 2 | Upgrade Provider Transaction version number.  Currently set to 1. | DIP3 |
 | proTXHash | uint256 | 32 | The hash of the provider transaction | DIP3 |
 | mode | uint_16 | 2 | Masternode mode | DIP3 |
@@ -176,14 +176,14 @@ Please note that while deploying this DIP, additional and temporary validation r
 
 ### ProUpRevTx
 
-A ProUpRevTx is invalid if any of these conditions are true:
+A ProUpRevTx is invalid if any of these conditions are true (all defined in DIP3 except conditions 2-4):
 
-1. proTxHash can not be found in the registered masternode set (DIP3)
+1. proTxHash can not be found in the registered masternode set
 2. sharedReward > 10000 (Current DIP)
 3. sharedReward > 0 and shareHolders field is null (Current DIP)
 4. sum of values in shareHolders field != 100 (Current DIP)
-5. The inputsHash does not match the calculated hash (DIP3)
-6. payloadSig is invalid (DIP3)
+5. The inputsHash does not match the calculated hash
+6. payloadSig is invalid
 
 ## Masternode Rewards
 
