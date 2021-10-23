@@ -124,7 +124,7 @@ There are multiple ways to update masternodes only the ProUpRegTx is relevant to
 
 ### Updating Registrar of Masternode (ProUpRegTx)
 
-To registrar update a masternode, the masternode owner must submit another special transaction (DIP2) to the network. This special transaction is called a Provider Update Registrar Transaction and is abbreviated as ProUpRegTx. It can only be done by the owner.
+To registrar update a masternode, the masternode owner must submit another special transaction (DIP2) to the network. This special transaction is called a Provider Update Registrar Transaction and is abbreviated as ProUpRegTx. Only the owner can submit a ProUpRegTx.
 
 A ProUpRegTx is only valid for masternodes in the registered masternodes subset. When processed, it updates the metadata of the masternode entry. It does not revive masternodes previously marked as PoSe-banned. (DIP3)
 
