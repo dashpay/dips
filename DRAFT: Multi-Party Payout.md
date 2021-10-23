@@ -28,16 +28,16 @@
 
 ## Abstract
 
-This DIP builds on the chain consensus for masternode lists laid forth in DIP0003 and provides for multi-party payout beyond the single owner + operator framework of the current system.
+This DIP builds on the chain consensus for masternode lists laid forth in DIP0003 and provides for multi-party payout beyond the single Owner + Operator framework of the current system.
 
 ## Motivation and Previous System
 
-In the previous system, Masternodes gained entry to the masternode list after the owner created a ProRegTx (DIP3). This tx provided key IDs for up-to 2 roles that would receive masternode rewards payouts:
+Masternodes gain entry to the masternode list after the Owner creates a ProRegTx (DIP3). This tx provides key IDs for up-to two roles that will receive masternode rewards payouts:
 
  * Owner
  * Operator
 
-Masternode rewards are payed to the Owner by default, and when defined, to the Operator. Current updatesto the masternode registrar  (relevant to this DIP) could only:
+Masternode rewards are payed to the Owner by default, and to the Operator when properly defined. Current updates to the masternode registrar can only (relevant to this DIP):
 
   * Define new Operator
   * Define payout to Operator
@@ -46,7 +46,7 @@ Masternode rewards are payed to the Owner by default, and when defined, to the O
 
 While elegant, under the current system, the masternode reward is paid to the operator based on the `<operatorReward>` field and any difference from 100% is automatically paid to the owner address.
 
-The limitation of rewards paid to only 2 addresses based on a single value field prevents automatic/trustless sharing of the rewards beyond the owner and/or operator, a critical element for enabling trustless shares in a masternode and introducing Dash native DeFi opportunities through staking (among other use cases).
+The limitation of rewards paid to only two addresses based on a single value field prevents automatic/trustless sharing of the rewards beyond the single Owner and/or Operator, a critical element for enabling trustless shares in a masternode and introducing Dash native DeFi opportunities through staking (among other use cases).
 
 ## Prior Work
 
@@ -55,7 +55,7 @@ The limitation of rewards paid to only 2 addresses based on a single value field
 
 ## New Stake Holder Reward Fields within ProRegTx and ProUpRegTx
 
-In the new system the ProRegTx and ProUpRegTx (DIP3) may include an additional fields to define additional parties to receive rewards beyond the owner and operator and the % of owner rewards each party receives.
+In the new system the ProRegTx and ProUpRegTx (DIP3) may include an additional fields to define other parties to receive rewards, beyond the Owner and Operator, and the % of owner rewards each party receives.
 
 This DIP defines:
 
@@ -68,7 +68,7 @@ All other transactions, transaction fields, the mechanisms for adding or removin
 
 ## Registering a Masternode (ProRegTx)
 
-To join the masternode list, masternode owners must submit a special transaction (DIP2) to the network. DIP 3 defines the ProRegTx and the ProRegUpTx message, parts, and payload: `<magicString><payoutStr>|<operatorReward>|<ownerKeyAddress>|<votingKeyAddress>|<payloadHash>`
+To join the masternode list, masternode owners must submit a special transaction (DIP2) to the network. DIP3 defines the ProRegTx and the ProRegUpTx message, parts, and payload: `<magicString><payoutStr>|<operatorReward>|<ownerKeyAddress>|<votingKeyAddress>|<payloadHash>`
 
 We propose adding an additional part (`<sharedReward>`)to produce a message that includes:
 
@@ -87,14 +87,14 @@ P2PK/P2PKH/P2SH script, `<payoutStr>` must be set to the hex representation of t
 6. `<sharedReward>`: (NEW) the sharedReward field of the ProRegTx.
 7. `<payloadHash>`: (DIP3) The SHA256 hash of the ProRegTx payload with the payloadSig being empty.
 
-The ProRegTx discretely specifies 2 rewards, the operatorReward and the sharedReward. The combined calculation of these two rewards then defines the owner's reward:
+The ProRegTx discretely specifies two rewards, the operatorReward and the sharedReward. The owner's reward is calculation based on these two rewards:
 
 * The percentage of the masternode reward paid to the operator is calculated by dividing the operatorReward field by 100.
 * The total percentage of the masternode reward to be paid to shareHolders is calculated by dividing the sharedReward field by 100.
 * The remainder of the masternode reward is paid fully to the owner address.
 * The percentage of the sharedReward paid to each shareHolder is the defined in the shareHolders field.
 
-The ProRegTx also specifies a new field, shareHolders, that contains the addresses and percentage of the sharedReward each address is paid. This field is an array of key:value pairs. The key is Dash addresses that will receive rewards. The value is an integer between 1 and 100 (inclusive). This value is the percentage of the sharedReward the address will receive. To mitigate potential block size issues: this field is limited to a length of 100.
+The ProRegTx also specifies a new field, `shareHolders`, that contains the addresses and percentage of the sharedReward each address is paid. This field is an array of key:value pairs. The key is Dash addresses that will receive rewards. The value is an integer between 1 and 1000 (inclusive). This value is the percentage of the sharedReward the address will receive. To mitigate potential block size issues: this field is limited to a length of 50.
 
 The transaction consists of the following data in the payload area:
 
@@ -111,7 +111,7 @@ The transaction consists of the following data in the payload area:
 | KeyIdVoting | CKeyID | 20 | The public key hash used for voting. | DIP0003 |
 | operatorReward | uint_16 | 2 | A value from 0 to 10000. | DIP0003 |
 | sharedReward | uint_16 | 2 | A value from 0 to 10000. | current |
-| shareHolders | Array | Variable | An array of length between 1 - 100 of key value pairs `shareHolder address` : `percentage of sharedReward` (expressed an an integer from 1-100) | current |
+| shareHolderReward | Array | Variable | An array of length between 1 - 50 of key value pairs `shareHolder address` : `percentage of sharedReward` (expressed an an integer from 1-1000) | current |
 | scriptPayoutSize | compactSize uint | 1-9 | Size of the Payee Script. | DIP0003 |
 | scriptPayout | Script | Variable | Payee script (p2pkh/p2sh) | DIP0003 |
 | inputsHash | uint256 | 32 | The SHA256 hash of all the outpoints of the transaction inputs | DIP0003 |
@@ -140,7 +140,7 @@ The transaction consists of the following data in the payload area:
 | PubKeyOperator | BLSPubKey | 48 | The public key used for operational related signing (network messages, ProTx updates) | DIP3 |
 | KeyIdVoting | CKeyID | 20 | The public key hash used for voting. | DIP3 |
 | sharedReward | uint_16 | 2 | A value from 0 to 10000. | current |
-| shareHolders | Array | Variable | An array of length between 1 - 100 of key value pairs `shareHolder address` : `percentage of sharedReward` (expressed an an integer from 1-100) | current |
+| shareHolderReward | Array | Variable | An array of length between 1 - 50 of key value pairs `shareHolder address` : `percentage of sharedReward` (expressed an an integer from 1-1000) | current |
 | scriptPayoutSize | compactSize uint | 1-9 | Size of the Payee Script. | DIP3 |
 | scriptPayout | Script | Variable | Payee script (p2pkh/p2sh) | DIP3 |
 | inputsHash | uint256 | 32 | The SHA256 hash of all the outpoints of the transaction inputs | DIP3 |
@@ -166,11 +166,12 @@ A ProRegTx is invalid if any of these conditions are true (all defined in DIP3 e
   10. operatorReward > 10000
   11. sharedReward > 10000 (Current DIP)
   12. sharedReward > 0 and shareHolders field is null (Current DIP)
-  13. sum of values in shareHolders field != 100 (Current DIP)
-  14. The inputsHash does not match the calculated hash
-  15. collateralOutpoint `hash` is null and payloadSig is not empty (zero size)
-  16. collateralOutpoint `hash` is not null and payloadSig is not a valid signature signed with the collateral key
-  17. collateralOutpoint `hash` is not null and the referenced collateral is not a P2PKH output
+  13. sum of values in shareHolders field != 1000 (Current DIP)
+  14. length shareHolderReward is > 50 (Current DIP)
+  15. The inputsHash does not match the calculated hash
+  16. collateralOutpoint `hash` is null and payloadSig is not empty (zero size)
+  17. collateralOutpoint `hash` is not null and payloadSig is not a valid signature signed with the collateral key
+  18. collateralOutpoint `hash` is not null and the referenced collateral is not a P2PKH output
 
 Please note that while deploying this DIP, additional and temporary validation rules may apply. The details of these temporary rules will be described in the deployment plan.
 
@@ -180,14 +181,15 @@ A ProUpRevTx is invalid if any of these conditions are true (all defined in DIP3
 
 1. proTxHash can not be found in the registered masternode set
 2. sharedReward > 10000 (Current DIP)
-3. sharedReward > 0 and shareHolders field is null (Current DIP)
+3. sharedReward > 0 and shareHolderReward field is null (Current DIP)
 4. sum of values in shareHolders field != 100 (Current DIP)
-5. The inputsHash does not match the calculated hash
-6. payloadSig is invalid
+5. length shareHolderReward is > 50 (Current DIP)
+6. The inputsHash does not match the calculated hash
+7. payloadSig is invalid
 
 ## Masternode Rewards
 
-The new system allows to deterministically ascertain the recipient of the masternode’s portion of the next block reward (DIP3) beyond the owner/operator paradigm, but doesn't change any of the mechanisms to determine reward payment.
+The new system allows to deterministically ascertain the recipient of the masternode’s portion of the next block reward (DIP3) beyond the single Owner/Operator paradigm, but doesn't change any of the mechanisms to determine reward payment.
 
 The rules to determine the next block’s payee are will continue to be (DIP3):
 
@@ -197,7 +199,7 @@ The rules to determine the next block’s payee are will continue to be (DIP3):
 
 This calculation is performed for every block to enforce proper payment of the block's masternode reward (both payee and amount). Previously, masternode payment enforcement was skipped for superblocks, so miners received the full mining reward. With DIP3, masternode payment enforcement is also performed on superblocks.
 
-The "testHeight" logic in next block payee rule #2 (above) is used to ensure that masternodes must wait at least one full payment cycle before receiving their first reward. This is to incentivise long running masternodes and to avoid paying non-functioning masternodes before PoSe verification can remove them. It also ensures that new masternodes are not able to get a jump start in the payment queue.
+The "testHeight" logic in next block payee rule #2 (above) is used to ensure that masternodes must wait for at least one full payment cycle before receiving their first reward. This incentivises long-running masternodes and avoids paying non-functioning masternodes before PoSe verification can remove them. It also ensures that new masternodes are not able to get a jump start in the payment queue.
 
 ## Copyright
 
