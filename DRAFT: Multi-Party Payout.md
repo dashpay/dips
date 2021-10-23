@@ -154,8 +154,8 @@ The transaction consists of the following data in the payload area:
 
 A ProRegTx is invalid if any of these conditions are true (all defined in DIP3 except conditions 11-13):
 
-  1. collateralOutpoint `hash` is null but an output with 1000 DASH is not present at position `n` of the ProRegTx outputs
-  2. collateralOutpoint `hash` is not null but an output with 1000 DASH can't be found in the UTXO specified by the `hash` and `n`
+  1. collateralOutpoint `hash` is null, but an output with 1000 DASH is not present at position `n` of the ProRegTx outputs
+  2. collateralOutpoint `hash` is not null, but an output with 1000 DASH can't be found in the UTXO specified by the `hash` and `n`
   3. Any KeyId* field is null (KeyIdOwner, KeyIdOperator or KeyIdVoting)
   4. KeyIdOwner or PubKeyOperator was already used by any entry in the registered masternodes set
   5. scriptPayout is not a P2PKH or P2SH script
@@ -173,7 +173,7 @@ A ProRegTx is invalid if any of these conditions are true (all defined in DIP3 e
   17. collateralOutpoint `hash` is not null and payloadSig is not a valid signature signed with the collateral key
   18. collateralOutpoint `hash` is not null and the referenced collateral is not a P2PKH output
 
-Please note that while deploying this DIP, additional and temporary validation rules may apply. The details of these temporary rules will be described in the deployment plan.
+Please note that while deploying this DIP, additional and interim validation rules may apply. The details of these temporary rules will be described in the deployment plan.
 
 ### ProUpRevTx
 
