@@ -191,7 +191,7 @@ A ProUpRevTx is invalid if any of these conditions are true (all defined in DIP3
 
 The new system allows to deterministically ascertain the recipient of the masternode’s portion of the next block reward (DIP3) beyond the single Owner/Operator paradigm, but doesn't change any of the mechanisms to determine reward payment.
 
-The rules to determine the next block’s payee are will continue to be (DIP3):
+The rules to determine the next block’s payee will continue to be the same as [originally defined in DIP3](https://github.com/dashpay/dips/blob/master/dip-0003.md#masternode-rewards).
 
   1. Take the valid masternode subset of the previous block
   2. Sort the set in ascending order by "testHeight" and “ProRegTx hash”. “testHeight” is determined for each individual entry and equals the “last paid height” (or “registered height” if the masternode was never paid). If the masternode was PoSe-banned before and revived later, the “revival height” of the masternode is used instead of the “registered height”. If the “testHeight” of two masternodes is identical, the ProRegTx hash acts as a deterministic tie breaker.
