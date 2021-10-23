@@ -55,7 +55,7 @@ The limitation of rewards paid to only two addresses based on a single value fie
 
 ## New Stake Holder Reward Fields within ProRegTx and ProUpRegTx
 
-In the new system the ProRegTx and ProUpRegTx (DIP3) may include an additional fields to define other parties to receive rewards, beyond the Owner and Operator, and the % of owner rewards each party receives.
+In the new system, the ProRegTx and ProUpRegTx (DIP3) may include an additional fields to define other parties to receive rewards, beyond the Owner and Operator, and the % of owner rewards each party receives.
 
 This DIP defines:
 
