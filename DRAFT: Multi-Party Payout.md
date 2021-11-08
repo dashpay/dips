@@ -48,7 +48,7 @@ We propose introducing version 2 of these transaction types to replace the `scri
 | Field | Type | Size | Description |
 | --- | --- | --- | --- |
 | payoutSharesSize | compactSize uint | 1-9 | Size of the Payout Share set |
-| payoutShares | payoutShare[] | 1-100 | A set of `payoutShare` items |
+| payoutShares | payoutShare[] | 1-32 | A set of `payoutShare` items |
 
 Each `payoutShare` item should have the following structure:
 
@@ -70,7 +70,7 @@ Where `payoutSharesStr` is:
 
 A ProRegTx or ProUpRegTx is invalid if any of these conditions are true (in addition to rules defined in DIP0003):
 
-  1. Size of `payoutShares` > 100
+  1. Size of `payoutShares` > 32
   1. Any `payoutShareReward` > 10000
   1. Sum of `payoutShares` != 10000
 
