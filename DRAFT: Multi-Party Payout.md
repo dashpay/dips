@@ -43,7 +43,7 @@ Paying rewards to only two addresses based on a single value field prevents auto
 
 ## Registering a Masternode (ProRegTx) and Updating Registrar of Masternode (ProUpRegTx)
 
-We propose introducing version 2 of these transaction types replacing `scriptPayout` and `scriptPayoutSize` fields with `payoutShares` and `payoutSharesSize` correspondingly.
+We propose introducing version 2 of these transaction types to replace the `scriptPayout` and `scriptPayoutSize` fields with `payoutShares` and `payoutSharesSize` respectively.
 
 | Field | Type | Size | Description |
 | --- | --- | --- | --- |
