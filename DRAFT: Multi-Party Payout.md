@@ -27,7 +27,7 @@ This DIP builds on the chain consensus for masternode lists laid forth in DIP000
 
 ## Motivation and Previous System
 
-In the previous system, Masternodes gained entry to the masternode list after the owner created a ProRegTx. This tx provided key IDs for up-to 2 roles that would receive masternode rewards payouts:
+In the previous system, masternodes gained entry to the masternode list after the owner created a ProRegTx. This transaction provided key IDs for up to two roles that would receive masternode rewards payouts:
 
  * Owner
  * Operator
