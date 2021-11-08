@@ -1,7 +1,8 @@
 <pre>
   DIP: 000x
   Title: Multi-Party Payouts
-  Authors: Timothy Munsell, UdjinM6, Danny Salman
+  Authors: Timothy Munsell, UdjinM6
+  Special-Thanks: Danny Salman
   Comments-Summary: No comments yet.
   Status: Draft
   Type: Standard
