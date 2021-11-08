@@ -58,7 +58,7 @@ Each `payoutShare` item should have the following structure:
 | scriptPayout | Script | Variable | Payee script (p2pkh/p2sh) |
 | payoutShareReward | uint_16 | 2 | A value from 0 to 10000 |
 
-To prove ownership of external collaterals masternode owner must set `payloadSig` of the ProRegTx to a valid signature which signs the following message:
+To prove ownership of external collaterals, masternode owners must sign the following message and use the resulting signature as the ProRegTx `payloadSig`:
 
 `<magicString><payoutSharesStr>|<operatorReward>|<ownerKeyAddress>|<votingKeyAddress>|<payloadHash>`
 
