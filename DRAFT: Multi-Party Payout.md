@@ -71,7 +71,7 @@ Where `payoutSharesStr` is:
 A ProRegTx or ProUpRegTx is invalid if any of these conditions are true (in addition to rules defined in DIP0003):
 
   1. Size of `payoutShares` > 100
-  1. any `payoutShareReward` > 10000
+  1. Any `payoutShareReward` > 10000
   1. sum of `payoutShares` != 10000
 
 ## Copyright
