@@ -62,7 +62,7 @@ To prove ownership of external collaterals, masternode owners must sign the foll
 
 `<magicString><payoutSharesStr>|<operatorReward>|<ownerKeyAddress>|<votingKeyAddress>|<payloadHash>`
 
-where `payoutSharesStr` is
+Where `payoutSharesStr` is:
 
 `address(<payoutShares>[0].<scriptPayout>)>|<payoutShares>[0].<payoutShareReward>|...|address(<payoutShares>[n].<scriptPayout>)>|<payoutShares>[n].<payoutShareReward>`
 
