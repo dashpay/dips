@@ -34,7 +34,7 @@ In the previous system, masternodes gained entry to the masternode list after th
 
 ### Problems with the previous system
 
-The limitation of rewards paid to only 2 addresses based on a single value field prevents automatic/trustless sharing of the rewards beyond the owner and/or operator, a critical element for enabling trustless shares in a masternode and introducing Dash native DeFi opportunities through staking (among other use cases).
+Paying rewards to only two addresses based on a single value field prevents automatic/trustless sharing of the rewards beyond the owner and/or operator. A more flexible reward payout system is critical for enabling trustless masternode shares and introducing Dash-native DeFi opportunities through staking (among other use cases).
 
 ## Prior Work
 
