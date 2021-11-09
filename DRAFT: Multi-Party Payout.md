@@ -76,4 +76,5 @@ A ProRegTx or ProUpRegTx is invalid if any of these conditions are true (in addi
 
 ## Copyright
 
-Copyright (c) 2021 Dash Core Group, Inc. [Licensed under the MIT License](https://opensource.org/licenses/MIT)
+This document is licensed under the [MIT License.](https://opensource.org/licenses/MIT)
+
