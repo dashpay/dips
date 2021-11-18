@@ -72,7 +72,7 @@ A ProRegTx or ProUpRegTx is invalid if any of these conditions are true (in addi
 
   1. Size of `payoutShares` > 32
   1. Any `payoutShareReward` > 10000
-  1. Sum of `payoutShareReward`s for all `payoutShare`s != 10000
+  1. Sum of `payoutShareReward` for all `payoutShare` != 10000
 
 
 ## Copyright
