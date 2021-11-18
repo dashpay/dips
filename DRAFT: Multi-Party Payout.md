@@ -1,5 +1,5 @@
 <pre>
-  DIP: 000x
+  DIP: 0026
   Title: Multi-Party Payouts
   Authors: Timothy Munsell, UdjinM6
   Special-Thanks: Danny Salman
