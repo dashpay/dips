@@ -36,7 +36,7 @@ Number | Layer | Title | Owner | Type | Status
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Proposed
 [21](dip-0021.md) | Consensus | LLMQ DKG Data Sharing | dustinface | Standard | Proposed
 [23](dip-0023.md) | Consensus | Enhanced Hard Fork Mechanism | Pasta | Standard | Proposed
-
+[26](dip-0026.md) | Consensus | Multi-Party Payout | Timothy Munsell, UdjinM6 | Standard | Proposed
 ## License
 
 Unless otherwise specified, Dash Improvement Proposals (DIPs) are released under the terms of the MIT license. See [LICENSE](LICENSE) for more information or see the [MIT License](https://opensource.org/licenses/MIT).
