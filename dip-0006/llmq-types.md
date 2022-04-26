@@ -7,7 +7,7 @@ in [Parameters/Variables of a LLMQ and DKG](../dip-0006.md#parametersvariables-o
 | LLMQ_400_60 | 2 | 400 | 300 | 240 (60%) | 288 (12 Hours) | 4 | 300 | 4 | |
 | LLMQ_400_85 | 3 | 400 | 350 | 340 (85%) | 576 (24 Hours) | 4 | 300 | 4 | |
 | LLMQ_100_67 | 4 | 100 | 80 | 67 (67%) | 24 (1 Hour) | 2 | 80 | 24 | |
-| LLMQ_60_75 | 5 | 60 | 50 | 45 (75%) | 288 (12 Hours) | 2 | 40 | 32 | |
+| LLMQ_60_75 | 5 | 60 | 50 | 45 (75%) | 288 (12 Hours) | 2 | 48 | 32 | |
 | LLMQ_TEST | 100 | 3 | 2 | 2 (66%) | 24 (1 Hour) | 2 | 2 | 2 | For testing only (regtest) |
 | LLMQ_DEVNET | 101 | 12 | 7 | 6 (50%) | 24 (1 Hour) | 2 | 7 | 4 | For devnets only |
 | LLMQ_TEST_V17 | 102 | 3 | 2 | 2 (66%) | 24 (1 Hour) | 2 | 2 | 2 | For testing only (regtest) |
