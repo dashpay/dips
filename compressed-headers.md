@@ -1,14 +1,4 @@
 # Compressed block headers
-Will Clark <will8clark@gmail.com>
-v1.0, May 2020:
-:toc: preamble
-:toclevels: 4
-
-This work is a derivation of these mailing list posts:
-
-1. https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014876.html[bitcoin-dev: "Compressed" headers stream - 2017] (with resurrection https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-December/015385.html[here])
-
-2. https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-March/015851.html[bitcoin-dev: Optimized Header Sync]
 
 ## Motivation
 
@@ -32,6 +22,14 @@ Currently headers are sent over the p2p network as a vector of `block_headers`, 
 |*Total*             | 81 bytes
 
 Some fields can be removed completely, others can be compressed under certain conditions.
+
+## Prior work
+
+This work is a derivation of the following:
+
+*  https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014876.html[bitcoin-dev: "Compressed" headers stream - 2017] (with resurrection https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-December/015385.html[here])
+* https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-March/015851.html[bitcoin-dev: Optimized Header Sync]
+* [Compressed block headers (Will Clark)](https://github.com/willcl-ark/compressed-block-headers/blob/v1.0/compressed-block-headers.adoc)
 
 ## Proposed specification
 
