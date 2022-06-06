@@ -96,9 +96,7 @@ The timestamp (in seconds) is consensus bound, based both on the time in the pre
 
 nBits currently changes once every 2016 blocks. It could be entirely calculated by the client from the timestamps of the previous 2015 blocks footnote:[2015 blocks are used in the adjustment calculation due to an off-by-one error: https://bitcointalk.org/index.php?topic=43692.msg521772#msg521772"].
 
-To simplify 'light' client implementations which would otherwise require consensus-valid calculation of the adjustments, we propose to transmit this according to the <<Bitfield>> specification above.
-
-To block 629,474 there have been 298 nBits adjustments (vs an expected 311 -- there was none before block 32,256).
+To simplify 'light' client implementations which would otherwise require consensus-valid calculation of the adjustments, we propose to transmit this according to the [Bitfield](#bitfield) specification above.
 
 | Genesis to block | Current (B) | Compressed (B) | Saving (%) |
 | -                | -           | -              | -          |
@@ -106,7 +104,7 @@ To block 629,474 there have been 298 nBits adjustments (vs an expected 311 -- th
 
 #### txn_count
 
-txn_count is included to make parsing of these messages compatible with parsing of `block` messages footnote:[https://bitcoin.stackexchange.com/questions/2104/why-is-the-block-header-txn-count-field-always-zero]. Therefore this field and its associated byte can be removed for transmission of compact headers.
+txn_count is included to make parsing of these messages compatible with parsing of `block` messages as explained on the [Bitcoin StackExchange](https://bitcoin.stackexchange.com/questions/2104/why-is-the-block-header-txn-count-field-always-zero). Therefore this field and its associated byte can be removed for transmission of compact headers.
 
 | Genesis to block | Current (B) | Compressed (B) | Saving (%) |
 | -                | -           | -              | -          |
@@ -114,7 +112,7 @@ txn_count is included to make parsing of these messages compatible with parsing 
 
 ### Service Bit
 
-A new service bit would be required so that the nodes can advertise their ability to supply compact headers.
+A new service bit is required so that the nodes can advertise their ability to supply compact headers. Dash uses bit 11 and designates it `NODE_HEADERS_COMPRESSED`.
 
 ### P2P Messages
 
@@ -143,7 +141,6 @@ For the motivational use-case it makes sense to also update this mechanism to su
 
 A `headers2` message is returned in response to `getheaders2` or at new header announcement following a `sendheaders2` request. It contains both `length` and `headers` fields. The `headers` field contains a variable length vector of `block_header2`:
 
-|===
 | Field Size | Description | Data type       | Comments
 | -          | -           | -               | -
 |1+         |length      |var_int         |Length of `headers`
