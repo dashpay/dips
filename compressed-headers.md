@@ -27,8 +27,9 @@ Some fields can be removed completely, others can be compressed under certain co
 
 This work is a derivation of the following:
 
-*  https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014876.html[bitcoin-dev: "Compressed" headers stream - 2017] (with resurrection https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-December/015385.html[here])
-* https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-March/015851.html[bitcoin-dev: Optimized Header Sync]
+* [bitcoin-dev: "Compressed" headers stream - August 2017](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-August/014876.html)
+  * [Further discussion - December 2017](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-December/015385.html)
+* [bitcoin-dev: Optimized Header Sync](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-March/015851.html)
 * [Compressed block headers (Will Clark)](https://github.com/willcl-ark/compressed-block-headers/blob/v1.0/compressed-block-headers.adoc)
 
 ## Proposed specification
@@ -132,9 +133,9 @@ The new p2p message required to request compact block headers would require the 
 
 #### `sendheaders2` -- Request compact header announcements
 
-Since https://github.com/bitcoin/bips/blob/master/bip-0130.mediawiki[BIP-130], nodes have been able to request to receive new headers directly in `headers` messages, rather than via an `inv` of the new block hash and subsequent `getheader` request and `headers` response (followed by a final `getdata` to get the tip block itself, if desired). This is requested by transmitting an empty `sendheaders` message after the version handshake is complete.]
+Since [BIP-130](https://github.com/bitcoin/bips/blob/master/bip-0130.mediawiki), nodes have been able to request to receive new headers directly in `headers` messages, rather than via an `inv` of the new block hash and subsequent `getheader` request and `headers` response (followed by a final `getdata` to get the tip block itself, if desired). This is requested by transmitting an empty `sendheaders` message after the version handshake is complete.]
 
-Upon receipt of this message, the node is permitted, but not required, to preemptively announce new headers with the `headers2` message (instead of `inv`). Preemptive header announcement is supported by the protocol version ≥ 70012 | Bitcoin Core version ≥ 0.12.0.
+Upon receipt of this message, the node is permitted, but not required, to preemptively announce new headers with the `headers2` message (instead of `inv`). Preemptive header announcement has been supported by the protocol version ≥ 70206 | Dash Core version ≥ 0.12.1.
 
 For the motivational use-case it makes sense to also update this mechanism to support sending header updates using compact headers using a new message.
 
@@ -146,10 +147,10 @@ A `headers2` message is returned in response to `getheaders2` or at new header a
 | Field Size | Description | Data type       | Comments
 | -          | -           | -               | -
 |1+         |length      |var_int         |Length of `headers`
-|39-81x?    |headers     |block_header2[] |Compressed block headers in <<block_header2 data type>> format
+|39-81x?    |headers     |block_header2[] |Compressed block headers in [block_header2 data type](#block_header2-data-type) format
 
 ### Implementation
 
-* The first header in the first `block_header2[]` vector to a newly-connected client MUST contain the full nBits`, `timestamp`, `version` and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.
-* Subsequent headers in a contiguous vector SHOULD follow the compressed <<block_header2 data type>> format.
-* Subsequent compressed headers supplied to an already-connected client (requesting compressed headers), SHOULD follow the compressed <<block_header2 data type>> format.
+* The first header in the first `block_header2[]` vector to a newly-connected client MUST contain the full `nBits`, `timestamp`, `version` and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.
+* Subsequent headers in a contiguous vector SHOULD follow the compressed [block_header2 data type](#block_header2-data-type) format.
+* Subsequent compressed headers supplied to an already-connected client (requesting compressed headers), SHOULD follow the compressed [block_header2 data type](#block_header2-data-type) format.
