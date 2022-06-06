@@ -49,7 +49,7 @@ The following table illustrates the proposed `block_header2` data type specifica
 |nonce               | 4 bytes  | 4 bytes
 |*Total*             | 81 bytes | range: 39 - 81 bytes
 
-This compression results in a maximum reduction from an 81 byte header to best-case 39 byte header. With 629,474 blocks in the current blockchain, a continuous header sync from genesis (requiring a single full 81 byte header followed by only compressed `block_header2`) has been tested to have its required bandwidth reduced from 50.98MB down to 25.86MB, a saving of 49%.
+This compression results in a maximum reduction from an 81 byte header to best-case 39 byte header. In bitcoin a continuous header sync from genesis (requiring a single full 81 byte header followed by only compressed `block_header2`) to height 629,474 was tested using this method and it resulted in a bandwidth reduction from 50.98MB down to 25.86MB, a saving of 49%.
 
 #### Bitfield
 
