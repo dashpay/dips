@@ -52,7 +52,7 @@ This compression results in a maximum reduction from an 81 byte header to best-c
 
 #### Bitfield
 
-To make parsing of header messages easier and further increase header compression, a single byte bitfield was suggested by gmaxwell footnote:[https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-December/015397.html]. We propose the following amended bitfield meanings (bits re-ordered to match `headers2` field order):
+To make parsing of header messages easier and further increase header compression, a single byte bitfield was suggested by [gmaxwell](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-December/015397.html). We propose the following amended bitfield meanings (bits re-ordered to match `headers2` field order):
 
 |Bit | Meaning + field size to read |
 | -  | -                            |
@@ -63,13 +63,13 @@ To make parsing of header messages easier and further increase header compressio
 |6   | possibly to signal "more headers follow" to make the encoding self-delimiting.
 |7   | currently undefined
 
-This bitfield adds 1 byte for every block in the chain, for a current total increase of 629,474B.
+This bitfield adds 1 byte for every block in the chain.
 
 #### Version
 
 In most cases the Version field will be identical to one referenced in one of the previous 7 unique versions, as indicated by bits 0,1,2 of the Bitfield.
 
-To block 629,474 there were 616,137 blocks whose version was in the previous 7 distinct versions, and only 13,338 blocks whose version was not, this includes any version bit manipulation done via overt ASIC boost.
+In bitcoin testing to block 629,474, there were 616,137 blocks whose version was in the previous 7 distinct versions and only 13,338 blocks that were not.
 
 | Genesis to block | Current (B) | Compressed (B) | Saving (%) |
 | -                | -           | -              | -          |
@@ -77,8 +77,7 @@ To block 629,474 there were 616,137 blocks whose version was in the previous 7 d
 
 #### Previous block hash
 
-The previous block hash will always be the
-`SHA256(SHA256(<previous_header>))` so is redundant, presuming you have the previous header in the chain.
+The previous block hash will always be the X11 hash of `previous_header` so it is redundant given that you have the previous header in the chain.
 
 | Genesis to block | Current (B) | Compressed (B) | Saving (%) |
 | -                | -           | -              | -          |
@@ -86,8 +85,7 @@ The previous block hash will always be the
 
 #### Time
 
-The timestamp (in seconds) is consensus bound, based both on the time in the previous
-header: `MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60 = 7200`, and being greater than the `MedianTimePast` of the previous 11 blocks. Therefore this can be safely represented as an offset from the previous headers' timestamp using a 2 byte `signed short int`.
+The timestamp (in seconds) is consensus bound, based both on the time in the previous header: `MAX_FUTURE_BLOCK_TIME = 2 * 60 * 60 = 7200`, and being greater than the `MedianTimePast` of the previous 11 blocks. Therefore this can be safely represented as an offset from the previous headers' timestamp using a 2 byte `signed short int`.
 
 | Genesis to block | Current (B) | Compressed (B) | Saving (%) |
 | -                | -           | -              | -          |
@@ -124,7 +122,6 @@ Three new messages would be used by nodes that enable compact block header suppo
 #### `getheaders2` -- Requesting compact headers
 
 The new p2p message required to request compact block headers would require the same fields as the current `getheaders` message:
-
 
 |Field Size | Description          | Data type | Comments
 | -         | -                    | -         | -
