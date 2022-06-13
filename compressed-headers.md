@@ -94,13 +94,7 @@ The timestamp (in seconds) is consensus bound, based both on the time in the pre
 
 #### nBits
 
-nBits currently changes once every 2016 blocks. It could be entirely calculated by the client from the timestamps of the previous 2015 blocks footnote:[2015 blocks are used in the adjustment calculation due to an off-by-one error: https://bitcointalk.org/index.php?topic=43692.msg521772#msg521772"].
-
-To simplify 'light' client implementations which would otherwise require consensus-valid calculation of the adjustments, we propose to transmit this according to the [Bitfield](#bitfield) specification above.
-
-| Genesis to block | Current (B) | Compressed (B) | Saving (%) |
-| -                | -           | -              | -          |
-| 629,474          | 2,517,896   | 1,196          | 99.6
+In Dash nBits changes every block so this field will always contain the full value.
 
 #### txn_count
 
