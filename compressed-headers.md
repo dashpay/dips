@@ -144,4 +144,3 @@ A `headers2` message is returned in response to `getheaders2` or at new header a
 
 * The first header in the first `block_header2[]` vector to a newly-connected client MUST contain the full `nBits`, `timestamp`, `version` and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.
 * Subsequent headers in a contiguous vector SHOULD follow the compressed [block_header2 data type](#block_header2-data-type) format.
-* Subsequent compressed headers supplied to an already-connected client (requesting compressed headers), SHOULD follow the compressed [block_header2 data type](#block_header2-data-type) format.
