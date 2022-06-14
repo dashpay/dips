@@ -57,12 +57,11 @@ To make parsing of header messages easier and further increase header compressio
 
 |Bit | Meaning + field size to read |
 | -  | -                            |
-|0<br>1<br>2    | version: same as the last *distinct* value 1st ... 7th (0 byte field) or a new 32bit distinct value (4 byte field).
-|3   | prev_block_hash: is omitted (0 byte field) or included (32 byte field)
-|4   | timestamp: as small offset (2 byte field) or full (4 byte field).
-|5   | nbits: same as last header (0 byte field) or new (4 byte field).
-|6   | possibly to signal "more headers follow" to make the encoding self-delimiting.
-|7   | currently undefined
+|0<br>1<br>2    | Version: same as the last *distinct* value 1st ... 7th (0 byte field) or a new 32-bit distinct value (4 byte field).
+|3   | Previous block hash: Omitted (0 byte field) when bit is `0`; Included (32 byte field) when bit is `1`
+|4   | Timestamp: Small offset (2 byte field) when bit is `0`; Full timestamp (4 byte field) when bit is `1`
+|5   | nBits: Same as last header (0 byte field) when bit is `0`; New value (4 byte field) when bit is `1`
+|6+  | Undefined
 
 This bitfield adds 1 byte for every block in the chain.
 
