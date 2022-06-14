@@ -93,7 +93,9 @@ The timestamp (in seconds) is consensus bound, based both on the time in the pre
 
 #### nBits
 
-In Dash nBits changes every block so this field will always contain the full value.
+In Dash use of the [Dark Gravity Wave (DGW)](https://docs.dash.org/en/stable/introduction/features.html#dark-gravity-wave) difficulty adjustment algorithm results in nBits generally changing in every block. Consequently, this field will usually contain the full value.
+
+There is a period of time at the beginning of the chain where the bitcoin difficulty adjustment algorithm was used. During this time compression of the nBits field will occur.
 
 #### txn_count
 
