@@ -143,5 +143,6 @@ A `headers2` message is returned in response to `getheaders2` or at new header a
 
 ### Implementation
 
-* The first header in the first `block_header2[]` vector to a newly-connected client MUST contain the full `nBits`, `timestamp`, `version` and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.
+* The first header in each `block_header2[]` vector MUST contain the full `nBits`, `timestamp`, `version` and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.
 * Subsequent headers in a contiguous vector SHOULD follow the compressed [block_header2 data type](#block_header2-data-type) format.
+* If a peer sends both a `sendheaders` and a `sendheaders2` message, they SHOULD be sent block announcements using compressed headers regardless of which message was sent first.
