@@ -67,7 +67,7 @@ This bitfield adds 1 byte for every block in the chain.
 
 #### Version
 
-In most cases the Version field will be identical to one referenced in one of the previous 7 unique versions, as indicated by bits 0,1,2 of the Bitfield.
+In most cases the Version field will be identical to one referenced in one of the previous 7 unique versions, as indicated by bits 0, 1, and 2 of the Bitfield.
 
 In bitcoin testing to block 629,474, there were 616,137 blocks whose version was in the previous 7 distinct versions and only 13,338 blocks that were not.
 
@@ -107,7 +107,7 @@ txn_count is included to make parsing of these messages compatible with parsing 
 
 ### Service Bit
 
-A new service bit is required so that the nodes can advertise their ability to supply compact headers. Dash uses bit 11 and designates it `NODE_HEADERS_COMPRESSED`.
+A new service bit is required so that the nodes can advertise their ability to supply compact headers. Dash would use bit 11 and designate it `NODE_HEADERS_COMPRESSED`.
 
 ### P2P Messages
 
@@ -119,10 +119,10 @@ The new p2p message required to request compact block headers would require the 
 
 |Field Size | Description          | Data type | Comments
 | -         | -                    | -         | -
-|4          |version              |uint32_t  |the protocol version
-|1+         |hash count           |var_int   |number of block locator hash entries
-|32+        |block locator hashes |char[32]  |block locator object; newest back to genesis block (dense to start, but then sparse)
-|32         |hash_stop            |char[32]  |hash of the last desired block header; set to zero to get as many blocks as possible (2000)
+|4          |version               |uint32_t   |The protocol version
+|1+         |hash count            |var_int    |Number of block locator hash entries
+|32+        |block locator hashes  |char[32]   |Block locator object; newest back to genesis block (dense to start, but then sparse)
+|32         |hash_stop             |char[32]   |Hash of the last desired block header; set to zero to get as many blocks as possible (2000)
 
 #### `sendheaders2` -- Request compact header announcements
 
@@ -138,11 +138,16 @@ A `headers2` message is returned in response to `getheaders2` or at new header a
 
 | Field Size | Description | Data type       | Comments
 | -          | -           | -               | -
-|1+         |length      |var_int         |Length of `headers`
-|39-81x?    |headers     |block_header2[] |Compressed block headers in [block_header2 data type](#block_header2-data-type) format
+|1+          |length       |var_int          |Length of `headers`
+|39-81x?     |headers      |block_header2[]  |Compressed block headers in [block_header2 data type](#block_header2-data-type) format
 
 ### Implementation
 
 * The first header in each `block_header2[]` vector MUST contain the full `nBits`, `timestamp`, `version` and `prev_block_hash` fields, along with a correctly populated `bitfield` byte.
 * Subsequent headers in a contiguous vector SHOULD follow the compressed [block_header2 data type](#block_header2-data-type) format.
 * If a peer sends both a `sendheaders` and a `sendheaders2` message, they SHOULD be sent block announcements using compressed headers regardless of which message was sent first.
+
+# Copyright
+
+Copyright (c) 2022 Dash Core Group, Inc. [Licensed under the MIT
+License](https://opensource.org/licenses/MIT)
