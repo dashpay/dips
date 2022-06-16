@@ -1,6 +1,7 @@
 <pre>
   DIP: 0025
   Title: Compressed Block Headers
+  Author(s): gabriel-bjg, Thephez, UdjinM6
   Special-Thanks: Will Clark
   Comments-Summary: No comments yet.
   Status: Proposed
