@@ -1,4 +1,13 @@
-# Compressed block headers
+<pre>
+  DIP: 0025
+  Title: Compressed Block Headers
+  Special-Thanks: Will Clark
+  Comments-Summary: No comments yet.
+  Status: Proposed
+  Type: Standard
+  Created: 2022-06-06
+  License: MIT License
+</pre>
 
 ## Motivation
 
