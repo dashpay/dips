@@ -4,6 +4,9 @@ The transaction type is described based on proposed DIPs.
 Here is a table of current proposed types and their associated DIP. Future DIPs
 may introduce more types.
 
+*Note:* This table refers to the _payload_ version which relates only to the special transaction
+payload and is distinct from the _transaction_ version.
+
 | Type | Transaction Type | DIP Number and Name | Payload Version | State |
 | ---- | ---------------- | ------------------- | --------------- | ----- |
 | 1 | Provider Registration Transaction (ProRegTx) | [DIP 003: Deterministic Masternode List](https://github.com/dashpay/dips/blob/master/dip-0003.md) | 1 | Active |
