@@ -38,6 +38,7 @@ Number | Layer | Title | Owner | Type | Status
 [22](dip-0022.md) | Consensus | Making InstantSend Deterministic using Quorum Cycles | Samuel Westrich, UdjinM6 | Standard | Proposed
 [23](dip-0023.md) | Consensus | Enhanced Hard Fork Mechanism | Pasta | Standard | Proposed
 [24](dip-0024.md) | Consensus | Long-Living Masternode Quorum Distribution and Rotation | Samuel Westrich & Virgile Bartolo | Standard | Proposed
+[25](dip-0025.md) | Peer Services | Compressed Block Headers | gabriel-bjg, Thephez, UdjinM6 | Standard | Proposed
 [26](dip-0026.md) | Consensus | Multi-Party Payout | Timothy Munsell, UdjinM6 | Standard | Proposed
 
 ## License
