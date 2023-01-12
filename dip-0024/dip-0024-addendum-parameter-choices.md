@@ -1,5 +1,3 @@
-# DIP-24 Addendum - Parameter Choices
-
 <pre>
   Title: DIP-24 Addendum - Parameter Choices
   Author(s):  Virgile Bartolo
