@@ -1,7 +1,7 @@
 <pre>
   Title: DIP-24 Addendum - Parameter Choices
   Author(s):  Virgile Bartolo
-  Special-Thanks: Samuel Westrich
+  Special-Thanks: Odysseas Gabrielides, Wisdom Ogwu, Samuel Westrich
   Comments-Summary: No comments yet.
   Type: Supporting Document
   Created: 2022-09-15
