@@ -40,6 +40,7 @@ Number | Layer | Title | Owner | Type | Status
 [24](dip-0024.md) | Consensus | Long-Living Masternode Quorum Distribution and Rotation | Samuel Westrich & Virgile Bartolo | Standard | Proposed
 [25](dip-0025.md) | Peer Services | Compressed Block Headers | gabriel-bjg, Thephez, UdjinM6 | Standard | Proposed
 [26](dip-0026.md) | Consensus | Multi-Party Payout | Timothy Munsell, UdjinM6 | Standard | Proposed
+[27](dip-0027.md) | Consensus | High-Performance Masternodes | Paul DeLucia, Odysseas Gabrielides, Łukasz Klimek, Ivan Shumkov, Samuel Westrich | Standard | Proposed
 
 ## License
 
