@@ -322,9 +322,9 @@ $x_i$.
 
 For that, we need $P(X_i^{(1)}= k)$ for all $i$. We look closely at the experiments:
 
-* $X_1^{(1)}$ is simply the hypergeometric law. $X_1^{(1)}\sim \operatorname{Hypergeometric} (M_a, c, qs)$ with $M_a$ being the total number of available masternodes to choose from, equal to $n - qs * 3/4$.
-* $X_2^{(1)}$ is the hypergeometric law $X_2^{(1)}\sim \operatorname{Hypergeometric} (M_a, c - x_1, qs)$. Indeed now there are $x_1$ fewer byzantine nodes to choose from.
-* $X_3^{(1)}$ is the hypergeometric law $X_3^{(1)}\sim \operatorname{Hypergeometric} (M_a, c - x_1 - x_2, qs)$.
+* $X_1^{(1)}$ is simply the hypergeometric law. $X_1^{(1)}\sim \text{Hypergeometric} (M_a, c, qs)$ with $M_a$ being the total number of available masternodes to choose from, equal to $n - qs * 3/4$.
+* $X_2^{(1)}$ is the hypergeometric law $X_2^{(1)}\sim \text{Hypergeometric} (M_a, c - x_1, qs)$. Indeed now there are $x_1$ fewer byzantine nodes to choose from.
+* $X_3^{(1)}$ is the hypergeometric law $X_3^{(1)}\sim \text{Hypergeometric} (M_a, c - x_1 - x_2, qs)$.
 
 These are known laws and thus easily calculated for specific values. We now have all the information
 required for the calculations.
