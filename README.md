@@ -41,7 +41,7 @@ Number | Layer | Title | Owner | Type | Status
 [25](dip-0025.md) | Peer Services | Compressed Block Headers | gabriel-bjg, Thephez, UdjinM6 | Standard | Proposed
 [26](dip-0026.md) | Consensus | Multi-Party Payout | Timothy Munsell, UdjinM6 | Standard | Proposed
 27 |  |  |  |  | Reserved
-[28](dip-0028.md) | Consensus | High-Performance Masternodes | Paul DeLucia, Odysseas Gabrielides, Łukasz Klimek, Ivan Shumkov, Samuel Westrich | Standard | Final
+[28](dip-0028.md) | Consensus | Evolution Masternodes | Paul DeLucia, Odysseas Gabrielides, Łukasz Klimek, Ivan Shumkov, Samuel Westrich | Standard | Final
 
 ## License
 
