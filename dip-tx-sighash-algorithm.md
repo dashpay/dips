@@ -45,7 +45,7 @@ The maximum transaction version is bumped to `4` and the proposed algorithm must
 1. nVersion of the transaction (2-byte integer)
 2. nType of the transaction (2-byte integer)
 3. hashPrevouts (32-byte hash)
-4. hashSequence (4-byte hash)
+4. hashSequence (32-byte hash)
 5. outpoint (32-byte hash + 4-byte index)
 6. scriptCode of the input (serialized as pk_script inside CTxOuts)
 7. value of the output spent by this input (8-byte int64_t)
