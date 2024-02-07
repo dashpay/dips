@@ -26,6 +26,7 @@ This DIP describes a new algorithm to compute the sighash of a transaction, whic
 ## Prior Work
 
 * [BIP-0143: Transaction Signature Verification for Version 0 Witness Program](https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki)
+* [DIP-0002: Special Transactions](https://github.com/dashpay/dips/blob/master/dip-0002.md)
 * [DIP-0023: Enhanced Hard Fork Mechanism](https://github.com/dashpay/dips/blob/master/dip-0023.md)
 
 ## Motivation
@@ -54,11 +55,15 @@ The maximum transaction version is bumped to `4` and the proposed algorithm must
 11. nLockTime of the transaction (4-byte uint32_t)
 12. sighash type of the signature (4-byte uint32_t)
 
-Items 1, 2, 8, 10, 11, 12 are usual fields of any transaction.
+Items 1, 2, 8, 11, 12 are usual fields of any transaction.
 
 Item 5 is the `outpoint` of the input being signed.
 
 Item 7 is the `value` in dash spent by the input being signed.
+
+Item 10 is the extra payload of a transaction: 
+* It must be included only if the transaction is special
+* A transaction is special if its `nVersion` is greater or equal to `3` and its `nType` is different from `0`, see  [DIP-0002](https://github.com/dashpay/dips/blob/master/dip-0002.md) for more details.
 
 For item 6 let's call `script` the script being executed, so the `scriptPubKey` of the `UTXO` spent by the input being signed. Then the `scriptCode` is computed as:
 * If the `script` does not contain any `OP_CODESEPARATOR`, the `scriptCode` is the `script` serialized as scripts inside `CTxOut`.
