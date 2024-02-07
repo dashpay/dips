@@ -140,11 +140,11 @@ ss << txTo.nLockTime;
 ss << nHashType;
 
 return ss.GetHash();
-````
+```
 
 Where the three internal functions are defined as:
 
-````cpp
+```cpp
 /** Compute the (single) SHA256 of the concatenation of all prevouts of a tx. */
 uint256 GetPrevoutsSHA256(const T& txTo){
     CHashWriter ss(SER_GETHASH, 0);
@@ -171,7 +171,7 @@ uint256 GetOutputsSHA256(const T& txTo){
     }
     return ss.GetSHA256();
 }
-````
+```
 
 ## Deployment
 
@@ -181,7 +181,7 @@ This DIP will be deployed using an ehf based hard fork as described in [DIP-0023
 
 To ensure consistency in consensus-critical behaviour, developers should test their implementations against the test below.
 
-````text
+```text
   The following is an unsigned transaction:
     040001000201168d635fbfd7df3a380a30dda5a4cf2d160ad47cc9614ac9f4e827f8876e260000000000ffffffff012da8dc79c177e8deffc3e95308cda74baac13c5bcfbe4010af709dbe0c2bb10000000000ffffffff0100e87648170000001976a9143c6fcdbbbc624fa338ae6479c90a566c95aace2188ac00000000d101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffff010101010001d77719cf0d140a54be57a29eed0ab8abde1572430adceb902ac682ba53c716070ea908ce754ede58972b7becd7e3a918e96e1e875f1ecb2f93702a8fd948b711b95762dad77719cf0d140a54be57a29eed0ab8abde15724300001976a9143c6fcdbbbc624fa338ae6479c90a566c95aace2188acb319b02a1a470620de59efc71832eea117579e4a80de0db2f3fafd1df0710b3e00
     
@@ -237,7 +237,7 @@ To ensure consistency in consensus-critical behaviour, developers should test th
     txout:         01 00e8764817000000 1976a9143c6fcdbbbc624fa338ae6479c90a566c95aace2188ac
     vExtraPayload: d101000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffff010101010001d77719cf0d140a54be57a29eed0ab8abde1572430adceb902ac682ba53c716070ea908ce754ede58972b7becd7e3a918e96e1e875f1ecb2f93702a8fd948b711b95762dad77719cf0d140a54be57a29eed0ab8abde15724300001976a9143c6fcdbbbc624fa338ae6479c90a566c95aace2188acb319b02a1a470620de59efc71832eea117579e4a80de0db2f3fafd1df0710b3e00
     nLockTime:     00000000
-````
+```
 
 ## Copyright
 
