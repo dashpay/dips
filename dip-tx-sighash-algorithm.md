@@ -99,15 +99,15 @@ uint256 hashSequence;
 uint256 hashOutputs;
 
 if (!(nHashType & SIGHASH_ANYONECANPAY)) {
-    hashPrevouts = SHA256Uint256(GetPrevoutsSHA256(txTo));
+    hashPrevouts = GetPrevoutsHash(txTo);
 }
 
 if (!(nHashType & SIGHASH_ANYONECANPAY) && (nHashType & 0x1f) != SIGHASH_SINGLE && (nHashType & 0x1f) != SIGHASH_NONE) {
-    hashSequence = SHA256Uint256(GetSequencesSHA256(txTo));
+    hashSequence = GetSequencesHash(txTo);
 }
 
 if ((nHashType & 0x1f) != SIGHASH_SINGLE && (nHashType & 0x1f) != SIGHASH_NONE) {
-    hashOutputs = SHA256Uint256(GetOutputsSHA256(txTo));
+    hashOutputs = GetOutputsHash(txTo);
 } else if ((nHashType & 0x1f) == SIGHASH_SINGLE && nIn < txTo.vout.size()) {
     CHashWriter ss(SER_GETHASH, 0);
     ss << txTo.vout[nIn];
@@ -145,31 +145,31 @@ return ss.GetHash();
 Where the three internal functions are defined as:
 
 ```cpp
-/** Compute the (single) SHA256 of the concatenation of all prevouts of a tx. */
-uint256 GetPrevoutsSHA256(const T& txTo){
+/** Compute the double SHA256 of the concatenation of all prevouts of a tx. */
+uint256 GetPrevoutsHash(const T& txTo){
     CHashWriter ss(SER_GETHASH, 0);
     for (const auto& txin : txTo.vin) {
         ss << txin.prevout;
     }
-    return ss.GetSHA256();
+    return ss.GetHash();
 }
 
-/** Compute the (single) SHA256 of the concatenation of all nSequences of a tx. */
-uint256 GetSequencesSHA256(const T& txTo){
+/** Compute the double SHA256 of the concatenation of all nSequences of a tx. */
+uint256 GetSequencesHash(const T& txTo){
     CHashWriter ss(SER_GETHASH, 0);
     for (const auto& txin : txTo.vin) {
         ss << txin.nSequence;
     }
-    return ss.GetSHA256();
+    return ss.GetHash();
 }
 
-/** Compute the (single) SHA256 of the concatenation of all txouts of a tx. */
-uint256 GetOutputsSHA256(const T& txTo){
+/** Compute the double SHA256 of the concatenation of all txouts of a tx. */
+uint256 GetOutputsHash(const T& txTo){
     CHashWriter ss(SER_GETHASH, 0);
     for (const auto& txout : txTo.vout) {
         ss << txout;
     }
-    return ss.GetSHA256();
+    return ss.GetHash();
 }
 ```
 
