@@ -21,7 +21,7 @@ License: MIT License
 
 ## Abstract
 
-This DIP describes a new algorithm to compute the sighash of a transaction, which is the sequence of bytes that is signed using ECDSA. Compared to the previous one, this new algorithm is faster and requires fewer data hashing.
+This DIP describes a new algorithm to compute the sighash of a transaction, which is the sequence of bytes that is signed using ECDSA. Compared to the previous one, this algorithm is faster and requires fewer data hashing.
 
 ## Prior Work
 
@@ -40,7 +40,7 @@ Unfortunately, there are at least 2 weaknesses in the original Signature Hash tr
 
 ## Specification
 
-The maximum transaction version is bumped to `4` and the proposed algorithm must be applied only to transactions with this new version. The algorithm consists in computing the signature hash of a transaction as the double SHA256 of the serialization of:
+A new sighash type will be added `SIGHASH_DIP0143` and the proposed algorithm must be applied only to individual transaction inputs that contains it. The algorithm consists in computing the signature hash of a transaction as the double SHA256 of the serialization of:
 
 1. nVersion of the transaction (2-byte integer)
 2. nType of the transaction (2-byte integer)
@@ -68,7 +68,7 @@ Item 10 is the extra payload of a transaction:
 For item 6 let's call `script` the script being executed, so the `scriptPubKey` of the `UTXO` spent by the input being signed. Then the `scriptCode` is computed as:
 * If the `script` does not contain any `OP_CODESEPARATOR`, the `scriptCode` is the `script` serialized as scripts inside `CTxOut`.
 * If the `script` contains any `OP_CODESEPARATOR`, the `scriptCode` is the `script` but removing everything up to and including the last executed `OP_CODESEPARATOR` before the signature checking opcode being executed, serialized as scripts inside `CTxOut`.
-* An important difference compared to the previous algorithm is that `FindAndDelete` of the signature is no longer applied to the `scriptCode`. This enforces that signatures are part only of the `scriptSig`.
+* Notice that, unlike the previous algorithm, all `OP_CODESEPARATOR` after the last executed one are not removed.
 
 All other items are computed depending on the `sighash` type:
 
@@ -176,6 +176,7 @@ uint256 GetOutputsSHA256(const T& txTo){
 ## Deployment
 
 This DIP will be deployed using an ehf based hard fork as described in [DIP-0023](https://github.com/dashpay/dips/blob/master/dip-0023.md).
+In particular a new script flag `SCRIPT_ENABLE_DIP0143` will be added and will be included in script verification only if the corresponding ehf is active. If the flag is not included transactions with any input that contains `SIGHASH_DIP0143` must be rejected.
 
 ## Test
 
