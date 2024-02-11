@@ -1,7 +1,7 @@
 <pre>
 DIP: tx-sighash-algorithm
 Title: A new transaction signature hash algorithm
-Authors: Bitcoin developers
+Authors: panleone
 Status: Draft
 Layer: Consensus (hard fork)
 Created: 2024-02-24
