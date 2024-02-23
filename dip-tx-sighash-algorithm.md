@@ -21,7 +21,7 @@ License: MIT License
 
 ## Abstract
 
-This DIP describes a new algorithm to compute the sighash of a transaction, which is the sequence of bytes that is signed using ECDSA. Compared to the previous one, this algorithm is faster and requires fewer data hashing.
+This DIP describes a new algorithm to compute the sighash of a transaction, which is the sequence of bytes that is signed using ECDSA. Compared to the previous algorithm, this one is faster and requires less data hashing.
 
 ## Prior Work
 
@@ -36,11 +36,11 @@ There are 4 ECDSA signature verification codes in the original DASH script syste
 Unfortunately, there are at least 2 weaknesses in the original Signature Hash transaction digest algorithm:
 
 * For the verification of each signature, the amount of data hashing is proportional to the size of the transaction. Therefore, data hashing grows in O(n<sup>2</sup>) as the number of sigops in a transaction increases. This could be fixed by optimizing the digest algorithm by introducing some reusable “midstate”, so the time complexity becomes O(n).
-* The algorithm does not involve the amount of DASH being spent by the input. This is usually not a problem for online network nodes as they could request the specified transaction to acquire the output value. For an offline transaction signing device (cold wallet), however, not knowing the input amount makes it impossible to calculate the exact amount being spent and the transaction fee. To cope with this problem, a cold wallet must also acquire the full transaction being spent, which could be a big obstacle in the implementation of lightweight, air-gapped wallet. By including the input value of part of the transaction digest, a cold wallet may safely sign a transaction by learning the value from an untrusted source. In the case that a wrong value is provided and signed, the signature would be invalid and no funding would be lost. See [SIGHASH_WITHINPUTVALUE: Super-lightweight HW wallets and offline data](https://bitcointalk.org/index.php?topic=181734.0).
+* The algorithm does not involve the amount of Dash being spent by the input. This is usually not a problem for online network nodes as they could request the specified transaction to acquire the output value. For an offline transaction signing device (cold wallet), however, not knowing the input amount makes it impossible to calculate the exact amount being spent and the transaction fee. To cope with this problem, a cold wallet must also acquire the full transaction being spent, which could be a big obstacle in the implementation of a lightweight, air-gapped wallet. By including the input value as part of the transaction digest, a cold wallet may safely sign a transaction by learning the value from an untrusted source. In the case that a wrong value is provided and signed, the signature would be invalid and no funding would be lost. See [SIGHASH_WITHINPUTVALUE: Super-lightweight HW wallets and offline data](https://bitcointalk.org/index.php?topic=181734.0).
 
 ## Specification
 
-A new sighash type will be added `SIGHASH_DIP0143` and the proposed algorithm must be applied only to individual transaction inputs that contains it. The algorithm consists in computing the signature hash of a transaction as the double SHA256 of the serialization of:
+A new sighash type, `SIGHASH_DIP0143`, will be added and the proposed algorithm must be applied only to individual transaction inputs that contain it. The algorithm consists in computing the signature hash of a transaction as the double SHA256 of the serialization of:
 
 1. nVersion of the transaction (2-byte integer)
 2. nType of the transaction (2-byte integer)
@@ -51,7 +51,7 @@ A new sighash type will be added `SIGHASH_DIP0143` and the proposed algorithm mu
 7. value of the output spent by this input (8-byte int64_t)
 8. nSequence of the input (8-byte int64_t)
 9. hashOutputs (32-byte hash)
-10. vExtraPayload of the transaction (only if transaction is special)
+10. vExtraPayload of the transaction (only if transaction is [special](https://github.com/dashpay/dips/blob/master/dip-0002.md#special-transactions))
 11. nLockTime of the transaction (4-byte uint32_t)
 12. sighash type of the signature (4-byte uint32_t)
 
@@ -175,8 +175,8 @@ uint256 GetOutputsHash(const T& txTo){
 
 ## Deployment
 
-This DIP will be deployed using an ehf based hard fork as described in [DIP-0023](https://github.com/dashpay/dips/blob/master/dip-0023.md).
-In particular a new script flag `SCRIPT_ENABLE_DIP0143` will be added and will be included in script verification only if the corresponding ehf is active. If the flag is not included transactions with any input that contains `SIGHASH_DIP0143` must be rejected.
+This DIP will be deployed using an EHF-based hard fork as described in [DIP-0023](https://github.com/dashpay/dips/blob/master/dip-0023.md).
+In particular a new script flag `SCRIPT_ENABLE_DIP0143` will be added and will be included in script verification only if the corresponding EHF is active. If the flag is not included, transactions with any input that contains `SIGHASH_DIP0143` must be rejected.
 
 ## Test
 
