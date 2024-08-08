@@ -40,7 +40,7 @@ Number | Layer | Title | Owner | Type | Status
 [24](dip-0024.md) | Consensus | Long-Living Masternode Quorum Distribution and Rotation | Samuel Westrich & Virgile Bartolo | Standard | Final
 [25](dip-0025.md) | Peer Services | Compressed Block Headers | gabriel-bjg, Thephez, UdjinM6 | Standard | Proposed
 [26](dip-0026.md) | Consensus | Multi-Party Payout | Timothy Munsell, UdjinM6 | Standard | Proposed
-27 |  |  |  |  | Reserved
+[27](dip-0027.md) | Consensus | Dash Core Credit Pool | Ivan Shumkov, Anton Suprunchuk, Thephez, Samuel Westrich | Standard | Proposed
 [28](dip-0028.md) | Consensus | Evolution Masternodes | Paul DeLucia, Odysseas Gabrielides, Łukasz Klimek, Ivan Shumkov, Samuel Westrich | Standard | Final
 [29](dip-0029.md) | Consensus | Randomness Beacon For LLMQ Selection | Virgile Bartolo | Standard | Proposed
 [30](dip-0030.md) | Consensus | Replay Attack Prevention and State Transition Nonces | Samuel Westrich | Standard | Proposed
