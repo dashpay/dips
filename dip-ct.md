@@ -81,9 +81,22 @@ This DIP documents how Dash can add CTs using Bulletproofs (BPs). The type of CT
 
 ### Confidential addresses (CT addresses)
 
-New Dash CTs will need a new type of address, a confidential address, to send and receive CT transactions. This means that the Dash full node will require new RPCs to create, validate, list and import confidential addresses. A prefix will need to be decided upon for these addresses so they can easily be differentiated from other Dash addresses. These addresses will be new data in wallet.dat and the code which reads and writes wallet.dat will need to also be updated to store and retrieve this data. The code which rescans blockchain history for transactions belonging to the current wallet will also need to be updated, i.e. the `-rescan` CLI option.
+New Dash CTs will need a new type of address, a confidential address, to send and receive CT transactions. This means that the Dash full node will require new RPCs to create, validate, list and import confidential addresses. A prefix will need to be decided upon for these addresses so they can easily be differentiated from other Dash addresses. These addresses will be new data in wallet.dat and the code which reads and writes wallet.dat will need to also be updated to store and retrieve this data. The code which rescans blockchain history for transactions belonging to the current wallet will also need to be updated.
 
 These new CT addresses require a different base58 prefix to identify them as different from traditional Dash addresses.
+
+The exact structure of a CT address is as follows. It contains the following data:
+
+  * salt (AKA blinding factor) . 32 byte random value
+  * pk . The public key, a 33 byte secp256k1 curve point
+
+A CT address can be then generated via
+
+```
+address = base58( RIPEMD160( SHA256( salt + pk ) ) )
+```
+
+where `+` denotes concatenation. 
 
 ### Confidential transactions
 
