@@ -85,45 +85,6 @@ New Dash CTs will need a new type of address, a confidential address, to send an
 
 These new CT addresses require a different base58 prefix to identify them as different from traditional Dash addresses.
 
-### New RPCs
-
-The following is a list of new RPCs which will be needed to support CTs:
-
-  * `getnewctaddress`
-    * Takes no arguments.
-    * Generates a random pubkey as well as a random salt or blinding factor and stores this data in wallet.dat and returns the base58 encoded representation
-    * This address will have a different base58 prefix from normal Dash addresses
-  * `listctaddresses`
-    * Takes no arguments.
-    * Returns a list of all CT addresses
-
-### Modified RPCs
-
-The following RPCs will be modified to support CTs:
-
-  * `importprivkey`
-    * Add ability to import a CT address private key
-  * `createrawcttransaction`
-    * Add ability to create raw CT transactions via specifying the amount of an input UTXO
-  * `getrawtransaction`
-    * Add ability to return data about CT transactions
-  * `gettransaction`
-    * Add ability to return data about CT transactions
-  * `getreceivedbyaddress`
-    * Add ability to get data about a CT address
-  * `dumpprivkey`
-    * Add ability to dump a CT address private key
-  * `dumpwallet`
-    * Add ability to dump CT address data
-  * `rescanblockchain`
-    * Add ability to recognize CT transactions owned by current wallet during a rescan
-  * `sendmany`
-    * Add ability to send to one or more CT addresses
-  * `sendtoaddress`
-    * Add ability to send to a CT address
-  * `validateaddress`
-    * Add ability to recognize CT addresses as valid and return metadata about them
-
 ### Confidential transactions
 
 A confidential transaction contains the following data :
