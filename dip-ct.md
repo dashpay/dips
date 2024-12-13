@@ -111,6 +111,39 @@ A confidential transaction contains the following data :
   * A list of one or more output addresses
     * These may be normal or CT addresses
 
+This DIP proposes using DIP-2 Special Transactions to store and implement Confidential Transactions. This means storing data in the `extra_payload` field of existing Dash transactions and Special Transaction `type` of 10, the currently next unused value of this field.
+
+The structure of `extra_payload` is :
+
+| Field | Type | Size | Description |
+| ----- | ---- | ---- | ----------- |
+| amount|ConfidentialAmount| 9 or 33 bytes| ... |
+| nonce |ConfidentialNonce| 33 bytes| ... |
+| proof |ConfidentialProof| Varies | ... |
+
+#### ConfidentialAmount
+
+| Field | Required | Size | Data Type | Encoding | Notes |
+| ----- | -------- | ---- | --------- | -------- | ----- |
+| Header | Yes | 1 byte | | | A header byte of `0x00` indicates a “null” value with no subsequent bytes.<br><br>A header byte of `0x01` indicates an “explicit” value with the following 8 bytes denoting a 64-bit value (big-endian).  This value must be between 0 and `MAX_MONEY` inclusive.<br><br>A header byte of `0x08` or `0x09` indicates a blinded value encoded as a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). The point must be a point on the curve. |
+| Value | If header byte is not `0x00` | 8 or 32 bytes | `hex` | Big-endian | |
+
+#### ConfidentialNonce
+
+| Field | Required | Size | Data Type | Encoding | Notes |
+| ----- | -------- | ---- | --------- | -------- | ----- |
+| Header | Yes | 1 byte | | | A header byte of `0x00` indicates a “null” value with no subsequent bytes.<br><br>A header byte of `0x01` indicates an “explicit” value with the following 32 bytes denoting a value (big-endian).<br><br>A header byte of `0x02` or `0x03` indicates a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). This point is not required to be on the curve. |
+| Value | If header byte is not `0x00` | 32 bytes | `hex` | Big-endian | |
+
+#### ConfidentialProof
+
+| Field | Required | Size | Data Type | Encoding | Notes |
+| ----- | -------- | ---- | --------- | -------- | ----- |
+| Length | Yes | Varies | `VarInt` | | `0x00` → null. |
+| Value | If header byte is not `0x00` | Varies | `hex` | Big-endian | Bulletproof which proves that the ConfidentialAmount is within the range of 0 and `MAX_MONEY`|
+
+
+#### Pederson Commitments
 
 A Pederson commitment can be thought of as a sealed box which is tamper-proof and contains a secret. Mathematically a Pederscon commitment is defined as
 
@@ -160,6 +193,7 @@ is unknown. This is known as the Discrete Logarithm Problem (DLP) and the securi
   * libsecp256k1 https://github.com/bitcoin-core/secp256k1
   * libsecp256k1 Bulletproofs: https://github.com/BlockstreamResearch/secp256k1-zkp/tree/master/src/modules/rangeproof
   * Example of bulletproof API in libsecp256k1 https://github.com/guillaumelauzier/Bulletproofs-libsecp256k1/blob/main/src.cpp
+  * Elements Transaction Format https://github.com/ElementsProject/elements/blob/master/doc/elements-tx-format.md
 
 ## Copyright
 
