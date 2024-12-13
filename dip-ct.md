@@ -121,6 +121,8 @@ The structure of `extra_payload` is :
 | nonce |ConfidentialNonce| 33 bytes| ... |
 | proof |ConfidentialProof| Varies | ... |
 
+The following data structures have been adapted from the Elements Project Transaction format:
+
 #### ConfidentialAmount
 
 | Field | Required | Size | Data Type | Encoding | Notes |
