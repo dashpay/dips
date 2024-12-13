@@ -4,7 +4,7 @@
   Author: Duke Leto
   Comments-Summary: No comments yet.
   Status: In Progress
-  Type: Standard
+  Type: Consensus
   Created: 2024-08-13
   License: MIT License
 </pre>
