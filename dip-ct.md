@@ -73,7 +73,7 @@ This DIP proposes a new transaction type as well as new address types and theref
 ## Overview
 
 One of the large differences between Dash and Monero is the Elliptic Curve each is based on. Dash uses secp256k1
-which is inherited from Bitcoin Core while Monero uses the Curve25519 curve. Bulletproofs are curve-agnostic, they can be used with any elliptic curve, but when considering exactly how the code will be implemented and which low-level libraries to use, this becomes important.
+which is inherited from Bitcoin Core while Monero uses the Curve25519 curve. To quote the original Bulletproof paper "Bulletproofs are zero-knowledge arguments of knowledge" i.e. they are a generalized mathematical tool that can be used in many different ways with many different cryptographic systems. In particular, they do not require a specific elliptic curve to be used with them. This is why both Bitcoin and Monero can use Bulletproofs even though they use different elliptic curves.
 
 ## Details
 
