@@ -88,9 +88,11 @@ These new CT addresses require a different base58 prefix to identify them as dif
 The exact structure of a CT address is as follows. It contains the following data:
 
   * salt (AKA blinding factor) . 32 byte random value
-  * pk . The public key, a 33 byte secp256k1 curve point
+  * pk . The compressed public key, a 33 byte secp256k1 curve point.
 
-To clarify, the public key can actually be stored in 32 bytes and one bit, because a point on the curve is a pair of 32 byte numbers (x,y). If x is known, y is almost uniquely identified, since for each `x` there are two `y` values, for exactly the same reason why `x^2 = 4` has two solutions, +2 and -2 . Since secp256k1 is symmetric about the x-axis, one bit can be used to say if the y value is above or below the x axis. 
+To clarify, the public key can actually be stored in 32 bytes and one bit, because a point on the curve is a pair of 32 byte numbers (x,y). If x is known, y is almost uniquely identified, since for each `x` there are two `y` values, for exactly the same reason why `x^2 = 4` has two solutions, +2 and -2 . Since secp256k1 is symmetric about the x-axis, one bit can be used to say if the y value is above or below the x axis.
+
+  The salt is 32 bytes because it is used to "blind" the x value of a (x,y) point on the curve which is 32 bytes. The compressed public key is 33 bytes (or 32 bytes and one bit) as described above and in the "Compressed Public Keys" section of Chapter 4 of "Mastering Bitcoin".
 
 
 A CT address can be then generated via
@@ -201,6 +203,7 @@ is unknown. This is known as the Discrete Logarithm Problem (DLP) and the securi
   * Elements Transaction Format https://github.com/ElementsProject/elements/blob/master/doc/elements-tx-format.md
   * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pedersen https://link.springer.com/chapter/10.1007/3-540-46766-1_9
   * What Are Pedersen Commitments And How They Work https://www.rareskills.io/post/pedersen-commitment
+  * Mastering Bitcoin, Chapter 4, Keys https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04_keys.adoc
 
 ## Copyright
 
