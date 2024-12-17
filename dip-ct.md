@@ -72,8 +72,8 @@ This DIP proposes a new transaction type as well as new address types and theref
 
 ## Overview
 
-One of the large differences between Dash and Monero is the Elliptic Curve each is based on. Dash uses secp256k1
-which is inherited from Bitcoin Core while Monero uses the Curve25519 curve. To quote the original Bulletproof paper "Bulletproofs are zero-knowledge arguments of knowledge" i.e. they are a generalized mathematical tool that can be used in many different ways with many different cryptographic systems. In particular, they do not require a specific elliptic curve to be used with them. This is why both Bitcoin and Monero can use Bulletproofs even though they use different elliptic curves. There exists a fork of libsecp256k1 called libsecp256k1-zkp which contains code to do Bulletproofs on the secp256k1 curve that the Dash community most likely will want to use.
+One of the large differences between Dash and Monero is the Elliptic Curve each is based on. Dash uses secp256k1 (defined by `y^2 = x^3 + 7` in "Standards For Efficient Cryptography")
+which is inherited from Bitcoin Core while Monero uses the Curve25519 curve defined by `y^2 = x^3 + 486662*x^2 + x` created by Daniel J. Berstein. To quote the original Bulletproof paper "Bulletproofs are zero-knowledge arguments of knowledge" i.e. they are a generalized mathematical tool that can be used in many different ways with many different cryptographic systems. In particular, they do not require a specific elliptic curve to be used with them. This is why both Bitcoin and Monero can use Bulletproofs even though they use different elliptic curves. There exists a fork of libsecp256k1 called libsecp256k1-zkp which contains code to do Bulletproofs on the secp256k1 curve that the Dash community most likely will want to use.
 
 ## Details
 
@@ -204,6 +204,8 @@ is unknown. This is known as the Discrete Logarithm Problem (DLP) and the securi
   * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pedersen https://link.springer.com/chapter/10.1007/3-540-46766-1_9
   * What Are Pedersen Commitments And How They Work https://www.rareskills.io/post/pedersen-commitment
   * Mastering Bitcoin, Chapter 4, Keys https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04_keys.adoc
+  * secp256k1 "Standards For Efficient Cryptography" https://www.secg.org/sec2-v2.pdf
+  * Curve25519, Daniel J Bernstein https://cr.yp.to/ecdh/curve25519-20060209.pdf
 
 ## Copyright
 
