@@ -77,18 +77,21 @@ which is inherited from Bitcoin Core while Monero uses the Curve25519 curve. To 
 
 ## Details
 
-This DIP documents how Dash can add CTs using Bulletproofs (BPs). The type of CT we propose using has two main parts, a signature and a Bulletproof. The Bulletproof proves that the signature is valid, in particular, that it's values are in between a certain valid range. This prevents an underflow or overflow of values that could be used to subvert the system. Bulletproofs are a type of Non-Interactive Zero Knowledge proof. They prove that the values are valid or invalid without leaking any information about the values themselves.
+This DIP documents how Dash can add CTs using Bulletproofs (BPs). The type of CT we propose using has two main parts, a signature and a Bulletproof. The Bulletproof (a type of range proof) proves that the signature is valid, in particular, that it's values are in between a certain valid range. This prevents an underflow or overflow of values that could be used to subvert the system. Bulletproofs are a type of Non-Interactive Zero Knowledge proof. They prove that the values are valid or invalid without leaking any information about the values themselves.
 
 ### Confidential addresses (CT addresses)
 
-New Dash CTs will need a new type of address, a confidential address, to send and receive CT transactions. This means that the Dash full node will require new RPCs to create, validate, list and import confidential addresses. A prefix will need to be decided upon for these addresses so they can easily be differentiated from other Dash addresses. These addresses will be new data in wallet.dat and the code which reads and writes wallet.dat will need to also be updated to store and retrieve this data. The code which rescans blockchain history for transactions belonging to the current wallet will also need to be updated.
+New Dash CTs will need a new type of address, a confidential address, to send and receive CT transactions. This means that the Dash full node will require new RPCs to create, validate, list and import confidential addresses. A prefix of `Dash` will be used for these addresses so they can easily be differentiated from other Dash addresses and from Confidential Addresses on other blockchains. These addresses will be new data in wallet.dat and the code which reads and writes wallet.dat will need to also be updated to store and retrieve this data. The code which rescans blockchain history for transactions belonging to the current wallet will also need to be updated. To detect if a UTXO is owned by the current wallet, full nodes will use the Confidential Address public key along with the salt corresponding to that public key to inspect every UTXO to see if is an output owned by the wallet.
 
-These new CT addresses require a different base58 prefix to identify them as different from traditional Dash addresses.
+These new CT addresses require a different base58 prefix to identify them as different from traditional Dash addresses and the prefix `Dash` is proposed.
 
 The exact structure of a CT address is as follows. It contains the following data:
 
   * salt (AKA blinding factor) . 32 byte random value
   * pk . The public key, a 33 byte secp256k1 curve point
+
+To clarify, the public key can actually be stored in 32 bytes and one bit, because a point on the curve is a pair of 32 byte numbers (x,y). If x is known, y is almost uniquely identified, since for each `x` there are two `y` values, for exactly the same reason why `x^2 = 4` has two solutions, +2 and -2 . Since secp256k1 is symmetric about the x-axis, one bit can be used to say if the y value is above or below the x axis. 
+
 
 A CT address can be then generated via
 
