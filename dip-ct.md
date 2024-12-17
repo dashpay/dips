@@ -127,7 +127,7 @@ The following data structures have been adapted from the Elements Project Transa
 
 | Field | Required | Size | Data Type | Encoding | Notes |
 | ----- | -------- | ---- | --------- | -------- | ----- |
-| Header | Yes | 1 byte | | | A header byte of `0x00` indicates a “null” value with no subsequent bytes.<br><br>A header byte of `0x01` indicates an “explicit” value with the following 8 bytes denoting a 64-bit value (big-endian).  This value must be between 0 and `MAX_MONEY` inclusive.<br><br>A header byte of `0x08` or `0x09` indicates a blinded value encoded as a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). The point must be a point on the curve. |
+| Header | Yes | 1 byte | | | A header byte of `0x00` indicates a “null” value with no subsequent bytes.<br><br>A header byte of `0x01` indicates an “explicit” value with the following 8 bytes denoting a 64-bit value (big-endian).  This value must be between 0 and `MAX_MONEY` inclusive.<br><br>A header byte of `0x08` or `0x09` indicates a blinded value encoded as a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). The point must be a point on the secp256k1 curve. |
 | Value | If header byte is not `0x00` | 8 or 32 bytes | `hex` | Big-endian | |
 
 #### ConfidentialNonce
