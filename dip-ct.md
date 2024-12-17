@@ -105,7 +105,7 @@ where `+` denotes concatenation.
 
 A confidential transaction contains the following data :
 
-  * A 33 byte Pederson commitment to the amount being transferred
+  * A 33 byte Pedersen commitment to the amount being transferred
   * A BP rangeproof that ensures the amount transferred is inside a certain interval between 0 and 2^N - 1
     * To support all potential value transfers between 0 and 21M the BP rangeproof needs N equal to 52
     * The exact size of the proof depends on the number of inputs and outputs
@@ -148,9 +148,9 @@ The following data structures have been adapted from the Elements Project Transa
 | Value | If header byte is not `0x00` | Varies | `hex` | Big-endian | Bulletproof which proves that the ConfidentialAmount is within the range of 0 and `MAX_MONEY`|
 
 
-#### Pederson Commitments
+#### Pedersen Commitments
 
-A Pederson commitment can be thought of as a sealed box which is tamper-proof and contains a secret. Mathematically a Pederscon commitment is defined as
+A Pedersen commitment can be thought of as a sealed box which is tamper-proof and contains a secret. Mathematically a Pedersen commitment is defined as
 
 ```
 P(v,s) = v[G] + s[Q]
@@ -178,7 +178,7 @@ is unknown, which is equivalent to
 log[G]
 ```
 
-is unknown. This is known as the Discrete Logarithm Problem (DLP) and the security of Pederson commitments is based on the hardness assumption that the DLP on appropriately chosen elliptic curves have no efficient algorithm to find a solution.
+is unknown. This is known as the Discrete Logarithm Problem (DLP) and the security of Pedersen commitments is based on the hardness assumption that the DLP on appropriately chosen elliptic curves have no efficient algorithm to find a solution.
 
 
 ### New consensus rules for CTs
@@ -199,7 +199,7 @@ is unknown. This is known as the Discrete Logarithm Problem (DLP) and the securi
   * libsecp256k1 Bulletproofs: https://github.com/BlockstreamResearch/secp256k1-zkp/tree/master/src/modules/rangeproof
   * Example of bulletproof API in libsecp256k1 https://github.com/guillaumelauzier/Bulletproofs-libsecp256k1/blob/main/src.cpp
   * Elements Transaction Format https://github.com/ElementsProject/elements/blob/master/doc/elements-tx-format.md
-  * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pederson https://link.springer.com/chapter/10.1007/3-540-46766-1_9
+  * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pedersen https://link.springer.com/chapter/10.1007/3-540-46766-1_9
   * What Are Pedersen Commitments And How They Work https://www.rareskills.io/post/pedersen-commitment
 
 ## Copyright
