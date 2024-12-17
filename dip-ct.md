@@ -101,7 +101,7 @@ A CT address can be then generated via
 address = base58( RIPEMD160( SHA256( salt + pk ) ) )
 ```
 
-where `+` denotes concatenation. 
+where `+` denotes concatenation. This is described in more detail in the section "Legacy Addresses for P2PKH" of Chapter 4 of "Mastering Bitcoin". This assumes Confidential UTXOs will be stored in P2PKH format.
 
 ### Confidential transactions
 
