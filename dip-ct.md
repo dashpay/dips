@@ -200,6 +200,7 @@ is unknown. This is known as the Discrete Logarithm Problem (DLP) and the securi
   * Example of bulletproof API in libsecp256k1 https://github.com/guillaumelauzier/Bulletproofs-libsecp256k1/blob/main/src.cpp
   * Elements Transaction Format https://github.com/ElementsProject/elements/blob/master/doc/elements-tx-format.md
   * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pederson https://link.springer.com/chapter/10.1007/3-540-46766-1_9
+  * What Are Pedersen Commitments And How They Work https://www.rareskills.io/post/pedersen-commitment
 
 ## Copyright
 
