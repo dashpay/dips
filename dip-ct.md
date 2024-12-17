@@ -185,8 +185,12 @@ is unknown. This is known as the Discrete Logarithm Problem (DLP) and the securi
 
 ### New consensus rules for CTs
 
-  * If at least one input of a CT is confidential, at least one of the outputs must also be confidential. This prevents metadata leaking about the exact amount in a confidential output. A confidential output may have an amount equal to zero.
-  * If all inputs are public, i.e. not confidential, the number of confidential outputs must be zero or greater than or equal to two, i.e. having all public inputs with a single confidential output is not allowed, as it leaks the metadata about exactly how much value is in the confidential output.
+The activation of these new consensus rules will be block height activated, i.e. a block height which enables Confidential Transactions will be chosen, which we will call `heightCT`. If the block height of the full node is less than `heightCT` then the following consensus rules will not be active. When the block reaches `heightCT` these rules will become active.
+
+  * If height is at least `heightCT` and if at least one input of a CT is confidential, at least one of the outputs must also be confidential. This prevents metadata leaking about the exact amount in a confidential output. A confidential output may have an amount equal to zero.
+  * If height is at least `heightCT` and if all inputs are public, i.e. not confidential, the number of confidential outputs must be zero or greater than or equal to two, i.e. having all public inputs with a single confidential output is not allowed, as it leaks the metadata about exactly how much value is in the confidential output.
+  * If height is less than `heightCT` then Special Transaction type 10 is invalid
+
 
 ## References
 
