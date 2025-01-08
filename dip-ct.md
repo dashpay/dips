@@ -16,7 +16,7 @@
 1. [Conventions](#conventions)
 1. [Prior Work](#prior-work)
 1. [Consensus Protocol Changes](#consensus-protocol-changes)
-1. [Observation](#observation)
+1. [References](#references)
 1. [Copyright](#copyright)
 
 ## Abstract
