@@ -250,6 +250,7 @@ The activation of these new consensus rules will be block height activated, i.e.
   * Mastering Bitcoin, Chapter 4, Keys https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04_keys.adoc
   * secp256k1 "Standards For Efficient Cryptography" https://www.secg.org/sec2-v2.pdf
   * Curve25519, Daniel J Bernstein https://cr.yp.to/ecdh/curve25519-20060209.pdf
+  * Cryptanalysis Of Number Theoretic Ciphers. Samuel S. Wagstaff, Jr. 2003
 
 ## Copyright
 
