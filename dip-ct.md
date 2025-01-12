@@ -105,10 +105,10 @@ where `+` denotes concatenation. This is described in more detail in the section
 
 ### Confidential transactions
 
-A confidential transaction contains the following data :
+A Confidential Transaction contains the following data :
 
-  * A 33 byte Pedersen commitment to the amount being transferred
-  * A BP rangeproof that ensures the amount transferred is inside a certain interval between 0 and 2^N - 1
+  * A 33 byte Pedersen commitment to the amount being transferred for each output
+  * A BP rangeproof for each output that ensures the amount transferred is inside a certain interval between 0 and 2^N - 1
     * To support all potential value transfers between 0 and 21M the BP rangeproof needs N equal to 52
     * The exact size of the proof depends on the number of inputs and outputs
   * An explicit fee, since the fee cannot be computed by the network since the amount is hidden
@@ -116,15 +116,53 @@ A confidential transaction contains the following data :
   * A list of one or more output addresses
     * These may be normal or CT addresses
 
-This DIP proposes using DIP-2 Special Transactions to store and implement Confidential Transactions. This means storing data in the `extra_payload` field of existing Dash transactions and Special Transaction `type` of 10, the currently next unused value of this field.
+This DIP proposes using DIP-2 Special Transactions to store and implement Confidential Transactions. This means storing data in the `extra_payload` field of existing Dash transactions and Special Transaction `type` of 10, the currently next unused value of this field. If a transaction contains any non-Confidential inputs or outputs then that data is stored in normal (non-Special) transaction data. The following describes how the confidential inputs and outputs of a transaction can be stored via `extra_payload`. 
+
+#### Variable Length Integer (VarInt)
+
+This data type is derived from Bitcoin, and allows an integer to be encoded with a variable length (which depends on the represented value), in order to save space.
+Variable length integers always precede a vector of a type of data that may vary in length and are used to indicate this length.
+Longer numbers are encoded in little-endian.
+
+| Value | Size | Format | Example |
+| ----- | ---- | ------ | ------- |
+| < `0xFD` | 1 byte | `uint8_t` | `0x0F` = 15 |
+| <= `0xFFFF` | 3 bytes | `0xFD` followed by the number as a `uint16_t` | `0xFD 00FF` = 65 280 |
+| <= `0xFFFF FFFF` | 5 bytes | `0xFE` followed by the number as a `uint32_t` | `0xFE 0000 00FF` = 4 278 190 080 |
+| <= `0xFFFF FFFF FFFF FFFF` | 9 bytes | `0xFF` followed by the number as a `uint64_t` | `0xFF 0000 0000 0000 00FF` = 18 374 686 479 671 623 680 |
+
+#### Vector\<Type\>
+
+Each `Vector` begins with a `VarInt` describing the number of items it contains.
+
+If the vector is of type `hex`, then the size / structure of each individual item is not known in advance. In this case, each item begins with a `VarInt` describing its size `s` in bytes, followed by `s` bytes which should be interpreted as the item itself.
+Otherwise, size prefixes are omitted, and each item should be interpreted in accordance with the vector's type.
+
+In other words, the vector is serialized as follows: `[Length (n)][Item #1][Item #2][...][Item #n]`.
+
+#### extra_payload
 
 The structure of `extra_payload` is :
 
 | Field | Type | Size | Description |
 | ----- | ---- | ---- | ----------- |
-| amount|ConfidentialAmount| 9 or 33 bytes| ... |
-| nonce |ConfidentialNonce| 33 bytes| ... |
-| proof |ConfidentialProof| Varies | ... |
+|numTxInputs| VarInt | varies | Number of confidential inputs|
+| txInputs| Vector<TxInput>| 33*numTxInputs bytes| Confidential transaction inputs |
+|numTxOutputs| VarInt | varies | Number of confidential outputs |
+| txOutputs | Vector<TxOutput>| 33*numTxOutputs bytes| Confidential transaction outputs |
+| proof |ConfidentialProof| Varies | Confidential proof data |
+
+The structure of `txInputs` is : 
+
+...
+
+The structure of `txOutputs` is : 
+
+| Field | Type | Size | Description |
+| ----- | ---- | ---- | ----------- |
+| amount|ConfidentialAmount| 33 bytes| The confidential amount being transferred |
+| nonce |ConfidentialNonce| 33 bytes| The confidential nonce |
+| proof |ConfidentialProof| Varies | The rangeproof that the confidential amount being transferred is valid |
 
 The following data structures have been adapted from the Elements Project Transaction format:
 
@@ -152,7 +190,9 @@ The following data structures have been adapted from the Elements Project Transa
 
 #### Pedersen Commitments
 
-A Pedersen commitment can be thought of as a sealed box which is tamper-proof and contains a secret. Mathematically a Pedersen commitment is defined as
+A Pedersen commitment can be thought of as a sealed box which is tamper-proof and contains a secret. A physical example of this would be for Alice to seal a message `M` inside an envelope along with a peice of carbon paper, then getting Bob to sign the outside of the envelope, so that the carbon paper copies his signature onto the message `M`. Later on Alice can open the envelope and both Alice and Bob can be assured that the secret message `M` was not changed.
+
+Mathematically a Pedersen commitment is defined as
 
 ```
 P(v,s) = v[G] + s[Q]
