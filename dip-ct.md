@@ -208,8 +208,10 @@ where
       * The verifier is any node which processes the transaction to see if it is valid
   * x*Y means multiplication of value x by curve point Y
     * In some references multiplication is implicit, i.e. x*Y = xY
+   
+In multiplicative notation the above would be `P(v,s) = G^v*Q^s` where `^` denotes exponentiation. Both notations are describing the exact same equivalent mathematics where additive notation is using `+` as the group operator while multiplicative notation is using `*`. In additive notation `n*G` is equivalent to `G^n` in multiplicative notation. 
 
-Capital letters are curve points (P, G, Q, Y above) while lowercase letters are arbitrary integers (v, s and x above). Some references, including the original paper by Pedersen use multiplicative notation, which looks like `P = G^v Q^s`, where `^` denotes exponentiation. Additive notation is usually used with Abelian Groups, i.e. those where `A + B = B + A` or `A*B=B*A`. Given two points on the elliptic curve secp256k1 `G` and `Q`, we can add them in any order, which is to say `G + Q = Q + G`.
+Capital letters are curve points (P, G, Q, Y above) while lowercase letters are arbitrary integers (v, s and x above). Some references including the original paper by Pedersen use multiplicative notation. Additive notation is usually used with Abelian Groups, i.e. those where `A + B = B + A` or `A*B=B*A`. Given two points on the elliptic curve secp256k1 `G` and `Q`, we can add them in any order, which is to say `G + Q = Q + G`.
 
 G and Q MUST be randomly chosen curve points such that the `d` in
 
