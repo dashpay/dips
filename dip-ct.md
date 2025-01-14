@@ -192,10 +192,10 @@ The following data structures have been adapted from the Elements Project Transa
 
 A Pedersen commitment can be thought of as a sealed box which is tamper-proof and contains a secret. A physical example of this would be for Alice to seal a message `M` inside an envelope along with a peice of carbon paper, then getting Bob to sign the outside of the envelope, so that the carbon paper copies his signature onto the message `M`. Later on Alice can open the envelope and both Alice and Bob can be assured that the secret message `M` was not changed.
 
-Mathematically a Pedersen commitment is defined as
+Mathematically a Pedersen commitment (written in additive notation) is defined as
 
 ```
-P(v,s) = v[G] + s[Q]
+P(v,s) = v*G + s*Q
 ```
 
 where
@@ -203,21 +203,24 @@ where
   * P(v,s) means P is a function of the variables v and s
   * v is a value to be committed
   * s is a salt AKA blinding factor
-  * [G] and [Q] are elliptic curve points on secp256k1 both known to committer and verifier
+  * G and Q are elliptic curve points on secp256k1 both known to committer and verifier
       * The committer is the creator of a transaction
       * The verifier is any node which processes the transaction to see if it is valid
-  * x[Y] means multiplication of value x by curve point [Y]
+  * x*Y means multiplication of value x by curve point Y
+    * In some references multiplication is implicit, i.e. x*Y = xY
 
-[G] and [Q] MUST be randomly chosen curve points such that
+Capital letters are curve points (P, G, Q above) while lowercase letters are arbitrary numbers (v and s above).
+
+G and Q MUST be randomly chosen curve points such that
 
 ```
-[Q] = d[G]
+Q = d*G
 ```
 
 is unknown, which is equivalent to
 
 ```
-log[G]
+Log G
 ```
 
 is unknown. This is known as the Discrete Logarithm Problem (DLP) and the security of Pedersen commitments is based on the hardness assumption that the DLP on appropriately chosen elliptic curves have no efficient algorithm to find a solution.
