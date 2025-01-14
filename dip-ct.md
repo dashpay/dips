@@ -185,7 +185,7 @@ The following data structures have been adapted from the Elements Project Transa
 | Field | Required | Size | Data Type | Encoding | Notes |
 | ----- | -------- | ---- | --------- | -------- | ----- |
 | Length | Yes | Varies | `VarInt` | | `0x00` → null. |
-| Value | If header byte is not `0x00` | Varies | `hex` | Big-endian | Bulletproof which proves that the ConfidentialAmount is within the range of 0 and `MAX_MONEY`|
+| Value | If header byte is not `0x00` | Varies | `hex` | Big-endian | Bulletproof which proves that the ConfidentialAmount is within the range of 0 and `2^52 - 1` |
 
 
 #### Pedersen Commitments
