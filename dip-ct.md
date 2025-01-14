@@ -209,9 +209,9 @@ where
   * x*Y means multiplication of value x by curve point Y
     * In some references multiplication is implicit, i.e. x*Y = xY
 
-Capital letters are curve points (P, G, Q above) while lowercase letters are arbitrary numbers (v and s above).
+Capital letters are curve points (P, G, Q above) while lowercase letters are arbitrary integers (v and s above). Some references, including the original paper by Pedersen use multiplicative notation, which looks like `P = G^v Q^s`, where `^` denotes exponentiation. Additive notation is usually used with Abelian Groups, i.e. those where `A + B = B + A` or `A*B=B*A`. Given two points on the elliptic curve secp256k1 `G` and `Q`, we can add them in any order, which is to say `G + Q = Q + G`.
 
-G and Q MUST be randomly chosen curve points such that
+G and Q MUST be randomly chosen curve points such that the `d` in
 
 ```
 Q = d*G
@@ -220,10 +220,19 @@ Q = d*G
 is unknown, which is equivalent to
 
 ```
-Log G
+d = Log Q
 ```
 
-is unknown. This is known as the Discrete Logarithm Problem (DLP) and the security of Pedersen commitments is based on the hardness assumption that the DLP on appropriately chosen elliptic curves have no efficient algorithm to find a solution.
+is unknown. In multiplicative notation: 
+```
+Q = G^d
+```
+
+and taking the discrete logarithm with respect to `G` of both sides we get `Log Q = Log (G^d) = d*Log(G) = d` where we have used the facts that `Log(a^b) = b*Log(a)` and `Log(G) = 1` in base `G`.
+
+`d` is called the Discrete Logarithm of `Q` with respect to `G` (or the Discrete Logarithm of `Q` in base `G`). We use the notation `Log` instead of `log` to denote the fact that a discrete logarithm is a different function from the traditional logarithm denoted `log` . The function `Log` and `log` share the same types of properties and identities which is why `Log` is considered the discrete analog of `log`.
+
+The Discrete Logarithm Problem (DLP) means that if `Q = d*G` (or `Q = G^d` in multiplicative notation) then while `d` does exist, it is computationally infeasible to calculate it. The security of Pedersen commitments is based on the hardness assumption that the DLP on appropriately chosen elliptic curves have no efficient algorithm to find a solution.
 
 
 ### New consensus rules for CTs
