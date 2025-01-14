@@ -177,7 +177,7 @@ The following data structures have been adapted from the Elements Project Transa
 
 | Field | Required | Size | Data Type | Encoding | Notes |
 | ----- | -------- | ---- | --------- | -------- | ----- |
-| Header | Yes | 1 byte | | | A header byte of `0x00` indicates a “null” value with no subsequent bytes.<br><br>A header byte of `0x01` indicates an “explicit” value with the following 32 bytes denoting a value (big-endian).<br><br>A header byte of `0x02` or `0x03` indicates a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). This point is not required to be on the curve. |
+| Header | Yes | 1 byte | | | A header byte of `0x02` or `0x03` indicates a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). This point is not required to be on the curve. |
 | Value | If header byte is not `0x00` | 32 bytes | `hex` | Big-endian | |
 
 #### ConfidentialProof
