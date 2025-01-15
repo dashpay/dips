@@ -273,6 +273,10 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * secp256k1 "Standards For Efficient Cryptography" https://www.secg.org/sec2-v2.pdf
   * Curve25519, Daniel J Bernstein https://cr.yp.to/ecdh/curve25519-20060209.pdf
   * Cryptanalysis Of Number Theoretic Ciphers. Samuel S. Wagstaff, Jr. 2003
+  * Pedersen Commitments https://www.zkdocs.com/docs/zkdocs/commitments/pedersen/
+  * Inner Product Arguments https://dankradfeist.de/ethereum/2021/07/27/inner-product-arguments.html
+  * An investigation into Conﬁdential Transactions https://github.com/AdamISZ/ConfidentialTransactionsDoc/blob/master/essayonCT.pdf
+  * Zero To Monero 2.0.0, Sections 5.2 (Pedersen Commitments) and 5.5 (Range Proofs) https://www.getmonero.org/library/Zero-to-Monero-2-0-0.pdf
 
 ## Copyright
 
