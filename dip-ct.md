@@ -31,7 +31,7 @@ Currently Dash transactions can optionally use CoinJoin to increase the privacy 
 leaves much to be desired. This is because CoinJoin is a mixing protocol which
 is based on amount obfuscation which leaves addresses as public data.
 
-CoinJoin transactions leaks large amounts of transaction metadata which is
+CoinJoin transactions leak large amounts of transaction metadata which is
 accessible via public blockchain data and requires users to learn about various
 details and advanced options to use it in a privacy-preserving way. The current
 CoinJoin implementation also requires users to wait longer for
