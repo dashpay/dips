@@ -259,6 +259,7 @@ The activation of these new consensus rules will be block height activated, i.e.
   * libsecp256k1 Bulletproofs: https://github.com/BlockstreamResearch/secp256k1-zkp/tree/master/src/modules/rangeproof
   * Example of bulletproof API in libsecp256k1 https://github.com/guillaumelauzier/Bulletproofs-libsecp256k1/blob/main/src.cpp
   * Elements Transaction Format https://github.com/ElementsProject/elements/blob/master/doc/elements-tx-format.md
+  * Elements Confidential Addresses https://elementsproject.org/features/confidential-transactions/addresses
   * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pedersen https://link.springer.com/chapter/10.1007/3-540-46766-1_9
   * What Are Pedersen Commitments And How They Work https://www.rareskills.io/post/pedersen-commitment
   * Mastering Bitcoin, Chapter 4, Keys https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04_keys.adoc
