@@ -263,6 +263,8 @@ The activation of these new consensus rules will be block height activated, i.e.
   * Elements Transaction Format https://github.com/ElementsProject/elements/blob/master/doc/elements-tx-format.md
   * Elements Confidential Transactions https://github.com/ElementsProject/elements/blob/master/doc/elements-confidential-transactions.md
   * Elements Confidential Addresses https://elementsproject.org/features/confidential-transactions/addresses
+  * "SLIP-0077 : Deterministic blinding key derivation for Confidential Transactions"
+https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * "Non-Interactive and Information-Theoretic Secure Verifiable Secret Sharing" Advances in Cryptology 1991, Torben Pryds Pedersen https://link.springer.com/chapter/10.1007/3-540-46766-1_9
   * What Are Pedersen Commitments And How They Work https://www.rareskills.io/post/pedersen-commitment
   * Mastering Bitcoin, Chapter 4, Keys https://github.com/bitcoinbook/bitcoinbook/blob/develop/ch04_keys.adoc
