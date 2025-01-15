@@ -258,6 +258,7 @@ The activation of these new consensus rules will be block height activated, i.e.
   * BP++ https://eprint.iacr.org/2022/510
   * BP++ CCS https://ccs.getmonero.org/proposals/bulletproofs-pp-peer-review.html
   * BP++ Audit by CypherStack https://github.com/cypherstack/bppp-review
+  * Notes on how and why Bulletproofs work https://doc-internal.dalek.rs/bulletproofs/notes/index.html
   * libsecp256k1 https://github.com/bitcoin-core/secp256k1
   * libsecp256k1 Bulletproofs: https://github.com/BlockstreamResearch/secp256k1-zkp/tree/master/src/modules/rangeproof
   * Example of bulletproof API in libsecp256k1 https://github.com/guillaumelauzier/Bulletproofs-libsecp256k1/blob/main/src.cpp
