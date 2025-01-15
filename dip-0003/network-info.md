@@ -185,9 +185,15 @@ DNS records for a domain name MUST have a valid `A` or `AAAA` entry.
 * This field MUST have a string containing at least two labels separated by the specified delimiter.
   * "Dotless domains" (as described by [RFC 7085](https://datatracker.ietf.org/doc/html/rfc7085#section-2)) MUST NOT be
     permitted.
+* This field MUST NOT permit top level domains associated with private/internal networks, including but not limited to,
+  the TLD assigned by [RFC 6762](https://datatracker.ietf.org/doc/html/rfc6762#section-3) for multicast DNS, alternatives
+  to it enumerated in [Appendix G](https://datatracker.ietf.org/doc/html/rfc6762#appendix-G) or the special-use domain
+  assigned by [RFC 8375](https://datatracker.ietf.org/doc/html/rfc8375).
 
 # References
 
 * [BIP 0155: addrv2 message](https://github.com/bitcoin/bips/blob/17c04f9fa1ecae173d6864b65717e13dfc1880af/bip-0155.mediawiki)
 * [RFC 1035: Domain Names - Implementation and Specification](https://datatracker.ietf.org/doc/html/rfc1035)
+* [RFC 6762: Multicast DNS](https://datatracker.ietf.org/doc/html/rfc6762)
 * [RFC 7085: Top-Level Domains That Are Already Dotless](https://datatracker.ietf.org/doc/html/rfc7085)
+* [RFC 8375: Special-Use Domain 'home.arpa.'](https://datatracker.ietf.org/doc/html/rfc8375)
