@@ -114,7 +114,7 @@ A Confidential Transaction contains the following data :
   * A BP rangeproof for each output that ensures the amount transferred is inside a certain interval between 0 and 2^N - 1
     * To support all potential value transfers between 0 and 21M the BP rangeproof needs N equal to 52
     * The exact size of the proof depends on the number of inputs and outputs
-  * An explicit fee output with blank ScriptPubKey
+  * An fee output with an explicit amount and blank ScriptPubKey
   * A list of input UTXOs
   * A list of one or more outputs
     * These may be normal or Confidential outputs
