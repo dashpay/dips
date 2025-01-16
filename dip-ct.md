@@ -114,10 +114,10 @@ A Confidential Transaction contains the following data :
   * A BP rangeproof for each output that ensures the amount transferred is inside a certain interval between 0 and 2^N - 1
     * To support all potential value transfers between 0 and 21M the BP rangeproof needs N equal to 52
     * The exact size of the proof depends on the number of inputs and outputs
-  * An explicit fee, since the fee cannot be computed by the network since the amount is hidden
+  * An explicit fee output with blank ScriptPubKey
   * A list of input UTXOs
-  * A list of one or more output addresses
-    * These may be normal or CT addresses
+  * A list of one or more outputs
+    * These may be normal or Confidential outputs
 
 This DIP proposes using DIP-2 Special Transactions to store and implement Confidential Transactions. This means storing data in the `extra_payload` field of existing Dash transactions and Special Transaction `type` of 10, the currently next unused value of this field. If a transaction contains any non-Confidential inputs or outputs then that data is stored in normal (non-Special) transaction data. The following describes how the confidential inputs and outputs of a transaction can be stored via `extra_payload`. 
 
