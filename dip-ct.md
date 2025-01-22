@@ -16,6 +16,7 @@
 1. [Conventions](#conventions)
 1. [Prior Work](#prior-work)
 1. [Consensus Protocol Changes](#consensus-protocol-changes)
+1. [Risks](#risks) 
 1. [References](#references)
 1. [Copyright](#copyright)
 
@@ -252,6 +253,24 @@ The activation of these new consensus rules will be block height activated, i.e.
   * If height is at least `heightCT` and if all inputs are public, i.e. not confidential, the number of confidential outputs must be zero or greater than or equal to two, i.e. having all public inputs with a single confidential output is not allowed, as it leaks the metadata about exactly how much value is in the confidential output.
   * If height is less than `heightCT` then Special Transaction type 10 is invalid
 
+## Risks
+
+This section highlights risks involved in the implementation of this DIP.
+
+### Inflation Risk
+
+If the code which implements this DIP does not check the validation of the Bulletproof or does so incorrectly, then the supply of DASH can be inflated by an arbitrary amount. It is of the highest importance that the code which implements the range proof validation be audited and thoroughly tested to avoid this.
+
+### Quantum Computer Risk
+
+Another form of this inflation risk is a Quantum Computer (QC) attack. No publicly known QC currently exists which can attack Pedersen commitments but the system described in this DIP very well could be in use in the future when the threat of QC attacks against blockchains is real. 
+
+An attack against Confidential Transactions described in this DIP involves calculating Discrete Logarithms to subvert the security of Pedersen Commitments. In this attack, the QC initially creates a valid Confidential Transaction, for example moving 1 DASH from a transparent address to a confidential address. Then the QC spends this confidential UTXO and creates another confidential UTXO with a different amount, say 21M DASH. If the QC is able to compute Discrete Logarithms then it will be able to change the amount being committed to without changing the Pedersen Commitment. This means that nodes on the network that verify the transaction will see it as valid, unaware that the transaction actually inflates the supply by an arbitrary amount, which is only limited by the maximum value allowed in the range proof.
+
+To limit (but not avoid) the risk described above, DASH can limit the amount that can be stored in a single confidential UTXO. For example, instead of allowing the creation of a confidential UTXO of amount 21M, it could be limited to a value near 10K (the exact maximum value for the range proof must be a power of 2). This would force an attacker to calculate roughly 2100 Discrete Logarithms instead of just one to inflate the supply by the same amount. Since calculating a Discrete Logarithm has a cost in time required and the most-likely substantial electricity needed to power the QC, this will drastically increase the cost of the attack and give other systems a higher Return-On-Investment for the attacker.
+
+For example, the currently in-progress BIP360 modification to Bitcoin describes a system to make Bitcoin resistant to QC attacks. It gives examples of many BTC addresses which contain 50 BTC each from early Bitcoin miners and shows that these addresses will most likely be the first objects of attack by QCs, since it equates to earning 50 BTC for calculating a single Discrete Logarithm. If the implementation of this DIP on DASH ensures that the value created in a single confidential UTXO is much less than the value of 50 BTC then it will ensure that QCs will attack Bitcoin before DASH confidential transactions.
+
 
 ## References
 
@@ -281,6 +300,7 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * Inner Product Arguments https://dankradfeist.de/ethereum/2021/07/27/inner-product-arguments.html
   * An investigation into Conﬁdential Transactions https://github.com/AdamISZ/ConfidentialTransactionsDoc/blob/master/essayonCT.pdf
   * Zero To Monero 2.0.0, Sections 5.2 (Pedersen Commitments) and 5.5 (Range Proofs) https://www.getmonero.org/library/Zero-to-Monero-2-0-0.pdf
+  * BIP360 "Pay to Quantum Resistant Hash" https://github.com/bitcoin/bips/blob/b75003e64bca77c200a244378f1d4540d462309a/bip-0360.mediawiki
 
 ## Copyright
 
