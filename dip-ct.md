@@ -87,7 +87,11 @@ These new CT addresses require a different base58 prefix to identify them as dif
 
 The exact structure of a CT address is as follows. It contains the following data:
 
-  * salt (AKA blinding key) . 32 byte random value
+  * Blinding key version byte
+  * Address type version byte
+  * salt (AKA public blinding key) . 32 byte random value
+    * When Alice sends a transaction to Bob, this public blinding key is used in an ECDH operation by Alice to transmit the actual amount and blinding key of a transaction to Bob
+    * Note that older Elements documentation called this a "scanning key"
   * pk . The compressed public key, a 33 byte secp256k1 curve point.
 
 For HD wallets, a master 32 byte salt (blinding key) is stored from which all blinding keys for generated addresses are derived. A
