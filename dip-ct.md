@@ -36,7 +36,8 @@ CoinJoin transactions leak large amounts of transaction metadata which is
 accessible via public blockchain data and requires users to learn about various
 details and advanced options to use it in a privacy-preserving way. The current
 CoinJoin implementation also requires users to wait longer for
-increased privacy via more mixing rounds. Most users will have no idea how many rounds they should use or what the implications of this choice will be. This incentivizes users to use fewer mixing
+increased privacy via more mixing rounds. Most users will have no idea how many rounds they should use or what the 
+implications of this choice will be. This incentivizes users to use fewer mixing
 rounds to save time, reducing their privacy as well as the privacy of
 all users utilizing CoinJoins.
 
@@ -265,7 +266,7 @@ If the code which implements this DIP does not check the validation of the Bulle
 
 Another form of this inflation risk is a Quantum Computer (QC) attack. No publicly known QC currently exists which can attack Pedersen commitments but the system described in this DIP very well could be in use in the future when the threat of QC attacks against blockchains is real. 
 
-An attack against Confidential Transactions described in this DIP involves calculating Discrete Logarithms to subvert the security of Pedersen Commitments. In this attack, the QC initially creates a valid Confidential Transaction, for example moving 1 DASH from a transparent address to a confidential address. Then the QC spends this confidential UTXO and creates another confidential UTXO with a different amount, say 21M DASH. If the QC is able to compute Discrete Logarithms then it will be able to change the amount being committed to without changing the Pedersen Commitment. This means that nodes on the network that verify the transaction will see it as valid, unaware that the transaction actually inflates the supply by an arbitrary amount, which is only limited by the maximum value allowed in the range proof.
+An attack against Confidential Transactions described in this DIP involves calculating Discrete Logarithms to subvert the security of Pedersen Commitments. Using Shor's Algorithm on a Quantum Computer reduces the complexity of calculating a Discrete Log from an exponential time to a polynomial time algorithm. In this attack, the QC initially creates a valid Confidential Transaction, for example moving 1 DASH from a transparent address to a confidential address. Then the QC spends this confidential UTXO and creates another confidential UTXO with a different amount, say 21M DASH. If the QC is able to compute Discrete Logarithms then it will be able to change the amount being committed to without changing the Pedersen Commitment. This means that nodes on the network that verify the transaction will see it as valid, unaware that the transaction actually inflates the supply by an arbitrary amount, which is only limited by the maximum value allowed in the range proof.
 
 To limit (but not avoid) the risk described above, DASH can limit the amount that can be stored in a single confidential UTXO. For example, instead of allowing the creation of a confidential UTXO of amount 21M, it could be limited to a value near 10K (the exact maximum value for the range proof must be a power of two minus 1). This would force an attacker to calculate roughly 2100 Discrete Logarithms instead of just one to inflate the supply by the same amount. Since calculating a Discrete Logarithm has a cost in time required and the most-likely substantial electricity needed to power the QC, this will drastically increase the cost of the attack and give other systems a higher Return-On-Investment for the attacker.
 
@@ -301,6 +302,8 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * An investigation into Conﬁdential Transactions https://github.com/AdamISZ/ConfidentialTransactionsDoc/blob/master/essayonCT.pdf
   * Zero To Monero 2.0.0, Sections 5.2 (Pedersen Commitments) and 5.5 (Range Proofs) https://www.getmonero.org/library/Zero-to-Monero-2-0-0.pdf
   * BIP360 "Pay to Quantum Resistant Hash" https://github.com/bitcoin/bips/blob/b75003e64bca77c200a244378f1d4540d462309a/bip-0360.mediawiki
+  * "Algorithms of Quantum Computation: Discrete Log And Factoring" Peter W. Shor, http://cc.ee.ntu.edu.tw/~rbwu/rapid_content/course/QC/Shor1994.pdf
+  * "Shor's Algorithm" https://en.wikipedia.org/wiki/Shor's_algorithm
 
 ## Copyright
 
