@@ -160,11 +160,19 @@ The structure of `extra_payload` is :
 | txOutputs | `Vector<TxOutput>`| 33*numTxOutputs bytes| Confidential transaction outputs |
 | proof |ConfidentialProof| Varies | Confidential proof data |
 
-The structure of `txInputs` is : 
+# TxInput
 
-...
+| Field | Required | Size | Data Type | Encoding | Notes |
+| ----- | -------- | ---- | --------- | -------- | ----- |
+| txid | Yes | 32 bytes | `hex` | See NOTE below | |
+| outIndex | Yes | 4 bytes | `uint32_t` | Little-endian | **Input is a coinbase**: `0xffffffff` |
+| scriptSig Length | Yes | Varies | `VarInt` | |  |
+| ScriptSig | Yes  | Varies | `hex` | | |
+| Sequence | Yes | 4 bytes | `uint32_t` | Little-endian | |
 
-The structure of `txOutputs` is : 
+NOTE: The hex encodings of hashes are byte-reversed, and so the bytes will need to be re-reversed to match the serialized data. This is the same situation as in Bitcoin. For example, the hash `1123...deff` would be displayed by the Bitcoin and Dash clients as `ffde...2311`. This is primarily for historical reasons: the Bitcoin and Dash clients have always interpreted and displayed hashes as little-endian integers and parsed their bytes in reverse order.
+
+# TxOutput
 
 | Field | Type | Size | Description |
 | ----- | ---- | ---- | ----------- |
