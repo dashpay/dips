@@ -155,9 +155,9 @@ The structure of `extra_payload` is :
 | Field | Type | Size | Description |
 | ----- | ---- | ---- | ----------- |
 |numTxInputs| VarInt | varies | Number of confidential inputs|
-| txInputs| Vector<TxInput>| 33*numTxInputs bytes| Confidential transaction inputs |
+| txInputs| `Vector<TxInput>`| 33*numTxInputs bytes| Confidential transaction inputs |
 |numTxOutputs| VarInt | varies | Number of confidential outputs |
-| txOutputs | Vector<TxOutput>| 33*numTxOutputs bytes| Confidential transaction outputs |
+| txOutputs | `Vector<TxOutput>`| 33*numTxOutputs bytes| Confidential transaction outputs |
 | proof |ConfidentialProof| Varies | Confidential proof data |
 
 The structure of `txInputs` is : 
