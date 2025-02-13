@@ -194,14 +194,14 @@ The following data structures have been adapted from the Elements Project Transa
 | Field | Required | Size | Data Type | Encoding | Notes |
 | ----- | -------- | ---- | --------- | -------- | ----- |
 | Header | Yes | 1 byte | | | A header byte of `0x02` or `0x03` indicates a compressed elliptic curve point. With the least significant bit of the header byte denoting the least significant bit of the y-coordinate, and the remaining 32 bytes denoting the x-coordinate (big-endian). This point is not required to be on the curve. |
-| Value | If header byte is not `0x00` | 32 bytes | `hex` | Big-endian | |
+| Value |  | 32 bytes | `hex` | Big-endian | |
 
 #### ConfidentialProof
 
 | Field | Required | Size | Data Type | Encoding | Notes |
 | ----- | -------- | ---- | --------- | -------- | ----- |
-| Length | Yes | Varies | `VarInt` | | `0x00` → null. |
-| Value | If header byte is not `0x00` | Varies | `hex` | Big-endian | Bulletproof which proves that the ConfidentialAmount is within the range of 0 and `2^52 - 1` |
+| Length | Yes | Varies | `VarInt` | |  |
+| Value |  | Varies | `hex` | Big-endian | Bulletproof which proves that the ConfidentialAmount is within the range of 0 and `2^52 - 1` |
 
 
 #### Pedersen Commitments
@@ -260,6 +260,8 @@ The activation of these new consensus rules will be block height activated, i.e.
   * If height is at least `heightCT` and if at least one input of a CT is confidential, at least one of the outputs must also be confidential. This prevents metadata leaking about the exact amount in a confidential output. A confidential output may have an amount equal to zero.
   * If height is at least `heightCT` and if all inputs are public, i.e. not confidential, the number of confidential outputs must be zero or greater than or equal to two, i.e. having all public inputs with a single confidential output is not allowed, as it leaks the metadata about exactly how much value is in the confidential output.
   * If height is less than `heightCT` then Special Transaction type 10 is invalid
+  * If a block contains at least one CT then:
+    * The new block header 
 
 ## Risks
 
