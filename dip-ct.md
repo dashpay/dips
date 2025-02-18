@@ -94,6 +94,21 @@ The exact structure of a CT address is as follows. It contains the following dat
     * When Alice sends a transaction to Bob, this public blinding key is used in an ECDH operation by Alice to transmit the actual amount and blinding key of a transaction to Bob
     * Note that older Elements documentation called this a "scanning key"
   * pk . The compressed public key, a 33 byte secp256k1 curve point.
+    
+Every confidential address contains a public blinding key used in ECDH. When Alice sends Bob a transaction, Alice chooses an ECDH ephemeral private key (the ConfidentialNonce in this DIP) and combines it with the public blinding key to derive a blinding seed.
+
+When Bob receives a CT, they combine the public blinding key with the private blinding key (ConfidentialNonce) to derive the same exact seed used by Alice.
+The reason this is possible is because curve operations are commutative, i.e. `A*B=B*A` , also known as Abelian. To show this is true, let Alice's keypair be denoted `(d_A, Q_A)` and Bob's keypair `(d_B, Q_B)` where `d_A` and `d_B` are private keys and `Q_A` and `Q_B` are public keys. The public keys are computed as `Q_A=d_A * G` and `Q_B=d_B * G` where G is a generator of the curve and the operation `x*G` means adding `G` to itself `x` times.
+
+To show that ECDH allows Alice and Bob to derive the same seed, we must show that the point on the curve `d_A*Q_B` is the same as `d_B*Q_A` :
+
+```
+d_A*Q_B = d_A * d_B * G        # definition of Q_B
+        = d_B * d_A * G        # commutivatity
+        = d_B * Q_A
+```
+
+Therefore Alice and Bob can compute a shared secret `(x,y) = d_A*Q_B = d_B*Q_A` without ever actually transmitting the secret.
 
 For HD wallets, a master 32 byte salt (blinding key) is stored from which all blinding keys for generated addresses are derived. A
 blinding key for an address is generated as `HMAC_SHA256(master blinding key, <address ScriptPubKey>)` . See the reference SLIP-0077 for more details.
