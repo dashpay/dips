@@ -93,8 +93,9 @@ The exact structure of a CT address is as follows. It contains the following dat
   * salt (AKA public blinding key) . 32 byte random value
     * When Alice sends a transaction to Bob, this public blinding key is used in an ECDH operation by Alice to transmit the actual amount and blinding key of a transaction to Bob
     * Note that older Elements documentation called this a "scanning key"
+    * Note that this value is not hashed, it is stored unchanged as part of the CT address
   * pk . The compressed public key, a 33 byte secp256k1 curve point.
-    
+    * Note that a hash of the public key is what is actually included in the address
 Every confidential address contains a public blinding key used in ECDH. When Alice sends Bob a transaction, Alice chooses an ECDH ephemeral private key (the ConfidentialNonce in this DIP) and combines it with the public blinding key to derive a blinding seed.
 
 When Bob receives a CT, they combine the public blinding key with the private blinding key (ConfidentialNonce) to derive the same exact seed used by Alice.
