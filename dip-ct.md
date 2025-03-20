@@ -74,7 +74,7 @@ This DIP proposes a new transaction type as well as new address types and theref
 
 ## Overview
 
- To quote the original Bulletproof paper "Bulletproofs are zero-knowledge arguments of knowledge" i.e. they are a generalized mathematical tool that can be used in many different ways with many different cryptographic systems. In particular, they do not require a specific elliptic curve to be used with them. This is why various different systems can use Bulletproofs even though they use different elliptic curves. There exists a fork of libsecp256k1 called libsecp256k1-zkp which contains code to do Bulletproofs on the secp256k1 curve that the Dash community most likely will want to use.
+To quote the original Bulletproof paper "Bulletproofs are zero-knowledge arguments of knowledge" i.e. they are a generalized mathematical tool that can be used in many different ways with many different cryptographic systems. In particular, they do not require a specific elliptic curve to be used with them. This is why various different systems can use Bulletproofs even though they use different elliptic curves. There exists a fork of libsecp256k1 called libsecp256k1-zkp which contains code to do Bulletproofs on the secp256k1 curve that the Dash community most likely will want to use.
 
 ## Details
 
