@@ -84,7 +84,7 @@ This DIP documents how Dash can add CTs using Bulletproofs (BPs). The type of CT
 
 New Dash CTs will need a new type of address, a confidential address, to send and receive CT transactions. This means that the Dash full node will require new RPCs to create, validate, list and import confidential addresses. A prefix of `Dash` will be used for these addresses so they can easily be differentiated from other Dash addresses and from Confidential Addresses on other blockchains. These addresses will be new data in the wallet and the code which reads and writes the wallet to disk will need to also be updated to store and retrieve this data. The code which rescans blockchain history for transactions belonging to the current wallet will also need to be updated. To detect if a UTXO is owned by the current wallet, full nodes will use the Confidential Address public key along with the salt corresponding to that public key to inspect every UTXO to see if is an output owned by the wallet.
 
-These new CT addresses require a different base58 prefix to identify them as different from traditional Dash addresses and the prefix `Dash` is proposed for mainnet, `TDash` for testnet and `RDash` for regtest.
+These new CT addresses require a different prefix to identify them as different from traditional Dash addresses and the prefix `Dash` is proposed for mainnet, `TDash` for testnet and `RDash` for regtest.
 
 The exact structure of a CT address is as follows. It contains the following data:
 
@@ -119,10 +119,10 @@ To clarify, the public key can actually be stored in 32 bytes and one bit, becau
   The salt is 32 bytes because it is used to "blind" the x value of a (x,y) point on the curve which is 32 bytes. The compressed public key is 33 bytes (or 32 bytes and one bit) as described above and in the "Compressed Public Keys" section of Chapter 4 of "Mastering Bitcoin".
 
 
-A base58 CT address can be then generated via
+A bech32m encoded CT address can be then generated via
 
 ```
-address = base58( RIPEMD160( SHA256( salt + pk ) ) )
+address = bech32m( RIPEMD160( SHA256( salt + pk ) ) )
 ```
 
 where `+` denotes concatenation. This is described in more detail in the section "Legacy Addresses for P2PKH" of Chapter 4 of "Mastering Bitcoin". This assumes Confidential UTXOs will be stored in P2PKH format.
@@ -329,6 +329,7 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * BIP360 "Pay to Quantum Resistant Hash" https://github.com/bitcoin/bips/blob/b75003e64bca77c200a244378f1d4540d462309a/bip-0360.mediawiki
   * "Algorithms of Quantum Computation: Discrete Log And Factoring" Peter W. Shor, http://cc.ee.ntu.edu.tw/~rbwu/rapid_content/course/QC/Shor1994.pdf
   * "Shor's Algorithm" https://en.wikipedia.org/wiki/Shor's_algorithm
+  * Bech32m Spec https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki
 
 ## Copyright
 
