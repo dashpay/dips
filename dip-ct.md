@@ -84,7 +84,7 @@ This DIP documents how Dash can add CTs using Bulletproofs (BPs). The type of CT
 
 New Dash CTs will need a new type of address, a confidential address, to send and receive CT transactions. This means that the Dash full node will require new RPCs to create, validate, list and import confidential addresses. A prefix of `Dash` will be used for these addresses so they can easily be differentiated from other Dash addresses and from Confidential Addresses on other blockchains. These addresses will be new data in the wallet and the code which reads and writes the wallet to disk will need to also be updated to store and retrieve this data. The code which rescans blockchain history for transactions belonging to the current wallet will also need to be updated. To detect if a UTXO is owned by the current wallet, full nodes will use the Confidential Address public key along with the salt corresponding to that public key to inspect every UTXO to see if is an output owned by the wallet.
 
-These new CT addresses require a different prefix to identify them as different from traditional Dash addresses and the prefix `Dash` is proposed for mainnet, `TDash` for testnet and `RDash` for regtest.
+These new CT addresses require a different prefix to identify them as different from traditional Dash addresses and the prefix `Dash` is proposed for mainnet, `TDash` for testnet and `RDash` for regtest. This corresponds to the the Human Readable Part (HRP) of the bech32m encoded address.
 
 The exact structure of a CT address is as follows. It contains the following data:
 
