@@ -330,6 +330,8 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * "Algorithms of Quantum Computation: Discrete Log And Factoring" Peter W. Shor, http://cc.ee.ntu.edu.tw/~rbwu/rapid_content/course/QC/Shor1994.pdf
   * "Shor's Algorithm" https://en.wikipedia.org/wiki/Shor's_algorithm
   * Bech32m Spec https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki
+  * DIP23 https://github.com/dashpay/dips/blob/master/dip-0023.md
+  * BIP9 https://github.com/bitcoin/bips/blob/master/bip-0009.mediawiki
 
 ## Copyright
 
