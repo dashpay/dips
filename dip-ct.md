@@ -277,7 +277,9 @@ The activation of these new consensus rules will be activated according to BIP9/
   * If height is at least `heightCT` and if all inputs are public, i.e. not confidential, the number of confidential outputs must be zero or greater than or equal to two, i.e. having all public inputs with a single confidential output is not allowed, as it leaks the metadata about exactly how much value is in the confidential output.
   * If height is less than `heightCT` then Special Transaction type 10 is invalid
   * If a block contains at least one CT then:
-    * The new block header 
+    * The new block header
+  * If a block contains a CT then the associated bulletproof must have a size of at most 40 bits
+    * This enforces a maximum limit on the amount of a confidential UTXO to be `2^40/10^8 = 10995.11627776 DASH`
 
 ## Risks
 
