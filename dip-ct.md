@@ -328,7 +328,7 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * Inner Product Arguments https://dankradfeist.de/ethereum/2021/07/27/inner-product-arguments.html
   * An investigation into Conﬁdential Transactions https://github.com/AdamISZ/ConfidentialTransactionsDoc/blob/master/essayonCT.pdf
   * Zero To Monero 2.0.0, Sections 5.2 (Pedersen Commitments) and 5.5 (Range Proofs) https://www.getmonero.org/library/Zero-to-Monero-2-0-0.pdf
-  * BIP360 "Pay to Quantum Resistant Hash" https://github.com/bitcoin/bips/blob/b75003e64bca77c200a244378f1d4540d462309a/bip-0360.mediawiki
+  * BIP360 "Pay to Quantum Resistant Hash" https://github.com/bitcoin/bips/blob/e6e72078084271cbba50d54c2d2a2b180daf8356/bip-0360.mediawiki
   * "Algorithms of Quantum Computation: Discrete Log And Factoring" Peter W. Shor, http://cc.ee.ntu.edu.tw/~rbwu/rapid_content/course/QC/Shor1994.pdf
   * "Shor's Algorithm" https://en.wikipedia.org/wiki/Shor's_algorithm
   * Bech32m Spec https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki
