@@ -88,8 +88,8 @@ These new CT addresses require a different prefix to identify them as different 
 
 The exact structure of a CT address is as follows. It contains the following data:
 
-  * Blinding key version byte
-  * Address type version byte
+  * bkvb - Blinding key version byte
+  * atvb - Address type version byte
   * salt (AKA public blinding key) . 32 byte random value
     * When Alice sends a transaction to Bob, this public blinding key is used in an ECDH operation by Alice to transmit the actual amount and blinding key of a transaction to Bob
     * Note that older Elements documentation called this a "scanning key"
@@ -122,7 +122,7 @@ To clarify, the public key can actually be stored in 32 bytes and one bit, becau
 A bech32m encoded CT address can be then generated via
 
 ```
-address = bech32m( RIPEMD160( SHA256( salt + pk ) ) )
+address = bech32m( RIPEMD160( SHA256( bkvb + atvb + salt + pk ) ) )
 ```
 
 where `+` denotes concatenation. This is described in more detail in the section "Legacy Addresses for P2PKH" of Chapter 4 of "Mastering Bitcoin". This assumes Confidential UTXOs will be stored in P2PKH format.
