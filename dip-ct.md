@@ -122,7 +122,7 @@ To clarify, the public key can actually be stored in 32 bytes and one bit, becau
 A bech32m encoded CT address can be then generated via
 
 ```
-address = bech32m( RIPEMD160( SHA256( bkvb + atvb + salt + pk ) ) )
+address = bech32m( bkvb + atvb + salt + RIPEMD160( SHA256( pk ) ) )
 ```
 
 where `+` denotes concatenation. This is described in more detail in the section "Legacy Addresses for P2PKH" of Chapter 4 of "Mastering Bitcoin". This assumes Confidential UTXOs will be stored in P2PKH format.
