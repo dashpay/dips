@@ -125,7 +125,13 @@ A bech32m encoded CT address can be then generated via
 address = bech32m( bkvb + atvb + salt + RIPEMD160( SHA256( pk ) ) )
 ```
 
-where `+` denotes concatenation. This is described in more detail in the section "Legacy Addresses for P2PKH" of Chapter 4 of "Mastering Bitcoin". This assumes Confidential UTXOs will be stored in P2PKH format.
+where `+` denotes concatenation. Since the salt is 32 bytes and the output of RIPEMD160 is 20 bytes, the above bech32m encoded address encodes 54 bytes of data. This is described in more detail in the section "Legacy Addresses for P2PKH" of Chapter 4 of "Mastering Bitcoin". This assumes Confidential UTXOs will be stored in P2PKH format.
+
+According to the above specification, a mainnet bech32m encoded Dash Confidential Address will look like this:
+
+```
+Dash1zqwumnhm5u2d5re9hk5mts8fs2kr8zjm5q4pw72h4pqm09yghunvy3z34rvxs0qduyd02v8hag77shanjag60ygcaax2g
+```
 
 ### Confidential transactions
 
