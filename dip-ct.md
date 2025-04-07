@@ -133,6 +133,8 @@ According to the above specification, a mainnet bech32m encoded Dash Confidentia
 Dash1zqwumnhm5u2d5re9hk5mts8fs2kr8zjm5q4pw72h4pqm09yghunvy3z34rvxs0qduyd02v8hag77shanjag60ygcaax2g
 ```
 
+The above address was generated with the bech32m reference Python implementation by encoding 54 bytes of random data with a Human Readable Part of "Dash". 
+
 ### Confidential transactions
 
 A Confidential Transaction contains the following data :
@@ -338,6 +340,7 @@ https://github.com/satoshilabs/slips/blob/master/slip-0077.md
   * "Algorithms of Quantum Computation: Discrete Log And Factoring" Peter W. Shor, http://cc.ee.ntu.edu.tw/~rbwu/rapid_content/course/QC/Shor1994.pdf
   * "Shor's Algorithm" https://en.wikipedia.org/wiki/Shor's_algorithm
   * Bech32m Spec https://github.com/bitcoin/bips/blob/master/bip-0350.mediawiki
+  * Bech32 and Bech32m Reference Python implementation https://github.com/sipa/bech32/tree/master/ref/python
   * DIP23 https://github.com/dashpay/dips/blob/master/dip-0023.md
   * BIP9 https://github.com/bitcoin/bips/blob/master/bip-0009.mediawiki
 
