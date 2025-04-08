@@ -135,6 +135,19 @@ Dash1zqwumnhm5u2d5re9hk5mts8fs2kr8zjm5q4pw72h4pqm09yghunvy3z34rvxs0qduyd02v8hag7
 
 The above address was generated with the bech32m reference Python implementation by encoding 54 bytes of random data with a Human Readable Part of "Dash". 
 
+Similary, a testnet Confidential Address example is:
+
+```
+TDash14nxdx2cxhvr30msmejddq77ae5w6mvkztqz86p084r959t60q46ry5jx6fd4hgjafwuh57y6shzckk8rpxtz8jgpchr5p
+```
+
+and a regtest Confidential Address would be:
+
+```
+RDash1arnq9xp6dzmaqnqw7865kqumxjxtzm3vvjm0w9d594zmufek5hl9xmzmwecpsa5eynm7evw85ssepsrqm5wg9ccyk050e
+```
+
+
 ### Confidential transactions
 
 A Confidential Transaction contains the following data :
