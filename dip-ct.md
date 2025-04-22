@@ -294,6 +294,17 @@ The Discrete Logarithm Problem (DLP) means that if `Q = d*G` (or `Q = G^d` in mu
 
 The activation of these new consensus rules will be activated according to BIP9/DIP23. Assuming that the network signals to activate this hardfork and the Masternode Hard Fork Signalling Transaction (as defined in DIP23) is mined, then these consensus rules will activate at `activation_height`, which we will call `heightCT` in this DIP. If the block height of the full node is less than `heightCT` then the following consensus rules will not be active. When the block reaches `heightCT` these rules will become active.
 
+#### Consensus rules for blocks
+
+  * If height is at least `heightCT` then :
+    * then block header version must equal 5, else invalid
+    * new block header key `confidentialAddressBalance` must exist, else invalid
+    * `confidentialAddressBalance` must be a valid unsigned 64 bit integer (which stores values in satoshis not whole coin amounts)
+    * `confidentialAddressBalance` must equal the value of `confidentialAddressBalance` from the previous block plus the sum of confidential inputs minus the sum of confidential outputs, else invalid
+    * `confidentialAddressBalance` must be greater than or equal to 0, else invalid
+    * `confidentialAddressBalance` must be less than or equal to 1892000000000000, else invalid
+    
+#### Consensus rules for transactions
   * If height is at least `heightCT` and if at least one input of a CT is confidential, at least one of the outputs must also be confidential. This prevents metadata leaking about the exact amount in a confidential output. A confidential output may have an amount equal to zero.
   * If height is at least `heightCT` and if all inputs are public, i.e. not confidential, the number of confidential outputs must be zero or greater than or equal to two, i.e. having all public inputs with a single confidential output is not allowed, as it leaks the metadata about exactly how much value is in the confidential output.
   * If height is less than `heightCT` then Special Transaction type 10 is invalid
