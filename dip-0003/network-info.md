@@ -26,10 +26,10 @@ The fields below are represented as `networkInfo` and are applicable to all mast
 The fields below are represented as `platformInfo` and are only applicable for EvoNodes as defined in
 [Appendix B](masternode-types.md)
 
-| Field            | Type    | Size   | Description                                                                              |
-| ---------------- | ------- | ------ | ---------------------------------------------------------------------------------------- |
-| platformP2PPort  | uint_16 | 0 or 2 | TCP port of Dash Platform peer-to-peer communication between nodes (network byte order). |
-| platformHTTPPort | uint_16 | 0 or 2 | TCP port of Platform HTTP/API interface (network byte order).                            |
+| Field            | Type    | Size   | Description                                                         |
+| ---------------- | ------- | ------ | ------------------------------------------------------------------- |
+| platformP2PPort  | uint_16 | 0 or 2 | TCP port of Dash Platform peer-to-peer communication between nodes. |
+| platformHTTPPort | uint_16 | 0 or 2 | TCP port of Platform HTTP/API interface.                            |
 
 ### <a name="plinfo_rules">Validation Rules</a>
 
