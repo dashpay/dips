@@ -65,22 +65,27 @@ This field is an array of [`p_count`](#p_count-field) elements of type [`p_entry
 * `p_entries[0]`
     * MUST have [`purpose`](#p_entrypurpose-field) code `CORE_P2P`
     * MUST be registered regardless of masternode type (as defined in [Appendix B](masternode-types.md)).
-    * [`entries[0]`](#p_entryentries-field) MUST have a [`type`](#entrytype-field) of `0x01` (IPv4 address).
-    * On mainnet, [`entries[0]`](#p_entryentries-field) MUST use [`port`](#entryport-field) of `9999`.
+    * [`entries[0]`](#p_entryentries-field):
+      * MUST have a [`type`](#entrytype-field) of `0x01` (IPv4 address).
+      * On mainnet, MUST use [`port`](#entryport-field) of `9999`.
     * [`entries`](#p_entryentries-field) MUST NOT have a [`type`](#entrytype-field) of `0xD0` (domain name).
 * `p_entries[1]`
     * MUST have [`purpose`](#p_entrypurpose-field) code `PLATFORM_P2P`.
     * MUST be registered for EvoNodes (type 1).
     * MUST NOT be registered for regular masternodes (type 0).
-    * [`entries[0]`](#p_entryentries-field) MUST have a [`type`](#entrytype-field) of `0x01` (IPv4 address).
-    * On mainnet, [`entries[0]`](#p_entryentries-field) MUST use [`port`](#entryport-field) of `26656`.
+    * [`entries[0]`](#p_entryentries-field):
+      * MUST have a [`type`](#entrytype-field) of `0x01` (IPv4 address).
+      * MUST have the same [`address`](#entryaddress-field) as `p_entries[0][0]`
+      * On mainnet, MUST use [`port`](#entryport-field) of `26656`.
     * [`entries`](#p_entryentries-field) MUST NOT have a [`type`](#entrytype-field) of `0xD0` (domain name).
 * `p_entries[2]`
     * MUST have [`purpose`](#p_entrypurpose-field) code `PLATFORM_HTTPS`.
     * MUST be registered for EvoNodes (type 1).
     * MUST NOT be registered for regular masternodes (type 0).
-    * [`entries[0]`](#p_entryentries-field) MUST have a [`type`](#entrytype-field) of `0x01` (IPv4 address).
-    * On mainnet, [`entries[0]`](#p_entryentries-field) MUST use [`port`](#entryport-field) of `443`.
+    * [`entries[0]`](#p_entryentries-field):
+      * MUST have a [`type`](#entrytype-field) of `0x01` (IPv4 address).
+      * MUST have the same [`address`](#entryaddress-field) as `p_entries[0][0]`
+      * On mainnet, MUST use [`port`](#entryport-field) of `443`.
     * [`entries`](#p_entryentries-field) MAY have a [`type`](#entrytype-field) of `0xD0` (domain name).
       * The element's [`address`](#entryaddress-field) MUST resolve to any [`address`](#entryaddress-field) in
         `p_entries[1]` of [`type`](#entrytype-field) `0x01` (IPv4 address) or `0x02` (IPv6 address)
