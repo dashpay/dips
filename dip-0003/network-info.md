@@ -20,3 +20,24 @@ The fields below are represented as `networkInfo` and are applicable to all mast
   | Field  | Value  |
   | -------| ------ |
   | port   | 9999   |
+
+## Platform Information
+
+The fields below are represented as `platformInfo` and are only applicable for EvoNodes as defined in
+[Appendix B](masternode-types.md)
+
+| Field            | Type    | Size   | Description                                                                              |
+| ---------------- | ------- | ------ | ---------------------------------------------------------------------------------------- |
+| platformP2PPort  | uint_16 | 0 or 2 | TCP port of Dash Platform peer-to-peer communication between nodes (network byte order). |
+| platformHTTPPort | uint_16 | 0 or 2 | TCP port of Platform HTTP/API interface (network byte order).                            |
+
+### <a name="plinfo_rules">Validation Rules</a>
+
+* `platformP2PPort` and `platformHTTPPort` MUST be within the valid port range [1, 65535]
+* `platformP2PPort`, `platformHTTPPort`, and [`port`](#masternode-information) from `networkInfo` MUST be distinct
+* On mainnet, `platformP2PPort` and `platformHTTPPort` MUST be set to the following values
+
+  | Field              | Value  |
+  | ------------------ | ------ |
+  | platformP2PPort    | 26656  |
+  | platformHTTPPort   | 443    |
