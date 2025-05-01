@@ -53,7 +53,6 @@ The fields below are represented as `networkInfo` and are applicable to all mast
 | ------- | ------- | -------- | ---------------------------------------------------------------------------------------- |
 | count   | uint_8  | 1        | Number of addresses through which the masternode is accessible                           |
 | entries | byte[]  | variable | Array of length `count` containing network information used to connect to the masternode |
-| port    | uint_16 | 2        | Port (network byte order)                                                                |
 
 ### `count` field
 
@@ -79,10 +78,11 @@ This field is an array of [`count`](#count-field) elements of type [`entry`](#en
 
 #### `entry` type
 
-| Field   | Type   | Size     | Description                                                     |
-| ------- | ------ | -------- | --------------------------------------------------------------- |
-| type    | uint_8 | 1        | Network identifier                                              |
-| address | byte[] | variable | Address of `type` that can be used to connect to the masternode |
+| Field   | Type    | Size     | Description                                                     |
+| ------- | ------- | -------- | --------------------------------------------------------------- |
+| type    | uint_8  | 1        | Network identifier                                              |
+| address | byte[]  | variable | Address of `type` that can be used to connect to the masternode |
+| port    | uint_16 | 2        | Port (network byte order)                                       |
 
 #### `entry.type` field
 
@@ -116,7 +116,7 @@ The network identifier field MUST support the following [extensions](#extensions
 * `address` of [`type`](#entrytype-field)s originating from [extensions](#extensions) MUST be compliant with the
   specification as defined (e.g. [Internet domain names](#extension-a-internet-domain-names))
 
-### `port` field
+#### `entry.port` field
 
 * This field MUST be any integer between 1024 and 65535.
 
@@ -150,8 +150,12 @@ The network identifier field MUST support the following [extensions](#extensions
 
   </details>
 
-* This field MUST be ignored for connecting to [`entry.address`](#entryaddress-field) of [`entry.type`](#entrytype-field)
-  where ports are immaterial.
+* This field MUST be set to `0` if the port number is immaterial for the [`type`](#entrytype-field) of [`address`](#entryaddress-field)
+  and MUST be ignored when attempting to make a connection. Listed are the [`type`](#entrytype-field)s where the port number is immaterial.
+
+  | Network ID | Description                             |
+  | ---------- | --------------------------------------- |
+  | `0x05`     | I2P overlay network address             |
 
 ## Extensions
 
