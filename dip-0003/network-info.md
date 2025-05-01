@@ -110,6 +110,36 @@ The network identifier field MUST comply with the following table of BIP 155 [ne
 
 * This field MUST be any integer between 1024 and 65535.
 
+* This field MUST NOT permit a value considered "prohibited" (see below)
+
+  <details>
+
+  <summary>Prohibited ports:</summary>
+
+  | Port Number | Description                           |
+  | ----------- | ------------------------------------- |
+  | 1719        | H.323 registration                    |
+  | 1720        | H.323 call signaling                  |
+  | 1723        | Point-to-Point Tunneling Protocol     |
+  | 2049        | Network File System                   |
+  | 3659        | Apple SASL                            |
+  | 4045        | NFS lock daemon                       |
+  | 5060        | Session Initiation Protocol (SIP)     |
+  | 5061        | SIP over TLS                          |
+  | 6000        | X11                                   |
+  | 6566        | Scanner Access Now Easy (SANE) daemon |
+  | 6665-6666   | Internet Relay Chat (Unofficial)      |
+  | 6667        | IRC (Official)                        |
+  | 6668-6669   | IRC (Unofficial)                      |
+  | 6697        | IRC over TLS (Official)               |
+  | 8332        | Bitcoin JSON-RPC server               |
+  | 8333        | Bitcoin P2P                           |
+  | 10080       | Amanda                                |
+  | 18332       | Bitcoin JSON-RPC server (Testnet)     |
+  | 18333       | Bitcoin P2P (Testnet)                 |
+
+  </details>
+
 * This field MUST be ignored for connecting to [`entry.address`](#entryaddress-field) of [`entry.type`](#entrytype-field)
   where ports are immaterial.
 
