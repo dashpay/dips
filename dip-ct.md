@@ -1,5 +1,5 @@
 <pre>
-  DIP: XXX
+  DIP: 32
   Title: Confidential Transactions
   Author: Duke Leto
   Comments-Summary: No comments yet.
