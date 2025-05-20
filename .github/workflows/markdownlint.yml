@@ -16,5 +16,6 @@ jobs:
       if: steps.changed-files.outputs.any_changed == 'true'
       with:
         config: '.markdownlint.json'
-        globs: ${{ steps.changed-files.outputs.all_changed_files }}
+        globs: '**/*.md'
+        # globs: ${{ steps.changed-files.outputs.all_changed_files }}
         separator: ","
