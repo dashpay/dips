@@ -13,9 +13,9 @@ jobs:
         files: '**/*.md'
         separator: ","
     - uses: DavidAnson/markdownlint-cli2-action@v20
-      # if: steps.changed-files.outputs.any_changed == 'true'
+      if: steps.changed-files.outputs.any_changed == 'true'
       with:
         config: '.markdownlint.json'
-        globs: '**/*.md'
-        # globs: ${{ steps.changed-files.outputs.all_changed_files }}
+        # globs: '**/*.md'
+        globs: ${{ steps.changed-files.outputs.all_changed_files }}
         separator: ","
