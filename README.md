@@ -36,7 +36,7 @@ Number | Layer | Title | Owner | Type | Status
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Final
 [21](dip-0021.md) | Consensus | LLMQ DKG Data Sharing | dustinface | Standard | Final
 [22](dip-0022.md) | Consensus | Making InstantSend Deterministic using Quorum Cycles | Samuel Westrich, UdjinM6 | Standard | Final
-[23](dip-0023.md) | Consensus | Enhanced Hard Fork Mechanism | Pasta | Standard | Proposed
+[23](dip-0023.md) | Consensus | Enhanced Hard Fork Mechanism | Pasta | Standard | Final
 [24](dip-0024.md) | Consensus | Long-Living Masternode Quorum Distribution and Rotation | Samuel Westrich & Virgile Bartolo | Standard | Final
 [25](dip-0025.md) | Peer Services | Compressed Block Headers | gabriel-bjg, Thephez, UdjinM6 | Standard | Proposed
 [26](dip-0026.md) | Consensus | Multi-Party Payout | Timothy Munsell, UdjinM6 | Standard | Proposed
