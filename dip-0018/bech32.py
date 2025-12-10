@@ -167,8 +167,8 @@ Network = Literal["mainnet", "testnet"]
 AddrType = Literal["p2pkh", "p2sh"]
 
 NETWORK_TO_HRP = {
-    "mainnet": "dashp",
-    "testnet": "tdashp"
+    "mainnet": "dashevo",
+    "testnet": "tdashevo"
 }
 
 HRP_TO_NETWORK = {v: k for k, v in NETWORK_TO_HRP.items()}
@@ -317,8 +317,8 @@ DIP17_VECTORS = [
         "6bca392f43453b7bc33a9532b69221ce74906a8815281637e0c9d0bee35361fe",
         "03de102ed1fc43cbdb16af02e294945ffaed8e0595d3072f4c592ae80816e6859e",
         "f7da0a2b5cbd4ff6bb2c4d89b67d2f3ffeec0525",
-        "dashp1qrma5z3ttj75la4m93xcndna9ullamq9y5uywec4",
-        "tdashp1qrma5z3ttj75la4m93xcndna9ullamq9y5sawjck",
+        "dashevo1qrma5z3ttj75la4m93xcndna9ullamq9y5smxxxm",
+        "tdashevo1qrma5z3ttj75la4m93xcndna9ullamq9y5aawfeu",
     ),
     # Vector 2: m/9'/5'/17'/0'/0'/1
     (
@@ -326,8 +326,8 @@ DIP17_VECTORS = [
         "eef58ce73383f63d5062f281ed0c1e192693c170fbc0049662a73e48a1981523",
         "02269ff766fcd04184bc314f5385a04498df215ce1e7193cec9a607f69bc8954da",
         "a5ff0046217fd1c7d238e3e146cc5bfd90832a7e",
-        "dashp1qzjl7qzxy9lar37j8r37z3kvt07epqe20cn855et",
-        "tdashp1qzjl7qzxy9lar37j8r37z3kvt07epqe20cl75leg",
+        "dashevo1qzjl7qzxy9lar37j8r37z3kvt07epqe20clcut89",
+        "tdashevo1qzjl7qzxy9lar37j8r37z3kvt07epqe20cj75ycz",
     ),
     # Vector 3: m/9'/5'/17'/0'/1'/0 (key_class' = 1')
     (
@@ -335,16 +335,16 @@ DIP17_VECTORS = [
         "cc05b4389712a2e724566914c256217685d781503d7cc05af6642e60260830db",
         "0317a3ed70c141cffafe00fa8bf458cec119f6fc039a7ba9a6b7303dc65b27bed3",
         "6d92674fd64472a3dfcfc3ebcfed7382bf699d7b",
-        "dashp1qpkeye606ez89g7lelp7hnldwwpt76va0v5n8t3z",
-        "tdashp1qpkeye606ez89g7lelp7hnldwwpt76va0vc28q3p",
+        "dashevo1qpkeye606ez89g7lelp7hnldwwpt76va0vcv050v",
+        "tdashevo1qpkeye606ez89g7lelp7hnldwwpt76va0v428mst",
     ),
 ]
 
 # DIP-18 P2SH vector (address encoding only, no derivation path)
 P2SH_VECTOR = (
     "43fa183cf3fb6e9e7dc62b692aeb4fc8d8045636",
-    "dashp1q9pl5xpu70aka8nacc4kj2htflydspzkxc6v9urk",
-    "tdashp1q9pl5xpu70aka8nacc4kj2htflydspzkxck49hr4",
+    "dashevo1q9pl5xpu70aka8nacc4kj2htflydspzkxckndrac",
+    "tdashevo1q9pl5xpu70aka8nacc4kj2htflydspzkxcm49vzl",
 )
 
 
