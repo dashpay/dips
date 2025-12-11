@@ -18,6 +18,7 @@ from typing import Tuple, Literal
 from hashlib import sha256, pbkdf2_hmac
 import hashlib
 import hmac
+import unicodedata
 
 from ecdsa import SECP256k1, SigningKey
 
@@ -249,6 +250,8 @@ H = 0x80000000
 
 def mnemonic_to_seed(mnemonic: str, passphrase: str = "") -> bytes:
     """BIP-39: Convert mnemonic to 64-byte seed using PBKDF2-HMAC-SHA512."""
+    mnemonic = unicodedata.normalize('NFKD', mnemonic)
+    passphrase = unicodedata.normalize('NFKD', passphrase)
     return pbkdf2_hmac(
         "sha512",
         mnemonic.encode("utf-8"),
