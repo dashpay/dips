@@ -1,6 +1,29 @@
 #!/usr/bin/env python3
+# Copyright (c) 2017, 2020 Pieter Wuille
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
 """
 DIP-18 Bech32m address encoding for Dash Platform, with full DIP-17 test vector validation.
+
+Bech32/Bech32m functions are copied verbatim from BIP-350 reference implementation:
+https://github.com/sipa/bech32/blob/master/ref/python/segwit_addr.py
 
 This module provides:
 - Bech32m encoding/decoding (BIP-350)
@@ -16,150 +39,107 @@ Usage:
 
 from typing import Tuple, Literal
 from hashlib import sha256, pbkdf2_hmac
+from enum import Enum
 import hashlib
 import hmac
 import unicodedata
 
 from ecdsa import SECP256k1, SigningKey
 
-# ---- Generic bech32m implementation (BIP-350) ----
+# ---- Bech32/Bech32m reference implementation (BIP-350) ----
+# The following code up to "End of BIP-350 reference" is copied verbatim from:
+# https://github.com/sipa/bech32/blob/master/ref/python/segwit_addr.py
 
-# 32-character Bech32 alphabet
+
+class Encoding(Enum):
+    """Enumeration type to list the various supported encodings."""
+    BECH32 = 1
+    BECH32M = 2
+
 CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
-CHARSET_REV = {c: i for i, c in enumerate(CHARSET)}
-
-# Generator constants for the polymod function
-GENERATOR = [0x3b6a57b2,
-             0x26508e6d,
-             0x1ea119fa,
-             0x3d4233dd,
-             0x2a1462b3]
-
-# Bech32m constant from BIP-350
 BECH32M_CONST = 0x2bc830a3
 
-
-def _polymod(values) -> int:
-    """Internal: compute Bech32/Bech32m polymod checksum."""
+def bech32_polymod(values):
+    """Internal function that computes the Bech32 checksum."""
+    generator = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3]
     chk = 1
-    for v in values:
+    for value in values:
         top = chk >> 25
-        chk = ((chk & 0x1ffffff) << 5) ^ v
+        chk = (chk & 0x1ffffff) << 5 ^ value
         for i in range(5):
-            if (top >> i) & 1:
-                chk ^= GENERATOR[i]
+            chk ^= generator[i] if ((top >> i) & 1) else 0
     return chk
 
 
-def _hrp_expand(hrp: str):
+def bech32_hrp_expand(hrp):
     """Expand the HRP into values for checksum computation."""
     return [ord(x) >> 5 for x in hrp] + [0] + [ord(x) & 31 for x in hrp]
 
 
-def _create_checksum_bech32m(hrp: str, data):
-    """Create a Bech32m checksum for given HRP and data."""
-    values = _hrp_expand(hrp) + list(data) + [0, 0, 0, 0, 0, 0]
-    polymod = _polymod(values) ^ BECH32M_CONST
+def bech32_verify_checksum(hrp, data):
+    """Verify a checksum given HRP and converted data characters."""
+    const = bech32_polymod(bech32_hrp_expand(hrp) + data)
+    if const == 1:
+        return Encoding.BECH32
+    if const == BECH32M_CONST:
+        return Encoding.BECH32M
+    return None
+
+def bech32_create_checksum(hrp, data, spec):
+    """Compute the checksum values given HRP and data."""
+    values = bech32_hrp_expand(hrp) + data
+    const = BECH32M_CONST if spec == Encoding.BECH32M else 1
+    polymod = bech32_polymod(values + [0, 0, 0, 0, 0, 0]) ^ const
     return [(polymod >> 5 * (5 - i)) & 31 for i in range(6)]
 
 
-def _verify_checksum_bech32m(hrp: str, data) -> bool:
-    """Verify Bech32m checksum for a given HRP and data+checksum."""
-    return _polymod(_hrp_expand(hrp) + list(data)) == BECH32M_CONST
+def bech32_encode(hrp, data, spec):
+    """Compute a Bech32 string given HRP and data values."""
+    combined = data + bech32_create_checksum(hrp, data, spec)
+    return hrp + '1' + ''.join([CHARSET[d] for d in combined])
 
+def bech32_decode(bech):
+    """Validate a Bech32/Bech32m string, and determine HRP and data."""
+    if ((any(ord(x) < 33 or ord(x) > 126 for x in bech)) or
+            (bech.lower() != bech and bech.upper() != bech)):
+        return (None, None, None)
+    bech = bech.lower()
+    pos = bech.rfind('1')
+    if pos < 1 or pos + 7 > len(bech) or len(bech) > 90:
+        return (None, None, None)
+    if not all(x in CHARSET for x in bech[pos+1:]):
+        return (None, None, None)
+    hrp = bech[:pos]
+    data = [CHARSET.find(x) for x in bech[pos+1:]]
+    spec = bech32_verify_checksum(hrp, data)
+    if spec is None:
+        return (None, None, None)
+    return (hrp, data[:-6], spec)
 
-def bech32m_encode(hrp: str, data) -> str:
-    """
-    Encode HRP + data (5-bit values) into a Bech32m string.
-    `data` should NOT contain the checksum yet.
-    """
-    if not hrp or any(ord(c) < 33 or ord(c) > 126 for c in hrp):
-        raise ValueError("invalid HRP")
-
-    # Enforce lowercase for output
-    hrp = hrp.lower()
-
-    checksum = _create_checksum_bech32m(hrp, data)
-    combined = list(data) + checksum
-    return hrp + "1" + "".join(CHARSET[d] for d in combined)
-
-
-def bech32m_decode(addr: str) -> Tuple[str, list]:
-    """
-    Decode a Bech32m string into (hrp, data_without_checksum).
-    Raises ValueError if invalid or checksum fails.
-    """
-    if any(ord(c) < 33 or ord(c) > 126 for c in addr):
-        raise ValueError("invalid characters")
-
-    # Reject mixed case
-    if addr.lower() != addr and addr.upper() != addr:
-        raise ValueError("mixed case not allowed")
-
-    addr = addr.lower()
-
-    # Overall length constraints from BIP-173/350
-    if len(addr) < 8 or len(addr) > 90:
-        raise ValueError("invalid length")
-
-    # Separator must be present and not at extremes
-    pos = addr.rfind("1")
-    if pos == -1 or pos < 1 or pos + 7 > len(addr):
-        raise ValueError("invalid separator position")
-
-    hrp = addr[:pos]
-    data_part = addr[pos + 1:]
-
-    if not hrp:
-        raise ValueError("empty HRP")
-
-    data = []
-    for c in data_part:
-        if c not in CHARSET_REV:
-            raise ValueError("invalid character in data part")
-        data.append(CHARSET_REV[c])
-
-    if not _verify_checksum_bech32m(hrp, data):
-        raise ValueError("invalid Bech32m checksum")
-
-    # Strip checksum (last 6 symbols)
-    return hrp, data[:-6]
-
-
-def convertbits(data, frombits: int, tobits: int, pad: bool = True):
-    """
-    General power-of-2 base conversion.
-    Used to convert 8-bit bytes <-> 5-bit Bech32 values.
-
-    `data` is an iterable of integers.
-    """
+def convertbits(data, frombits, tobits, pad=True):
+    """General power-of-2 base conversion."""
     acc = 0
     bits = 0
     ret = []
     maxv = (1 << tobits) - 1
     max_acc = (1 << (frombits + tobits - 1)) - 1
-
     for value in data:
-        if value < 0 or (value >> frombits) != 0:
-            raise ValueError("convertbits: invalid value")
+        if value < 0 or (value >> frombits):
+            return None
         acc = ((acc << frombits) | value) & max_acc
         bits += frombits
         while bits >= tobits:
             bits -= tobits
             ret.append((acc >> bits) & maxv)
-
     if pad:
         if bits:
             ret.append((acc << (tobits - bits)) & maxv)
-    else:
-        if bits >= frombits:
-            # leftover bits are enough to encode a full symbol → invalid
-            raise ValueError("convertbits: invalid padding")
-        if (acc << (tobits - bits)) & maxv:
-            # leftover bits would encode a non-zero symbol → invalid
-            raise ValueError("convertbits: non-zero padding")
-
+    elif bits >= frombits or ((acc << (tobits - bits)) & maxv):
+        return None
     return ret
+
+
+# ---- End of BIP-350 reference ----
 
 
 # ---- Dash Platform address encoding on top of Bech32m ----
@@ -208,7 +188,7 @@ def encode_platform_address(hash160: bytes,
     payload_bytes = bytes([type_byte]) + hash160  # 21 bytes
     data5 = convertbits(payload_bytes, 8, 5, pad=True)
 
-    return bech32m_encode(hrp, data5)
+    return bech32_encode(hrp, data5, Encoding.BECH32M)
 
 
 def decode_platform_address(addr: str) -> Tuple[Network, AddrType, bytes]:
@@ -218,7 +198,13 @@ def decode_platform_address(addr: str) -> Tuple[Network, AddrType, bytes]:
     :param addr: Bech32m-encoded Dash Platform address
     :return: (network, "p2pkh"/"p2sh", 20-byte hash160)
     """
-    hrp, data_no_checksum = bech32m_decode(addr)
+    hrp, data_no_checksum, spec = bech32_decode(addr)
+
+    if hrp is None:
+        raise ValueError("invalid Bech32m address")
+
+    if spec != Encoding.BECH32M:
+        raise ValueError("address is not Bech32m encoded")
 
     if hrp not in HRP_TO_NETWORK:
         raise ValueError(f"unknown HRP '{hrp}' for Dash Platform")
@@ -226,7 +212,10 @@ def decode_platform_address(addr: str) -> Tuple[Network, AddrType, bytes]:
     network = HRP_TO_NETWORK[hrp]
 
     # Convert back to 8-bit payload, without padding
-    payload_bytes = bytes(convertbits(data_no_checksum, 5, 8, pad=False))
+    payload_bytes = convertbits(data_no_checksum, 5, 8, pad=False)
+    if payload_bytes is None:
+        raise ValueError("invalid payload encoding")
+    payload_bytes = bytes(payload_bytes)
 
     if len(payload_bytes) != 21:
         raise ValueError("invalid payload length (expected 21 bytes)")
