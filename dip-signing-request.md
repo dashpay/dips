@@ -57,13 +57,13 @@ The URI scheme is `dash-st` (Dash State Transition).
 ## URI Format
 
 ```text
-dash-st:<state-transition-data>[?<parameters>]
+dash-st:<st-data>[?<parameters>]
 ```
 
 Where:
 
-* `<state-transition-data>` is the Base58-encoded state transition bytes
-* `<parameters>` is an optional query string of key-value pairs
+* `st-data` is the Base58-encoded state transition bytes
+* `parameters` is an optional query string of key-value pairs
 
 ### ABNF Grammar
 
