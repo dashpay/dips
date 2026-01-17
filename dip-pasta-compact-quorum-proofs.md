@@ -28,8 +28,11 @@
 1. [Proof Construction](#proof-construction)
     1. [ChainLock Selection Strategy](#chainlock-selection-strategy)
     1. [Quorum Commitment Merkle Proof Construction](#quorum-commitment-merkle-proof-construction)
+1. [Dash Core RPC Methods](#dash-core-rpc-methods)
+    1. [getquorumproofchain](#getquorumproofchain)
+    1. [verifyquorumproofchain](#verifyquorumproofchain)
 1. [P2P Messages](#p2p-messages)
-    1. [GETQUORUMPROOFCHAIN](#getquorumproofchain)
+    1. [GETQUORUMPROOFCHAIN](#getquorumproofchain-1)
     1. [QUORUMPROOFCHAIN](#quorumproofchain)
 1. [gRPC API](#grpc-api)
 1. [Proof Size Analysis](#proof-size-analysis)
@@ -316,7 +319,70 @@ To construct a proof for a specific commitment:
 3. Find the index of the target commitment's hash
 4. Construct the merkle path from that index to the root
 
+## Dash Core RPC Methods
+
+Platform nodes communicate with their local Dash Core node via RPC, not P2P. The following RPC methods are added to Dash Core for proof generation and verification.
+
+### getquorumproofchain
+
+Generates a quorum proof chain from a checkpoint to a target quorum.
+
+**Arguments:**
+
+| # | Name | Type | Description |
+| - | ---- | ---- | ----------- |
+| 1 | checkpointBlockHash | string | Block hash of the checkpoint (hex) |
+| 2 | checkpointHeight | number | Height of the checkpoint block |
+| 3 | checkpointQuorums | array | Array of known chainlock quorum objects |
+| 4 | targetQuorumHash | string | Hash of the target quorum to prove (hex) |
+| 5 | targetQuorumType | number | LLMQ type of the target quorum |
+
+Each checkpoint quorum object contains:
+
+* `quorumHash` (string): Quorum identifier (hex)
+* `quorumType` (number): LLMQ type
+* `quorumPublicKey` (string): Quorum public key (hex)
+
+**Result:**
+
+Returns the `QuorumProofChainResponse` structure with headers, chainlocks, and quorum proofs encoded as hex strings.
+
+### verifyquorumproofchain
+
+Verifies a quorum proof chain and returns the target quorum's public key if valid.
+
+**Arguments:**
+
+| # | Name | Type | Description |
+| - | ---- | ---- | ----------- |
+| 1 | checkpointBlockHash | string | Block hash of the checkpoint (hex) |
+| 2 | checkpointHeight | number | Height of the checkpoint block |
+| 3 | checkpointQuorums | array | Array of known chainlock quorum objects |
+| 4 | proof | object | The proof chain to verify |
+| 5 | targetQuorumHash | string | Hash of the target quorum (hex) |
+| 6 | targetQuorumType | number | LLMQ type of the target quorum |
+
+**Result:**
+
+```json
+{
+  "valid": true,
+  "quorumPublicKey": "hexstring"
+}
+```
+
+Or on failure:
+
+```json
+{
+  "valid": false,
+  "error": "error message"
+}
+```
+
 ## P2P Messages
+
+These messages enable SPV light clients to request quorum proofs directly from peers without requiring a local Dash Core node. Nodes supporting these messages must advertise protocol version >= XXXXXX (to be assigned).
 
 ### GETQUORUMPROOFCHAIN
 
@@ -343,7 +409,7 @@ The response uses the `QuorumProofChainResponse` structure defined in [Quorum Pr
 
 ## gRPC API
 
-For Platform SDK integration, the following gRPC endpoint is defined:
+DAPI exposes quorum proof functionality to remote clients via gRPC. Internally, DAPI calls the Dash Core RPC methods described above on its local Core node.
 
 ```protobuf
 service Core {
