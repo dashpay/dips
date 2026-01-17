@@ -321,7 +321,7 @@ To construct a proof for a specific commitment:
 
 ## Dash Core RPC Methods
 
-Platform nodes communicate with their local Dash Core node via RPC, not P2P. The following RPC methods are added to Dash Core for proof generation and verification.
+Platform nodes communicate with their local Dash Core node via RPC, not P2P. The following RPC methods are added to Dash Core for proof generation and verification. Core derives the checkpoint height and active chainlock quorums from the checkpoint block hash.
 
 ### getquorumproofchain
 
@@ -332,16 +332,8 @@ Generates a quorum proof chain from a checkpoint to a target quorum.
 | # | Name | Type | Description |
 | - | ---- | ---- | ----------- |
 | 1 | checkpointBlockHash | string | Block hash of the checkpoint (hex) |
-| 2 | checkpointHeight | number | Height of the checkpoint block |
-| 3 | checkpointQuorums | array | Array of known chainlock quorum objects |
-| 4 | targetQuorumHash | string | Hash of the target quorum to prove (hex) |
-| 5 | targetQuorumType | number | LLMQ type of the target quorum |
-
-Each checkpoint quorum object contains:
-
-* `quorumHash` (string): Quorum identifier (hex)
-* `quorumType` (number): LLMQ type
-* `quorumPublicKey` (string): Quorum public key (hex)
+| 2 | targetQuorumHash | string | Hash of the target quorum to prove (hex) |
+| 3 | targetQuorumType | number | LLMQ type of the target quorum |
 
 **Result:**
 
@@ -356,11 +348,9 @@ Verifies a quorum proof chain and returns the target quorum's public key if vali
 | # | Name | Type | Description |
 | - | ---- | ---- | ----------- |
 | 1 | checkpointBlockHash | string | Block hash of the checkpoint (hex) |
-| 2 | checkpointHeight | number | Height of the checkpoint block |
-| 3 | checkpointQuorums | array | Array of known chainlock quorum objects |
-| 4 | proof | object | The proof chain to verify |
-| 5 | targetQuorumHash | string | Hash of the target quorum (hex) |
-| 6 | targetQuorumType | number | LLMQ type of the target quorum |
+| 2 | proof | object | The proof chain to verify |
+| 3 | targetQuorumHash | string | Hash of the target quorum (hex) |
+| 4 | targetQuorumType | number | LLMQ type of the target quorum |
 
 **Result:**
 
@@ -386,14 +376,11 @@ These messages enable SPV light clients to request quorum proofs directly from p
 
 ### GETQUORUMPROOFCHAIN
 
-Request a quorum proof chain from a peer.
+Request a quorum proof chain from a peer. The serving node derives the checkpoint height and active chainlock quorums from the checkpoint block hash.
 
 | Field | Type | Size | Description |
 | ----- | ---- | ---- | ----------- |
 | checkpointBlockHash | uint256 | 32 | Block hash of the client's checkpoint |
-| checkpointHeight | uint32_t | 4 | Height of the checkpoint block |
-| checkpointQuorumCount | compactSize uint | 1-9 | Number of known chainlock quorums |
-| checkpointQuorums | QuorumEntry[] | variable | Known chainlock quorum entries from checkpoint |
 | targetQuorumHash | uint256 | 32 | Hash of the target quorum to prove |
 | targetQuorumType | uint8_t | 1 | LLMQ type of the target quorum |
 
@@ -417,18 +404,10 @@ service Core {
         returns (GetQuorumProofChainResponse);
 }
 
-message QuorumEntry {
-    bytes quorum_hash = 1;      // 32 bytes
-    uint32 quorum_type = 2;
-    bytes quorum_public_key = 3; // 48 bytes
-}
-
 message GetQuorumProofChainRequest {
     bytes checkpoint_block_hash = 1;    // 32 bytes
-    uint32 checkpoint_height = 2;
-    repeated QuorumEntry checkpoint_chainlock_quorums = 3;
-    bytes target_quorum_hash = 4;       // 32 bytes
-    uint32 target_quorum_type = 5;
+    bytes target_quorum_hash = 2;       // 32 bytes
+    uint32 target_quorum_type = 3;
 }
 
 message ChainlockEntry {
