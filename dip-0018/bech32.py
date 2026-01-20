@@ -155,8 +155,8 @@ NETWORK_TO_HRP = {
 HRP_TO_NETWORK = {v: k for k, v in NETWORK_TO_HRP.items()}
 
 TYPE_TO_BYTE = {
-    "p2pkh": 0x00,
-    "p2sh": 0x01,
+    "p2pkh": 0xb0,
+    "p2sh": 0x80,
 }
 
 BYTE_TO_TYPE = {v: k for k, v in TYPE_TO_BYTE.items()}
@@ -309,8 +309,8 @@ DIP17_VECTORS = [
         "6bca392f43453b7bc33a9532b69221ce74906a8815281637e0c9d0bee35361fe",
         "03de102ed1fc43cbdb16af02e294945ffaed8e0595d3072f4c592ae80816e6859e",
         "f7da0a2b5cbd4ff6bb2c4d89b67d2f3ffeec0525",
-        "evo1qrma5z3ttj75la4m93xcndna9ullamq9y57vzaqm",
-        "tevo1qrma5z3ttj75la4m93xcndna9ullamq9y5ch5x7d",
+        "evo1krma5z3ttj75la4m93xcndna9ullamq9y59dj9x7",
+        "tevo1krma5z3ttj75la4m93xcndna9ullamq9y5rky7cg",
     ),
     # Vector 2: m/9'/5'/17'/0'/0'/1
     (
@@ -318,8 +318,8 @@ DIP17_VECTORS = [
         "eef58ce73383f63d5062f281ed0c1e192693c170fbc0049662a73e48a1981523",
         "02269ff766fcd04184bc314f5385a04498df215ce1e7193cec9a607f69bc8954da",
         "a5ff0046217fd1c7d238e3e146cc5bfd90832a7e",
-        "evo1qzjl7qzxy9lar37j8r37z3kvt07epqe20c30csp9",
-        "tevo1qzjl7qzxy9lar37j8r37z3kvt07epqe20ch5wtln",
+        "evo1kzjl7qzxy9lar37j8r37z3kvt07epqe20c2wgg8q",
+        "tevo1kzjl7qzxy9lar37j8r37z3kvt07epqe20cv47nek",
     ),
     # Vector 3: m/9'/5'/17'/0'/1'/0 (key_class' = 1')
     (
@@ -327,16 +327,16 @@ DIP17_VECTORS = [
         "cc05b4389712a2e724566914c256217685d781503d7cc05af6642e60260830db",
         "0317a3ed70c141cffafe00fa8bf458cec119f6fc039a7ba9a6b7303dc65b27bed3",
         "6d92674fd64472a3dfcfc3ebcfed7382bf699d7b",
-        "evo1qpkeye606ez89g7lelp7hnldwwpt76va0vkmt0fv",
-        "tevo1qpkeye606ez89g7lelp7hnldwwpt76va0vsqa5h6",
+        "evo1kpkeye606ez89g7lelp7hnldwwpt76va0vd6mh0f",
+        "tevo1kpkeye606ez89g7lelp7hnldwwpt76va0vtpdv3l",
     ),
 ]
 
 # DIP-18 P2SH vector (address encoding only, no derivation path)
 P2SH_VECTOR = (
     "43fa183cf3fb6e9e7dc62b692aeb4fc8d8045636",
-    "evo1q9pl5xpu70aka8nacc4kj2htflydspzkxccyfcmc",
-    "tevo1q9pl5xpu70aka8nacc4kj2htflydspzkxc7llr9w",
+    "evo1sppl5xpu70aka8nacc4kj2htflydspzkxctaevg5",
+    "tevo1sppl5xpu70aka8nacc4kj2htflydspzkxcdx0hkz",
 )
 
 
