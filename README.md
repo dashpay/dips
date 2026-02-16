@@ -33,8 +33,8 @@ Number | Layer | Title | Owner | Type | Status
 [14](dip-0014.md) | Applications | Extended Key Derivation using 256-Bit Unsigned Integers | Samuel Westrich | Informational | Proposed
 [15](dip-0015.md) | Applications | DashPay | Samuel Westrich, Eric Britten | Standard | Proposed
 [16](dip-0016.md) | Applications | Headers First Synchronization on Simple Payment Verification Wallets | Samuel Westrich | Informational | Proposed
-[17](dip-0017.md) | Consensus | Dash Platform Payment Addresses and HD Derivation | Samuel Westrich | Standard | Proposed
-[18](dip-0018.md) | Consensus | Dash Platform Payment Address Encodings | Samuel Westrich, thephez | Standard | Proposed
+[17](dip-0017.md) | Applications | Dash Platform Payment Addresses and HD Derivation | Samuel Westrich | Standard | Proposed
+[18](dip-0018.md) | Applications | Dash Platform Payment Address Encodings | Samuel Westrich, thephez | Standard | Proposed
 [20](dip-0020.md) | Consensus | Dash Opcode Updates | Mart Mangus | Standard | Final
 [21](dip-0021.md) | Consensus | LLMQ DKG Data Sharing | dustinface | Standard | Final
 [22](dip-0022.md) | Consensus | Making InstantSend Deterministic using Quorum Cycles | Samuel Westrich, UdjinM6 | Standard | Final
