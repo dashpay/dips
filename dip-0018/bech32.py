@@ -156,7 +156,7 @@ HRP_TO_NETWORK = {v: k for k, v in NETWORK_TO_HRP.items()}
 
 TYPE_TO_BYTE = {
     "p2pkh": 0xb0,
-    "p2sh": 0xb8,
+    "p2sh": 0x80,
 }
 
 BYTE_TO_TYPE = {v: k for k, v in TYPE_TO_BYTE.items()}
@@ -335,8 +335,8 @@ DIP17_VECTORS = [
 # DIP-18 P2SH vector (address encoding only, no derivation path)
 P2SH_VECTOR = (
     "43fa183cf3fb6e9e7dc62b692aeb4fc8d8045636",
-    "dash1hppl5xpu70aka8nacc4kj2htflydspzkxc57vr75",
-    "tdash1hppl5xpu70aka8nacc4kj2htflydspzkxcyela06",
+    "dash1sppl5xpu70aka8nacc4kj2htflydspzkxch4cad6",
+    "tdash1sppl5xpu70aka8nacc4kj2htflydspzkxc8jtru5",
 )
 
 

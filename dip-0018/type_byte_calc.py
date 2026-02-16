@@ -60,7 +60,7 @@ print("=" * 60)
 print("Finding type bytes for specific first characters")
 print("=" * 60)
 
-for char in ['q', 'k', 'h', 'x', '7']:
+for char in ['q', 'k', 's', 'x', '7']:
     find_type_byte_for_char(char)
 
 print("\n" + "=" * 60)
@@ -69,5 +69,5 @@ print("=" * 60)
 
 # Check proposed combinations
 print("\n--- Checking specific values ---")
-for tb in [0x30, 0xE0, 0xA0, 0xB8, 48, 224]:
+for tb in [0x30, 0xE0, 0xA0, 0x80, 48, 224]:
     show_encoding_for_type_byte(tb)
