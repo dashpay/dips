@@ -1,0 +1,22 @@
+{
+  "version": "0.2",
+  "language": "en,en-US,en-GB",
+  "dictionaryDefinitions": [
+    {
+      "name": "project-words",
+      "path": "./project-words.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": ["project-words"],
+  "ignorePaths": ["node_modules", "/project-words.txt"],
+  "overrides": [
+    {
+      "filename": "**/*.md",
+      "description": "Ignore letter-only strings 30+ chars (e.g. Base58 alphabet sets, extended hashes)",
+      "ignoreRegExpList": [
+        "/[A-Za-z]{30,}/g"
+      ]
+    }
+  ]
+}
