@@ -19,7 +19,8 @@
 1. [Overview](#overview)
 1. [Key Exchange Protocol](#key-exchange-protocol)
     * [dash-key: URI Format](#dash-key-uri-format)
-    * [Binary Payload Layout](#binary-payload-layout)
+        * [Binary Payload Layout](#binary-payload-layout)
+        * [Network Identifiers](#network-identifiers)
     * [URI Validation Rules](#uri-validation-rules)
     * [Cryptographic Flow](#cryptographic-flow)
         * [Login Key Derivation](#login-key-derivation)
@@ -185,16 +186,7 @@ dash-key:<base58_payload>?n=<network>&v=<version>
 | `n` | Network identifier (required) |
 | `v` | Protocol version (optional). When present, the wallet MUST verify it matches the version byte in the payload. The current protocol version is `1`. |
 
-### Network Identifiers
-
-| Value | Network |
-| ----- | ------- |
-| `m`, `mainnet`, `dash` | Mainnet |
-| `t`, `testnet` | Testnet |
-| `d`, `devnet` | Devnet |
-| `r`, `regtest` | Regtest (local) |
-
-## Binary Payload Layout
+### Binary Payload Layout
 
 The Base58-decoded payload has the following structure:
 
@@ -207,6 +199,15 @@ The Base58-decoded payload has the following structure:
 | 67 | 0–64 | label | UTF-8 encoded application label |
 
 Minimum payload size: 67 bytes (no label). Maximum payload size: 131 bytes (64-byte label).
+
+### Network Identifiers
+
+| Value | Network |
+| ----- | ------- |
+| `m`, `mainnet`, `dash` | Mainnet |
+| `t`, `testnet` | Testnet |
+| `d`, `devnet` | Devnet |
+| `r`, `regtest` | Regtest (local) |
 
 ## URI Validation Rules
 
@@ -239,12 +240,12 @@ Derive a private key at the following HD path:
 m / 9' / coin_type' / 21' / account'
 ```
 
-| Path Level | Value | Description |
-| ---------- | ----- | ----------- |
-| 9' | Feature purpose (per [DIP-0009](https://github.com/dashpay/dips/blob/master/dip-0009.md)) | |
-| coin_type' | `5` (mainnet) or `1` (testnet/devnet/regtest) | Per [BIP-0044](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) |
-| 21' | Key exchange feature index | |
-| account' | Wallet account index for the selected identity (default `0`) | |
+| Path Level | Value |
+| ---------- | ----- |
+| 9' | Feature purpose (per [DIP-0009](https://github.com/dashpay/dips/blob/master/dip-0009.md)) |
+| coin_type' | `5` (mainnet) or `1` (testnet/devnet/regtest) per [BIP-0044](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) |
+| 21' | Key exchange feature index |
+| account' | Wallet account index for the selected identity (default `0`) |
 
 #### Stage 2: HKDF Key Derivation
 
@@ -415,7 +416,7 @@ dash-st:<encoded_transition>?n=<network>&v=<version>[&id=<identity>][&k=<key_id>
 | --------- | ----------- |
 | `dash-st:` | URI scheme prefix |
 | `<encoded_transition>` | Encoded unsigned state transition bytes |
-| `n` | Network identifier (required; same values as `dash-key:`) |
+| `n` | Network identifier (required; see [Network Identifiers](#network-identifiers)) |
 | `v` | Protocol version (required; must be `1`) |
 
 ## Query Parameters
@@ -424,14 +425,14 @@ dash-st:<encoded_transition>?n=<network>&v=<version>[&id=<identity>][&k=<key_id>
 | --------- | -------- | ----------- |
 | `n` | Yes | Network identifier (`m`, `t`, `d`, or `r`) |
 | `v` | Yes | Protocol version; must be `1` |
-| `id` | No | Base58-encoded identity identifier hint (32 bytes); wallet should pre-select this identity |
+| `id` | No | Base58-encoded identity identifier (32 bytes); wallet should pre-select this identity |
 | `k` | No | Key ID hint (integer); wallet should pre-select this signing key |
 | `l` | No | URL-encoded application label (max 64 characters) |
 
 The state transition type is determined by deserializing the encoded bytes. The serialization format
 is self-describing and includes a type discriminator, so no external type hint is needed.
 
-## Encoding
+## Supported Encodings
 
 The state transition bytes MUST be encoded using Base58, consistent with the `dash-key:` protocol.
 
@@ -477,7 +478,6 @@ adds two keys:
 | Security Level | HIGH |
 | Key Type | ECDSA_HASH160 |
 | Data | Hash160 of the authentication public key (20 bytes) |
-| Read Only | false |
 
 **Encryption key:**
 
@@ -487,7 +487,6 @@ adds two keys:
 | Security Level | MEDIUM |
 | Key Type | ECDSA_HASH160 |
 | Data | Hash160 of the encryption public key (20 bytes) |
-| Read Only | false |
 
 The key IDs are assigned sequentially starting from the identity's current maximum key ID plus one.
 The identity revision and nonce are incremented from their current Platform values.
