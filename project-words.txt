@@ -1,5 +1,6 @@
 # Acceptable
 ASIC
+bech
 Bitfield
 bitfield
 bitsets
@@ -63,6 +64,7 @@ Merkle
 mnhfsignal
 MNLISTDIFF
 Namecoin
+Notif
 pBFT
 platformban
 plwdtx
@@ -103,9 +105,14 @@ topup
 topups
 tprv
 tpub
+unlinkability
+unlinkable
 unretrievable
+unshield
+unshielding
 UTXO
 varint
+vout
 vvec
 xprv
 xpub
