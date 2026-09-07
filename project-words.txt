@@ -103,6 +103,7 @@ topup
 topups
 tprv
 tpub
+unmined
 unretrievable
 UTXO
 varint
