@@ -2,7 +2,7 @@
 
 DIP stands for Dash Improvement Proposal. Similar to Bitcoin's [BIPs](https://github.com/bitcoin/bips/), a DIP is a design document providing information to the Dash community, or describing a new feature for Dash or its processes or environment. The DIP should provide a concise technical specification of the feature and a rationale for the feature.
 
-Because Dash is forked from the Bitcoin codebase, many of the BIPs can be applied to Dash as well (a list of the BIPs updated to include Dash-specific details can be found [here](https://github.com/dashevo/bips)). The purpose of the DIPs is not to duplicate those which exist as BIPs, but to introduce protocol upgrades or feature specifications which are unique to Dash.
+Because Dash is forked from the Bitcoin codebase, many of the BIPs can be applied to Dash as well (a list of the BIPs updated to include Dash-specific details can be found [Dash-specific BIPs](https://github.com/dashevo/bips)). The purpose of the DIPs is not to duplicate those which exist as BIPs, but to introduce protocol upgrades or feature specifications which are unique to Dash.
 
 ## Contributions
 
@@ -47,6 +47,18 @@ Number | Layer | Title | Owner | Type | Status
 [29](dip-0029.md) | Consensus | Randomness Beacon For LLMQ Selection | Virgile Bartolo | Standard | Proposed
 [30](dip-0030.md) | Consensus | Replay Attack Prevention and State Transition Nonces | Samuel Westrich | Standard | Proposed
 [31](dip-0031.md) | Consensus | Platform Proof of Service | Ivan Shumkov, Pasta | Standard | Proposed
+[Unassigned (dip-dashvm-protocol)](dip-dashvm-protocol.md) | Consensus | DashVM: Protocol integration and wire contracts | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-engine-abi)](dip-dashvm-engine-abi.md) | Consensus | DashVM: Deterministic Wasm engine, named bundles and ABI | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-activation)](dip-dashvm-activation.md) | Consensus | DashVM: Compilation readiness and executable lifecycle | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-storage)](dip-dashvm-storage.md) | Consensus | DashVM: Native storage, collections and capabilities | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-guards)](dip-dashvm-guards.md) | Consensus | DashVM: Bounded guards and native action rules | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-execution)](dip-dashvm-execution.md) | Consensus | DashVM: Atomic calls and ordered parallel execution | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-fees)](dip-dashvm-fees.md) | Consensus | DashVM: Admission bounds, fees, receipts and refunds | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-scheduling)](dip-dashvm-scheduling.md) | Consensus | DashVM: Time-based scheduled calls | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-governance)](dip-dashvm-governance.md) | Consensus | DashVM: Freeze, wipe and deleted-contract custody | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-proofs-clients)](dip-dashvm-proofs-clients.md) | Consensus | DashVM: Current-state proofs and client results | To be confirmed | Standard | Draft
+[Unassigned (dip-dashvm-rust-sdk)](dip-dashvm-rust-sdk.md) | Applications | DashVM: Rust authoring and reproducible packages | To be confirmed | Informational | Draft
+[Unassigned (dip-dashvm-external-primitives)](dip-dashvm-external-primitives.md) | Consensus | DashVM: ACL and randomness integration boundaries | To be confirmed | Standard | Draft
 
 ## License
 
