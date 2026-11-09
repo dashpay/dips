@@ -910,10 +910,11 @@ DIP-14 indexes: every byte `0x35`, every byte `0x6b`, bytes `00 01 … 1f`, and 
 | `m/9'/5'/5'/7'/0'/asc'/desc'/2'/0'` | `020bcde800f41ad1f924477a9502f111445224cc9ab70114ae4e5099ba02bdd034` |
 | `m/9'/5'/5'/7'/0'/asc'/desc'/2'/1'` | `021b97869c21933673076a938337c28848c8bf8094bbe6883e3a4acbf33c639072` |
 
-The session key rows are pinned in rust-dashcore `key-wallet` (`bip32.rs`). The encryption key rows
-add the rotation level; rust-dashcore pins the same paths without it (for example `…/0x35…'/0x6b…'/1'`
-is `03e989de1b62f137231cc06659c810c17100becd1f5e23d5710faa7602769fe434`), and their keys are the
-parents of these.
+All rows are pinned in rust-dashcore `key-wallet` (`bip32.rs`). It also pins the earlier paths
+without the rotation level, which wallets derive only to recognise registrations made before this
+layout (for example `…/0x35…'/0x6b…'/1'` is
+`03e989de1b62f137231cc06659c810c17100becd1f5e23d5710faa7602769fe434`); those keys are the parents
+of the corresponding rows above.
 
 # Reference Implementations
 
