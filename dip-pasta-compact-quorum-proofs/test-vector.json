@@ -1,0 +1,24 @@
+{
+  "bootstrap_file": "bootstrap.bin",
+  "checkpoint": {
+    "network": 1,
+    "height": 1548500,
+    "block_hash": "000000a99c2dac4616bca1f27301f1f99684a96102c97ef1d645569c529b55b7",
+    "masternode_root": "c0f49c8c3d91c16d9bcc7ce08345b3279901d0c8da66c2620b7acc9d1ed38021",
+    "quorum_root": "ba4b901be120adc613b38914a09f3745de1112fa9b49d34d6b435643fd99ab1c"
+  },
+  "minimum_height": 1549547,
+  "expected": {
+    "target": {
+      "network": 1,
+      "height": 1549547,
+      "block_hash": "0000006c4949598a2dab62d679834121646a225fc6e8cd44c39d8ee9f8c19771",
+      "masternode_root": "c0f49c8c3d91c16d9bcc7ce08345b3279901d0c8da66c2620b7acc9d1ed38021",
+      "quorum_root": "6349769daa7cfbe4c61e9879c8ffe282076dff7759860a5d9b3a689c8c627a4f"
+    },
+    "record_kinds": [
+      0,
+      1
+    ]
+  }
+}
