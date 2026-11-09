@@ -595,8 +595,8 @@ output:
 * Governance proposal and trigger payees — these are address-encoded rather
   than raw scripts, and no address encoding produces the template, so no
   additional check is needed;
-* Asset-unlock (credit withdrawal) outputs — these are created by an ordinary
-  transaction, so the creation rule in
+* Asset-unlock (credit withdrawal) outputs — these are created by another
+  special transaction, so the creation rule in
   [Collateral Spend Enforcement](#collateral-spend-enforcement) already rejects
   a template output.
 
@@ -634,8 +634,9 @@ This DIP deploys with Dash Core's v24 network upgrade (`DEPLOYMENT_V24`,
 version bit 13, an Enhanced Hard Fork per [DIP-0023](dip-0023.md)), together
 with DIP-0026. Shared Evo masternodes additionally require the `evo_shares`
 deployment (version bit 14), which uses the same deployment parameters as v24
-on every network. Dash Core v24 does not signal `evo_shares`, so a node that
-implements only v24 treats it as inactive.
+on every network. Dash Core v24 implements the `evo_shares` deployment but does
+not sign its activation signal; it activates only when a later release signals
+it.
 Contextual validation must recognize special transaction types 10 through 12
 so they reach their type-specific checks; those checks enforce the v24 gate.
 
