@@ -184,8 +184,10 @@ replaced here:
 
 1. The deployment (see [Deployment and Compatibility](#deployment-and-compatibility))
    is active.
-2. `type` is 0 (Regular masternode). Shared Evo masternodes are out of scope
-   (see [Rationale](#rationale)).
+2. `type` is 0 (Regular masternode), or 1 (Evo masternode) once the
+   `evo_shares` deployment is active (see
+   [Deployment and Compatibility](#deployment-and-compatibility)). Before
+   `evo_shares` activates, a shared Evo registration is invalid.
 3. The collateral is internal: `collateralOutpoint.hash` is null and
    `collateralOutpoint.n` points at an output of this transaction whose value
    equals the required collateral and whose `scriptPubKey` is exactly the
@@ -202,7 +204,7 @@ replaced here:
    period the penalty is never required, but it would still act as the
    unilateral bonus ceiling (output rule 6), leaving that much of the actor's
    share extractable by a stolen owner key for the life of the masternode.
-9. No two shares have the same `ownerKeyID`; no share `ownerKeyID` equals any
+9. Every share `ownerKeyID` is non-null; no two shares have the same `ownerKeyID`; no share `ownerKeyID` equals any
    owner key registered by any other masternode (see
    [Masternode List State](#masternode-list-state)); duplicate `refundScript`s
    within the share table are invalid; duplicate `rewardScript`s are allowed.
@@ -221,7 +223,7 @@ replaced here:
 "DashSharedMNReg" || payload version ||
 tx version || tx type || tx nLockTime ||
 inputsHash || all input sequences || outputsHash ||
-type || mode || netInfo ||
+type || mode || netInfo || [platformNodeID] ||
 keyIdVoting || pubKeyOperator || operatorReward ||
 shares || earlyPeriodBlocks || earlyPenalty
 ```
@@ -232,8 +234,10 @@ no count prefix (the same construction as `inputsHash`, over outputs instead of
 input prevouts), and `shares` is the share table exactly as serialized in the
 payload, including the leading `sharesCount` byte. Every field uses its
 payload or transaction serialization, and the leading tag is serialized as a
-compactSize-length-prefixed string, not as bare bytes. Shared registrations are type 0, so no Platform payload fields
-exist to hash. `collateralOutpoint` is deliberately absent: only one output of
+compactSize-length-prefixed string, not as bare bytes. `type`, `mode` and
+`operatorReward` are uint16, the transaction version is int16, the transaction
+type is uint16 and `nLockTime` is uint32. `platformNodeID` is present only for
+an Evo registration; nothing is added for a Regular registration. `collateralOutpoint` is deliberately absent: only one output of
 the transaction may carry the template (see
 [Collateral Spend Enforcement](#collateral-spend-enforcement)), so
 `outputsHash` already fixes the collateral slot. Consent binds every
@@ -347,7 +351,8 @@ Let `a = actorIndex`, `W` = the sum of non-actor share amounts, and
    `bonus[i] >= floor(P * shares[i].amount / W)`.
 4. The sum of all `bonus[i]` is at least `P`.
 5. The transaction fee — the collateral value minus the sum of all outputs —
-   is at most `MAX_DIS_FEE` = 1000000 duffs (0.01 DASH).
+   is at most `MAX_DIS_FEE` = 1000000 duffs (0.01 DASH). Dash Core names this
+   constant `CProDisTx::MAX_FEE`.
 6. In a unilateral dissolution, the sum of all `bonus[i]` is at most
    `earlyPenalty`.
 
@@ -380,7 +385,9 @@ competing ProDisTx, which conflicts on the collateral input.
 
 #### Fees and standby dissolutions (non-normative)
 
-Dash relay supports neither BIP125 replacement nor package relay, so a ProDisTx
+Provider transactions, including ProDisTx, are never InstantSend-locked, so a
+ProDisTx confirms only in a block. Dash relay supports neither BIP125
+replacement nor package relay, so a ProDisTx
 must embed a sufficient fee at signing time; child-pays-for-parent on the actor
 output can only raise the mining priority of a ProDisTx that already meets the
 minimum relay fee. A flat fee of roughly 100000 duffs — about one millionth of
@@ -521,6 +528,10 @@ This reuses DIP-0026's single rounding convention (sequential floor, remainder
 to the last entry) rather than introducing a second one. Implementations must
 use an intermediate at least 128 bits wide for the amount multiplication.
 
+As in DIP-0026, every output this procedure produces must be matched by its own
+coinbase output, even when two shares pay the same `rewardScript` the same
+amount.
+
 ### Collateral Spend Enforcement
 
 Template rules cannot live only inside provider-transaction checks. Consensus
@@ -581,10 +592,16 @@ output:
   payload version, including DIP-0026 payout entries and the operator payout
   script — a template payout would make the coinbase impossible to construct
   when that masternode is paid;
-* Governance proposal and trigger payment scripts (validated after
-  activation) — a template payee would invalidate the superblock carrying it;
-* Asset-unlock (credit withdrawal) destinations — a template destination would
-  make the withdrawal transaction invalid.
+* Governance proposal and trigger payees — these are address-encoded rather
+  than raw scripts, and no address encoding produces the template, so no
+  additional check is needed;
+* Asset-unlock (credit withdrawal) outputs — these are created by an ordinary
+  transaction, so the creation rule in
+  [Collateral Spend Enforcement](#collateral-spend-enforcement) already rejects
+  a template output.
+
+The provider payout scripts above must already be P2PKH or P2SH, which excludes
+the template.
 
 ### Special Transaction Filtering
 
@@ -614,7 +631,11 @@ keys and filter construction performs no masternode-list lookup.
 ## Deployment and Compatibility
 
 This DIP deploys with Dash Core's v24 network upgrade (`DEPLOYMENT_V24`,
-an Enhanced Hard Fork per [DIP-0023](dip-0023.md)), together with DIP-0026.
+version bit 13, an Enhanced Hard Fork per [DIP-0023](dip-0023.md)), together
+with DIP-0026. Shared Evo masternodes additionally require the `evo_shares`
+deployment (version bit 14), which uses the same deployment parameters as v24
+on every network. Dash Core v24 does not signal `evo_shares`, so a node that
+implements only v24 treats it as inactive.
 Contextual validation must recognize special transaction types 10 through 12
 so they reach their type-specific checks; those checks enforce the v24 gate.
 
@@ -624,6 +645,10 @@ Before activation:
   invalid.
 * Creating template-scripted outputs is nonstandard but not consensus-invalid.
 
+Under Dash Core relay policy, a template output is standard only as the
+declared collateral output of a shared registration, and a template prevout is
+standard only as the input of a ProDisTx.
+
 After activation:
 
 * All rules in this DIP apply.
@@ -631,8 +656,8 @@ After activation:
 * Existing masternodes (legacy and version 3 non-shared) are unaffected.
   Normal masternode collateral-spend semantics are unchanged.
 
-Shared registration is restricted to Regular masternodes in this version.
-Extending shared ownership to Evo masternodes requires a Platform-side
+Until `evo_shares` activates, shared registration is restricted to Regular
+masternodes. Activating it for Evo masternodes requires a Platform-side
 specification for distributing Platform credits according to the share table;
 without it, Platform-side rewards would not follow the consensus split and
 would reintroduce the trust this DIP removes.
@@ -660,7 +685,8 @@ every template output is live shared collateral. Restricting spending by
 pattern (rather than by masternode-list lookup) makes the per-input hook a
 constant script comparison and closes every path to such an output. Freezing
 the (deliberately created, nonstandard) pre-activation outputs follows the
-SegWit reserved-pattern precedent and affects only opt-in coins. Exact-script
+reserved-pattern precedent of Bitcoin's segregated witness
+([BIP141](https://github.com/bitcoin/bips/blob/master/bip-0141.mediawiki)) and affects only opt-in coins. Exact-script
 matching keeps the reserved set to a single 7-byte script.
 
 ### Why share owner keys cannot be rotated
@@ -763,7 +789,7 @@ Implementations should include tests for at least the following:
 1. A valid shared registration with 2 and with 8 participants; exact
    serialization round-trips for shared payloads and for a non-shared version 3
    payload with an empty share table and zeroed penalty fields.
-2. Invalid: shared Evo registration; external shared collateral; share sum not
+2. Invalid: shared Evo registration before `evo_shares` activates; external shared collateral; share sum not
    equal to the collateral; share below 100 DASH; `earlyPenalty >= min(share)`;
    nonzero `earlyPenalty` with `earlyPeriodBlocks == 0`; early period above
    the cap; non-empty DIP-0026 `payouts` with shares;
@@ -887,8 +913,8 @@ Shared ownership is consensus-visible by construction:
   penalty terms — is public on-chain forever;
 * Every payout block creates up to 8 owner outputs that persistently cluster
   the co-owners' scripts with each other and with the masternode;
-* The immutable refund script is an address pre-commitment made years before
-  the exit that eventually pays it.
+* The immutable refund script is an address pre-commitment made at
+  registration, potentially long before the exit that eventually pays it.
 
 Wallets should use fresh keys and destinations for every formation, never reuse
 a refund destination across formations or with other on-chain activity, and may
