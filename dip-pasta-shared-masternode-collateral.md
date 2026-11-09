@@ -22,7 +22,7 @@
     4. [Collateral Share](#collateral-share)
     5. [Registering a Shared Masternode](#registering-a-shared-masternode)
     6. [Dissolving a Shared Masternode (ProDisTx)](#dissolving-a-shared-masternode-prodistx)
-    7. [Updating a Share (ProUpShareTx)](#updating-a-share-proupsharetx)
+    7. [Updating a Share's Reward Script (ProUpShareTx)](#updating-a-shares-reward-script-proupsharetx)
     8. [Updating the Shared Registrar (ProUpSharedRegTx)](#updating-the-shared-registrar-proupsharedregtx)
     9. [Masternode List State](#masternode-list-state)
     10. [Masternode Reward Payments](#masternode-reward-payments)
@@ -407,7 +407,7 @@ lost, broadcasting the standby recovers the participant's principal without any
 other party's cooperation. A leaked standby can force an early exit, but every
 output is fixed by the covenant, so its holder cannot redirect any value.
 
-### Updating a Share (ProUpShareTx)
+### Updating a Share's Reward Script (ProUpShareTx)
 
 | Name | Special transaction type |
 | --- | --- |
