@@ -103,6 +103,11 @@ proof checks their signatures, but does not repeat distributed key generation
 eligible to sign each block. Proving that a key belongs to a quorum list does
 not, by itself, prove that the quorum is still eligible to sign.
 
+Consecutive handoffs are ordered by strictly increasing certificate height.
+The proof does not check that one certificate's block descends from another's;
+soundness relies on the assumption above that ChainLock quorums never sign
+conflicting blocks.
+
 The client verifies both the Core evidence and the Platform response:
 
 ```mermaid
@@ -285,7 +290,7 @@ or bootstrap response.
    locktime MUST NOT be constrained: consensus does not restrict them, and the
    Merkle path already binds the transaction to the signed header.
 6. **Continue with the next key.** Check the transaction's full, non-null quorum
-   commitment using the commitment rules above. Its quorum identity must differ
+   commitment using the commitment rules above. Its quorum hash must differ
    from the current one. Use its key for the next certificate. The mining block
    may predate the snapshot; the certificate must still advance as required in
    step 4.
@@ -334,14 +339,23 @@ several proofs in sequence, using each verified target as the next checkpoint.
 The Core RPC is:
 
 ```text
-getquorumproofchain checkpoint_hash height=0 quorum_hash="" llmq_type=0 node_count=4
+getquorumproofchain checkpoint_hash height=0 quorum_hash="" llmq_type=0 node_count=0
 ```
 
 `height=0` selects the server's latest available ChainLock on its active chain.
 A positive height is a minimum: the target must be at or above that height and
-strictly above the checkpoint. `quorum_hash` and `llmq_type` request one
-quorum record; `node_count` requests zero through fifteen eligible EvoNode
-records. The result contains `proof_hex`, `bootstrap_hex`, and `target`.
+strictly above the checkpoint. The server searches ChainLocks from that height
+up to 4,096 blocks ahead. If the signer of a candidate target has left the
+checkpoint's quorum root, it may try later ChainLocks within that range, so the
+target can be higher than `height`.
+
+`quorum_hash` and `llmq_type` must be given together and request one quorum
+record from the target's quorum root. `node_count` requests zero through fifteen
+EvoNode records. An EvoNode is eligible if its simplified masternode list entry
+is valid and has a non-null confirmed hash. Records are taken in simplified
+masternode list order. The call fails if `node_count` is positive and no
+eligible node exists, or if the requested quorum is not in the target's quorum
+root. The result contains `proof_hex`, `bootstrap_hex`, and `target`.
 `bootstrap_hex` is empty if no records were requested.
 
 ```text
@@ -351,6 +365,8 @@ verifyquorumproofchain checkpoint_object proof_hex minimum_height=0
 `checkpoint_object` supplies all fields of the caller's independently trusted
 snapshot. The verification RPC returns `valid` plus either the verified `target`
 or an `error`. It must not obtain the trusted snapshot from server metadata.
+`verifyquorumproofchain` checks the proof chain only; the record checks in step 8
+are performed by the client that receives a bootstrap response.
 
 DAPI and quorum servers expose the same HTTP interface:
 
@@ -362,7 +378,8 @@ Content-Type: application/json
  "quorumHash":"<RPC quorum hash>","llmqType":6,"nodeCount":4}
 ```
 
-A successful response contains the binary bootstrap response with content type
+`nodeCount` defaults to 4 on this interface. A successful response contains the
+binary bootstrap response with content type
 `application/octet-stream`. HTTP gzip compression is permitted. A server MUST
 enforce this DIP's parameter bounds and response size limits after decompression.
 On failure, it returns an HTTP error.
