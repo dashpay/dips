@@ -1,14 +1,15 @@
 # DashPay Shielded Payment Addresses: Test Vectors
 
-These vectors cover the [identity shielded account](../dip-quantumexplorer-dashpay-shielded-addresses.md#identity-shielded-accounts), the [per-contact diversifier index](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-diversifier-index), the 64-byte encoding of [`encryptedShieldedAddress`](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-shielded-addresses), and the [`ContactTag`](../dip-quantumexplorer-dashpay-shielded-addresses.md#shielded-memo-kinds) memo. All byte strings are hexadecimal.
+These vectors cover the [identity shielded account](../dip-quantumexplorer-dashpay-shielded-addresses.md#identity-shielded-accounts), the [per-contact diversifier index](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-diversifier-index), the 64-byte encoding of [`encryptedShieldedAddress`](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-shielded-addresses), and the [`PaymentRef` and `ContactTag`](../dip-quantumexplorer-dashpay-shielded-addresses.md#shielded-memo-kinds) memos. All byte strings are hexadecimal.
 
 Inputs common to all vectors:
 
 * Mnemonic `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about`, empty passphrase.
 * `ownerId` = 32 bytes of `0x11`; Bob's identity = 32 bytes of `0x22`; Carol's identity = 32 bytes of `0x33`.
 * `accountReference` `0x01234567` for version 0 requests and `0x11234567` for the version 1 rotation (DIP-15 version in the top four bits).
-* For the encryption and memo vectors: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`) and IV `a0a1...af`. Real implementations MUST draw the IV at random.
-* The memo vector is Bob paying with a note whose `rho` is `0102...20`. It also shows that the same memo copied into a note with another `rho` (`1112...30`) does not verify, whichever note is included first. Both values are canonical encodings of a `rho`, which the generator checks.
+* For the encryption and `ContactTag` vectors: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`) and IV `a0a1...af`. Real implementations MUST draw the IV at random.
+* The `PaymentRef` vector carries the reference `INV-2026-0042` (13 bytes of ASCII), padded with zero bytes to 32.
+* The `ContactTag` vector is Bob paying with a note whose `rho` is `0102...20`. It also shows that the same memo copied into a note with another `rho` (`1112...30`) does not verify, whichever note is included first. Both values are canonical encodings of a `rho`, which the generator checks.
 
 In each account block, `fvk` is the 96-byte raw full viewing key, `profile addr` is the address at diversifier index 0, and `K` is the contact index key. Per-contact vectors are given for mainnet, identity index 0.
 
@@ -59,6 +60,11 @@ iv                  : a0a1a2a3a4a5a6a7a8a9aaabacadaeaf
 plaintext (43 B)    : 25611685f1aa7c3b7a2f7a758ea2f98ca16e32e20e0d3b403a1d81421f1185d67f47054ae98e55e05e839c
 field (64 B)        : a0a1a2a3a4a5a6a7a8a9aaabacadaeafb00fd785cffaf9bd43b25189363352d54462f4fc18e0ca7108e1effc6d615026025a763f29384d39e5b0c29020d62e97
 
+== PaymentRef memo (kind 2)
+reference (text)    : INV-2026-0042
+reference (bytes)   : 494e562d323032362d30303432
+memo (36 B)         : 02000000494e562d323032362d3030343200000000000000000000000000000000000000
+
 == ContactTag memo (kind 4)
 shared key          : 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
 payer identity      : 2222222222222222222222222222222222222222222222222222222222222222
@@ -76,7 +82,7 @@ The vectors were produced by the program below, built against the Orchard implem
 
 ```rust
 //! DashPay Shielded Payment Addresses test vectors: identity shielded account,
-//! per-contact diversifier index, encryptedShieldedAddress, ContactTag memo.
+//! per-contact diversifier index, encryptedShieldedAddress, PaymentRef memo, ContactTag memo.
 use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, BlockEncryptMut, KeyIvInit};
 use hmac::{Hmac, Mac};
 use orchard::keys::{DiversifierIndex, FullViewingKey, Scope, SpendingKey};
@@ -173,6 +179,16 @@ fn main() {
     println!("iv                  : {}", hex::encode(iv));
     println!("plaintext (43 B)    : {}", hex::encode(addr));
     println!("field (64 B)        : {}", hex::encode(&field));
+
+    // PaymentRef memo (kind 2): the payee's reference, zero-padded on the right to 32 bytes.
+    let reference = b"INV-2026-0042";
+    let mut payment_ref = 2u32.to_le_bytes().to_vec();
+    payment_ref.extend_from_slice(reference);
+    payment_ref.resize(36, 0);
+    println!("\n== PaymentRef memo (kind 2)");
+    println!("reference (text)    : {}", String::from_utf8_lossy(reference));
+    println!("reference (bytes)   : {}", hex::encode(reference));
+    println!("memo (36 B)         : {}", hex::encode(&payment_ref));
 
     // ContactTag memo (kind 4): the tag covers the rho of the note that carries it.
     let payer = bob;
