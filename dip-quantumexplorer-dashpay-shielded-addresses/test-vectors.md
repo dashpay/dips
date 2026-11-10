@@ -7,8 +7,8 @@ Inputs common to all vectors:
 * Mnemonic `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about`, empty passphrase.
 * `ownerId` = 32 bytes of `0x11`; Bob's identity = 32 bytes of `0x22`; Carol's identity = 32 bytes of `0x33`.
 * `accountReference` `0x01234567` for version 0 requests and `0x11234567` for the version 1 rotation (DIP-15 version in the top four bits).
-* For the encryption and memo vectors: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`), IV `a0a1...af`, nonce `5051...5f`. Real implementations MUST draw the IV and nonce at random.
-* The memo vector is Bob paying 100,000,000 credits to the owner's profile address (mainnet, identity index 0, diversifier index 0).
+* For the encryption and memo vectors: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`) and IV `a0a1...af`. Real implementations MUST draw the IV at random.
+* The memo vector is Bob paying with a note whose `rho` is `7071...8f`. It also shows that the same memo copied into a note with another `rho` (`9091...af`) does not verify, whichever note is included first.
 
 In each account block, `fvk` is the 96-byte raw full viewing key, `profile addr` is the address at diversifier index 0, and `K` is the contact index key. Per-contact vectors are given for mainnet, identity index 0.
 
@@ -61,11 +61,13 @@ field (64 B)        : a0a1a2a3a4a5a6a7a8a9aaabacadaeafb00fd785cffaf9bd43b2518936
 
 == ContactTag memo (kind 4)
 shared key          : 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
-nonce               : 505152535455565758595a5b5c5d5e5f
 payer identity      : 2222222222222222222222222222222222222222222222222222222222222222
-paid address (43 B) : e126993647eb0c9a4b476e2823380ead099e803ea52c980146e6fa42cfeb9d2ef8f7b1d6e764821d706397
-paid value          : 100000000
-memo (36 B)         : 04000000505152535455565758595a5b5c5d5e5f172b9d83e816820f3acf3b449e654921
+note rho            : 707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f
+memo (36 B)         : 04000000ef7ea49072f34379b9ac077cbdcf20084153c2be8d3ebec22806aaec2c84da38
+-- the same memo copied into a note with another rho does not verify
+copy's rho          : 909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeaf
+tag for copy's rho  : aa37c3d4b92f511bc650ba11ea11e2b48ef038f0bb0b000c67ef9dda92275931
+tag in copied memo  : ef7ea49072f34379b9ac077cbdcf20084153c2be8d3ebec22806aaec2c84da38
 ```
 
 ## Generator
@@ -171,28 +173,33 @@ fn main() {
     println!("plaintext (43 B)    : {}", hex::encode(addr));
     println!("field (64 B)        : {}", hex::encode(&field));
 
-    // ContactTag memo (kind 4).
-    let nonce: [u8; 16] = core::array::from_fn(|i| 0x50 + i as u8);
+    // ContactTag memo (kind 4): the tag covers the rho of the note that carries it.
     let payer = bob;
-    // Bob pays the owner's profile address (diversifier index 0) 100,000,000 credits.
-    let paid_address = fvk.address_at(0u32, Scope::External).to_raw_address_bytes();
-    let paid_value: u64 = 100_000_000;
-    let mut msg = TAG_LABEL.to_vec();
-    msg.extend_from_slice(&nonce);
-    msg.extend_from_slice(&payer);
-    msg.extend_from_slice(&paid_address);
-    msg.extend_from_slice(&paid_value.to_le_bytes());
-    let mac = hmac(&shared_key, &msg);
+    let contact_tag = |rho: &[u8; 32]| {
+        let mut msg = TAG_LABEL.to_vec();
+        msg.extend_from_slice(&payer);
+        msg.extend_from_slice(rho);
+        hmac(&shared_key, &msg)
+    };
+    let rho: [u8; 32] = core::array::from_fn(|i| 0x70 + i as u8);
+    let tag = contact_tag(&rho);
     let mut memo = 4u32.to_le_bytes().to_vec();
-    memo.extend_from_slice(&nonce);
-    memo.extend_from_slice(&mac[..16]);
+    memo.extend_from_slice(&tag);
     assert_eq!(memo.len(), 36);
+    // The same memo copied into another note: that note has another rho, whichever of the two
+    // is included first, so the tag the recipient recomputes for it differs and nothing is
+    // attributed.
+    let copy_rho: [u8; 32] = core::array::from_fn(|i| 0x90 + i as u8);
+    let tag_expected_for_copy = contact_tag(&copy_rho);
+    assert_ne!(tag_expected_for_copy, tag);
     println!("\n== ContactTag memo (kind 4)");
     println!("shared key          : {}", hex::encode(shared_key));
-    println!("nonce               : {}", hex::encode(nonce));
     println!("payer identity      : {}", hex::encode(payer));
-    println!("paid address (43 B) : {}", hex::encode(paid_address));
-    println!("paid value          : {paid_value}");
+    println!("note rho            : {}", hex::encode(rho));
     println!("memo (36 B)         : {}", hex::encode(&memo));
+    println!("-- the same memo copied into a note with another rho does not verify");
+    println!("copy's rho          : {}", hex::encode(copy_rho));
+    println!("tag for copy's rho  : {}", hex::encode(tag_expected_for_copy));
+    println!("tag in copied memo  : {}", hex::encode(tag));
 }
 ```
