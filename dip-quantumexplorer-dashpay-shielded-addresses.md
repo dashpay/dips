@@ -42,7 +42,7 @@ This DIP specifies how DashPay identities receive payments through the Dash Plat
 * a shielded payment address published on the DashPay profile, for private payments from anyone;
 * a per-contact shielded payment address carried, encrypted, in each [DIP-15](dip-0015.md) contact request, for private payments between contacts with built-in attribution;
 * the rule that derives each per-contact address from the contact request that carries it, so a wallet never hands the same address to two contacts, on any device and after any restore, without keeping allocation state;
-* two shielded memo kinds: one that names what a payment is for, and one that authenticates the contact who paid.
+* a shielded memo kind that names what a payment is for.
 
 Shielded payments hide the payer, the recipient, and the amount. This DIP covers contact requests as DIP-15 defines them, which are public documents; contact requests that hide the relationship itself are specified separately.
 
@@ -219,7 +219,7 @@ The function depends only on the three inputs, not on the document that carries 
 
 * Wallets MUST NOT send a new contact request automatically in response to receiving a payment. Doing so would publicly timestamp the payment, and would let whoever sends a payment make the wallet spend fees.
 * Wallets MAY offer the user a way to give such a contact a per-contact address by rotation. They SHOULD show the fee, SHOULD do so only when the contact shows support for this DIP (a contact request from them carries the field, or their profile carries `shieldedAddress`), and SHOULD send after a random delay.
-* Until then, such a contact pays the profile shielded address and attributes the payment with a `ContactTag` memo ([Shielded Memo Kinds](#shielded-memo-kinds)).
+* Until then, such a contact can pay only the profile shielded address, and the payment arrives without attribution.
 
 ### Shielded Memo Kinds
 
@@ -229,37 +229,17 @@ Shielded pool note memos are 36 bytes: a little-endian `u32` kind tag followed b
 | ---- | ---- | ------- | --------- |
 | `2` | `PaymentRef` | Reference (32 bytes) | "This payment is for X." A reference that the payee chose and gave to the payer, such as an invoice or order number. It names what is being paid, never who is paying. |
 | `3` | reserved | none | Reserved for a future document-reference kind |
-| `4` | `ContactTag` | `tag (32 bytes)` | Authenticated attribution between contacts, readable only by the two parties and valid for one note only. |
 
 `PaymentRef` carries a reference that the payee issued for a payment it expects, so that the payee can match the note to its own records. Normative requirements:
 
 * **Issued by the payee.** A payer MUST send a `PaymentRef` only when the payee supplied the reference for this payment, and MUST copy it unchanged. How the payee gives the reference to the payer (for example, in a payment request) is outside the scope of this DIP.
 * **Encoding.** The payload is the reference, padded on the right with `0x00` bytes to 32 bytes. A payee whose own identifier is longer than 32 bytes issues a 32-byte hash of it instead. The payee compares all 32 bytes of the payload. A payload of 32 zero bytes is not a reference, and clients MUST ignore it. Clients MAY show a payload as text when it is valid UTF-8 once its trailing `0x00` bytes are removed, and SHOULD show it in hexadecimal otherwise.
-* **Not the payer.** A reference does not identify or authenticate the payer: everyone who has seen it can attach it to a payment. Clients MUST NOT show or treat a `PaymentRef` as evidence of who paid. Who paid is given by the address the note arrived on, or by a `ContactTag`.
+* **Not the payer.** A reference does not identify or authenticate the payer: everyone who has seen it can attach it to a payment. Clients MUST NOT show or treat a `PaymentRef` as evidence of who paid. Who paid is given only by the address the note arrived on.
 * **Amount.** A reference says nothing about the amount. A payee MUST compare the amount it received under a reference with the amount it requested, and decides for itself how to treat a short, excess, or repeated payment.
 * **One per request.** A payee SHOULD issue a different reference for each payment it needs to tell apart. Because a memo is readable by whoever holds the viewing keys of either party, a payee SHOULD choose references that mean nothing without its own records: a random value or a sequence number rather than a name.
-* **One memo per note.** A note carries one memo, so a note with a `PaymentRef` carries neither a text memo nor a `ContactTag`. A contact that holds a per-contact address pays that address, which identifies the contact, and adds the `PaymentRef`. A contact that holds no per-contact address and was given a reference SHOULD send the `PaymentRef` rather than a `ContactTag`: the payee knows whom it issued the reference to.
+* **One memo per note.** A note carries one memo, so a note with a `PaymentRef` carries no text memo. A contact that holds a per-contact address pays that address, which identifies the contact, and adds the `PaymentRef`.
 
-`ContactTag` is computed as:
-
-```text
-tag = HMAC-SHA256(key = S, msg = "DashPay/shielded/contact-tag/v1" || payerId || rho)
-```
-
-where:
-
-* `payerId` is the 32-byte identifier of the paying identity;
-* `rho` is the 32-byte `rho` of the note that carries the memo. In the shielded pool a note's `rho` is the nullifier published by the action that creates the note, so no other valid note can have the same `rho`: the pool refuses a nullifier that has already been published;
-* `S` is the DIP-15 shared key of a contact request between the two identities whose sender key and recipient key are both enabled: the newest such request from the payee to the payer if one exists, otherwise the newest such request from the payer to the payee, in the order defined under **Selection** in [Per-Contact Shielded Addresses](#per-contact-shielded-addresses).
-
-A recipient verifies a `ContactTag` by recomputing it, with the `rho` of the note that carries it, for each of its contacts and each shared key it holds for that contact; a match attributes the payment to that contact. Verification needs no record of earlier tags and does not depend on the order in which notes are included. Normative requirements:
-
-* Clients MUST NOT attribute a `ContactTag` that matches no contact.
-* **Bound to one note.** A memo copied into another note, whether before or after the original is included in a block, is carried by a note with a different `rho` and does not verify. A copy therefore never takes attribution away from the original, whichever is included first.
-* **Building.** A note's `rho` is fixed only when the wallet's bundle builder pairs the note's output with a spend. A wallet MUST compute the tag after that pairing, from the `rho` the note will actually have. A wallet whose builder cannot do so MUST NOT send a `ContactTag`.
-* **Disabled keys.** A shared key derives from two identity keys, the sender key and the recipient key of its contact request. A payer MUST compute tags only under a shared key whose two identity keys are both enabled. A recipient MUST refuse a tag under a shared key, for either of its identity keys that has a `disabledAt` time, unless the time of the block that included the note is more than five minutes earlier than that `disabledAt`. [DIP-11](dip-0011.md) lets `disabledAt` differ from the time of the block that disabled the key by up to five minutes, and Platform block times strictly increase from one block to the next (its consensus refuses a block whose time is not later than the previous block's), so this margin refuses every note that could have been included in or after that block, including one in the same block. A wallet that cannot tell when a note was included MUST refuse tags under that key for every note it had not already attributed when it learned of the disablement. Attribution already given to earlier notes stands.
-
-A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attribution that neither third parties nor holders of either side's viewing keys can forge, reuse, or interpret, because it is keyed by a secret only the two contacts hold and covers a value no other note can share. A payment from an identity that is not a contact stays anonymous to the payee: no shared secret exists that could authenticate a claim of who paid.
+No memo kind in this DIP names the payer. A payment to a profile address is anonymous to the payee, whoever sends it; a payer who wants the payee to know who paid needs a per-contact address from the payee.
 
 ### Client Behavior
 
@@ -268,18 +248,18 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 
 | Index `j` | Attribution |
 | --------- | ----------- |
-| `0` | The first profile address (or change; the OVK tells the wallet's own change apart). Anonymous unless it carries a verified `ContactTag`. |
+| `0` | The first profile address (or change; the OVK tells the wallet's own change apart). Anonymous. |
 | `1` to `2^32 - 1` | A later profile address, attributed like index `0`, or a wallet-local address |
 | `2^87` and above, matching a sent contact request | That contact; shown as received via the address given to that contact, and marked as an earlier address if the request has been superseded |
 | `2^87` and above, matching none | Unattributed until the wallet's contact data is synchronized |
 
-* **Paying a contact.** Clients SHOULD use, in order: the contact's per-contact address; the contact's profile shielded address with a `ContactTag` memo; and only on the user's explicit choice, the transparent DIP-15 payment chain. Clients MUST NOT silently fall back from a shielded payment to one that reveals the payer or the amount; paying from transparent funds directly into the shielded pool to the contact reveals both the payer and the amount, and requires explicit confirmation. Shielding funds to oneself and paying later is preferable to both.
+* **Paying a contact.** Clients SHOULD use, in order: the contact's per-contact address; the contact's profile shielded address, after telling the user that the contact will not see who paid; and only on the user's explicit choice, the transparent DIP-15 payment chain. Clients MUST NOT silently fall back from a shielded payment to one that reveals the payer or the amount; paying from transparent funds directly into the shielded pool to the contact reveals both the payer and the amount, and requires explicit confirmation. Shielding funds to oneself and paying later is preferable to both.
 * **Paying a profile.** Given a profile that carries `shieldedAddress`, clients SHOULD offer it as the private way to pay that identity.
 * **Paying against a reference.** When the payee supplied a reference with its payment details, clients SHOULD carry it in a `PaymentRef` memo, on whichever address the payment uses. On receipt, clients SHOULD show the reference with the payment, so that the user or the application that issued it can match the two. A `PaymentRef` never changes the attribution given by the table above.
 * **Exiting to transparent funds**: a recipient who wants Core-chain or Platform-address funds unshields to themselves at a time and amount of their own choosing. Non-normative hygiene: unshield to fresh addresses, avoid amount-identical shield-then-unshield sequences close in time, and prefer round or denomination-friendly amounts.
 * **Watch-only delegation**: the pool's viewing keys provide detection-without-spend delegation; nothing in this DIP adds a delegation mechanism or requires one. An IVK-only delegate sees amounts and memos of incoming notes but cannot map per-contact indices to contacts; an FVK delegate can, and also sees every outgoing payment.
 * **Restore from seed**: the wallet derives the identity shielded account of every identity it discovers and rescans the pool. It rebuilds its map from per-contact indices to contacts by recomputing `j` for each contact request it has sent, including superseded ones. An index in the per-contact range that matches none of them was issued by an implementation that does not follow this DIP; the wallet MAY recover it by decrypting its own sent requests' `encryptedShieldedAddress` with the DIP-15 shared keys. Sender-side history comes from the OVK, which recovers each paid address; the wallet matches those against the addresses in every contact request it has received from each contact, including superseded ones.
-* **Key disablement.** If an identity key referenced by a contact request's `senderKeyIndex` or `recipientKeyIndex` is disabled, its holder may have leaked it, and anyone holding it can learn the per-contact address and compute that request's shared key. Wallets SHOULD treat attribution through that address as unverified from then on, MUST stop accepting `ContactTag` memos under that shared key ([Shielded Memo Kinds](#shielded-memo-kinds)), and SHOULD offer to rotate the address using different keys.
+* **Key disablement.** If an identity key referenced by a contact request's `senderKeyIndex` or `recipientKeyIndex` is disabled, its holder may have leaked it, and anyone holding it can learn the per-contact address and compute that request's shared key. Wallets SHOULD treat attribution through that address as unverified from then on, and SHOULD offer to rotate the address using different keys.
 
 ## Rationale
 
@@ -291,8 +271,8 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 * **A partitioned index space.** Placing per-contact indices at `2^87` and above keeps them disjoint from the profile address and from any sequential wallet-local addresses, including those of implementations that allocate from `1` upward.
 * **One account per identity.** Separate hardened accounts keep a wallet's identities unlinkable even to someone holding one identity's viewing key, and one IVK per identity covers its profile address and all its contacts. Keeping these addresses out of a wallet's ordinary accounts also keeps the account that receives change from ever being published.
 * **64 to 80 bytes, not exactly 64.** A fixed-size byte array is stored without a length prefix and a ranged one with one, so the choice can never be changed for stored documents. The range allows a future 80-byte encoding (for example an authentication tag, or up to 20 more bytes of plaintext) without any contract change; older readers ignore values they cannot decode.
-* **`ContactTag` rather than the payer's identity id in the memo.** An identity id written into a memo is unauthenticated, since anyone can write any id, and is readable by viewing-key holders on both sides. A tag keyed by the contacts' shared secret authenticates the payer, reveals nothing to anyone else, and lets contacts established before this DIP attribute payments without sending a new contact request. The tag covers the note's `rho`, because a memo is visible to viewing-key holders, who could otherwise attach a copied tag to a payment of their own; binding it to a value unique to the note needs no bookkeeping by the recipient and cannot be front-run.
-* **`PaymentRef` names the payment, not the payer.** Who paid is answered by the address a note arrives on, or by a `ContactTag`. What a payment is for is a separate question. An address answers it only when the payee issues a separate address for each request, which it cannot do for its published profile address or for an address it has already given to a contact. A reference chosen by the payee lets it reconcile payments on any address, and needs no authentication: a payment that carries the reference and the requested amount settles the request, whoever sent it.
+* **No memo that names the payer.** An identity id written into a memo is unauthenticated, since anyone can write any id. A tag that authenticates the payer to a contact can be built from the DIP-15 shared key, but it has to cover a value unique to its note, which a wallet can compute only after its bundle builder has paired the note's output with a spend, and it needs rules for shared keys whose identity keys have been disabled. Its main use would be payments between contacts whose requests predate this DIP, and a new contact request that carries the field already serves them.
+* **`PaymentRef` names the payment, not the payer.** Who paid is answered by the address a note arrives on. What a payment is for is a separate question. An address answers it only when the payee issues a separate address for each request, which it cannot do for its published profile address or for an address it has already given to a contact. A reference chosen by the payee lets it reconcile payments on any address, and needs no authentication: a payment that carries the reference and the requested amount settles the request, whoever sent it.
 * **Version before creation time.** A contact request's creation time is supplied by its sender, so two requests can carry equal times or times that disagree with their versions. Ordering by the DIP-15 version first makes every reader pick the same request after a rotation.
 
 ## Backwards Compatibility
@@ -301,7 +281,7 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
   * `profile.shieldedAddress` is part of version 2 of the DashPay contract (Platform protocol version 14). This DIP specifies which address wallets put there.
   * `contactRequest.encryptedShieldedAddress` is added in version 3 of the DashPay contract (Platform protocol version 15). The `encryptedFor` declaration relies on the `maximum` of `4294967295` on `senderKeyIndex` and `recipientKeyIndex` that version 3 already carries.
 * Documents written under a newer contract version cannot be decoded by clients holding an earlier copy of the DashPay contract: the document format records every optional property, even an absent one, so an older reader finds bytes it does not expect and fails rather than ignoring them. Each document records the contract version it was written under, so such a reader can tell that it must fetch the newer contract. Clients MUST update their copy of the contract when each upgrade activates.
-* Until a chain has activated the contract version that defines `encryptedShieldedAddress`, wallets MUST NOT include it ([Per-Contact Shielded Addresses](#per-contact-shielded-addresses)); identities on such a chain still receive shielded payments from contacts through the profile shielded address and `ContactTag`.
+* Until a chain has activated the contract version that defines `encryptedShieldedAddress`, wallets MUST NOT include it ([Per-Contact Shielded Addresses](#per-contact-shielded-addresses)); identities on such a chain still receive shielded payments from contacts through the profile shielded address, without attribution.
 * Memo kinds are a client-side registry over the pool's existing extensible memo format; unknown kinds already round-trip, so no protocol change is involved.
 * DIP-15 contact-request flows are unchanged, except that a version-bumped request with an unchanged extended public key updates only the shielded address ([Rotation and Existing Contacts](#rotation-and-existing-contacts)). Older DIP-15 clients may ignore such a request or treat it as a new account for the same extended public key; either is harmless. Established contacts can continue using per-contact derived chains for transparent payments.
 * Core chain consensus is unchanged.
@@ -309,9 +289,8 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 ## Security Considerations
 
 * **Profile address hijacking.** Profile documents update under lower-security keys than identity keys; a compromised profile key can replace the published shielded address. Clients SHOULD alert users when a contact's profile shielded address changes and pin previously seen values. Per-contact shielded addresses ride the contact request (immutable, created by the contact's identity) and are unaffected by profile compromise.
-* **Weak authentication of per-contact addresses.** Anyone who *learns* a per-contact address can pay it: the contact, anyone holding either identity key of the contact request's DIP-15 key pair, and anyone holding the sender's viewing keys once a note has arrived on it. Diversifier attribution therefore means "received on the address given to this contact", not proof of the payer. `ContactTag` is the authenticated alternative.
+* **Weak authentication of per-contact addresses.** Anyone who *learns* a per-contact address can pay it: the contact, anyone holding either identity key of the contact request's DIP-15 key pair, and anyone holding the sender's viewing keys once a note has arrived on it. Diversifier attribution therefore means "received on the address given to this contact", not proof of the payer. This DIP defines no authenticated alternative.
 * **Address changes.** A new per-contact address from a contact looks the same whether the contact rotated it or someone controlling the contact's identity keys replaced it. The change warning in [Per-Contact Shielded Addresses](#per-contact-shielded-addresses) is the defense; clients SHOULD encourage out-of-band confirmation for large payments after a change.
-* **Copied `ContactTag` memos.** A memo can be read by whoever holds the viewing keys of the payer or the recipient. A `ContactTag` covers the `rho` of its note, which no other valid note can have, and it is refused under a shared key whose identity keys have been disabled, so a copied or stale tag attributes nothing, in whatever order the notes are included.
 * **`PaymentRef` is not authentication.** A reference is known to the payee, to everyone the payee gave it to, and, once a note carries it, to whoever holds the viewing keys of either party. Any of them can attach it to a payment. Clients MUST NOT treat it as identifying the payer. A payee that acts on a reference MUST check the amount received against its own record of the request; otherwise a small payment under someone else's reference passes for the payment of that request.
 * **No consensus enforcement of uniqueness.** Consensus sees only ciphertext and cannot check that an address is unique per contact; the guarantee comes entirely from the index derivation in wallets.
 * **Payer-provable payments.** A payer to any shielded address can later prove they made the payment (they know the note plaintext). This is inherent to any receiving address and usually desirable (receipts).
@@ -340,6 +319,7 @@ Full vectors, and the program that generates them against the Orchard implementa
 ## Future Extensions
 
 * **Anonymous contact requests.** Contact requests that hide the relationship itself are specified in a separate DIP. They carry the sender's per-contact shielded address inside the encrypted request, and derive it with the function in [Per-Contact Diversifier Index](#per-contact-diversifier-index).
+* **Authenticated payer memo.** A memo kind that proves to a contact which contact paid, keyed by the DIP-15 shared key and bound to the note that carries it, for payments to an address that does not identify the payer.
 * **Document-reference memo kind.** Memo kind `3` is reserved for pointing a shielded payment at a larger encrypted context document, should an application need more than 32 bytes of payment context.
 * **A second encoding of `encryptedShieldedAddress`.** The 80-byte length is reserved for a future encoding within the same field, requiring no contract change.
 * **Post-quantum address exchange.** Protecting per-contact addresses against quantum adversaries would need a post-quantum key encapsulation, whose ciphertexts (over a kilobyte) do not fit this field; it would be a new field or document type.

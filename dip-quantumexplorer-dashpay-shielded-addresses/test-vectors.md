@@ -1,15 +1,14 @@
 # DashPay Shielded Payment Addresses: Test Vectors
 
-These vectors cover the [identity shielded account](../dip-quantumexplorer-dashpay-shielded-addresses.md#identity-shielded-accounts), the [per-contact diversifier index](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-diversifier-index), the 64-byte encoding of [`encryptedShieldedAddress`](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-shielded-addresses), and the [`PaymentRef` and `ContactTag`](../dip-quantumexplorer-dashpay-shielded-addresses.md#shielded-memo-kinds) memos. All byte strings are hexadecimal.
+These vectors cover the [identity shielded account](../dip-quantumexplorer-dashpay-shielded-addresses.md#identity-shielded-accounts), the [per-contact diversifier index](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-diversifier-index), the 64-byte encoding of [`encryptedShieldedAddress`](../dip-quantumexplorer-dashpay-shielded-addresses.md#per-contact-shielded-addresses), and the [`PaymentRef`](../dip-quantumexplorer-dashpay-shielded-addresses.md#shielded-memo-kinds) memo. All byte strings are hexadecimal.
 
 Inputs common to all vectors:
 
 * Mnemonic `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about`, empty passphrase.
 * `ownerId` = 32 bytes of `0x11`; Bob's identity = 32 bytes of `0x22`; Carol's identity = 32 bytes of `0x33`.
 * `accountReference` `0x01234567` for version 0 requests and `0x11234567` for the version 1 rotation (DIP-15 version in the top four bits).
-* For the encryption and `ContactTag` vectors: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`) and IV `a0a1...af`. Real implementations MUST draw the IV at random.
+* For the encryption vector: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`) and IV `a0a1...af`. Real implementations MUST draw the IV at random.
 * The `PaymentRef` vector carries the reference `INV-2026-0042` (13 bytes of ASCII), padded with zero bytes to 32.
-* The `ContactTag` vector is Bob paying with a note whose `rho` is `0102...20`. It also shows that the same memo copied into a note with another `rho` (`1112...30`) does not verify, whichever note is included first. Both values are canonical encodings of a `rho`, which the generator checks.
 
 In each account block, `fvk` is the 96-byte raw full viewing key, `profile addr` is the address at diversifier index 0, and `K` is the contact index key. Per-contact vectors are given for mainnet, identity index 0.
 
@@ -64,16 +63,6 @@ field (64 B)        : a0a1a2a3a4a5a6a7a8a9aaabacadaeafb00fd785cffaf9bd43b2518936
 reference (text)    : INV-2026-0042
 reference (bytes)   : 494e562d323032362d30303432
 memo (36 B)         : 02000000494e562d323032362d3030343200000000000000000000000000000000000000
-
-== ContactTag memo (kind 4)
-shared key          : 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
-payer identity      : 2222222222222222222222222222222222222222222222222222222222222222
-note rho            : 0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20
-memo (36 B)         : 040000008ffbc7e50d311491fa3cefe8b32af5a8b77d94c45d1d1047d62391c916c834ec
--- the same memo copied into a note with another rho does not verify
-copy's rho          : 1112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f30
-tag for copy's rho  : 5801006b6bd9144b6c5baba5d0a5ef24a8b0b1b22ab8e547338196d2b275fb41
-tag in copied memo  : 8ffbc7e50d311491fa3cefe8b32af5a8b77d94c45d1d1047d62391c916c834ec
 ```
 
 ## Generator
@@ -82,11 +71,10 @@ The vectors were produced by the program below, built against the Orchard implem
 
 ```rust
 //! DashPay Shielded Payment Addresses test vectors: identity shielded account,
-//! per-contact diversifier index, encryptedShieldedAddress, PaymentRef memo, ContactTag memo.
+//! per-contact diversifier index, encryptedShieldedAddress, PaymentRef memo.
 use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, BlockEncryptMut, KeyIvInit};
 use hmac::{Hmac, Mac};
 use orchard::keys::{DiversifierIndex, FullViewingKey, Scope, SpendingKey};
-use orchard::note::Rho;
 use orchard::Address;
 use sha2::Sha256;
 
@@ -95,7 +83,6 @@ type Dec = cbc::Decryptor<aes::Aes256>;
 
 const KEY_LABEL: &[u8] = b"DashPay/shielded/contact-index-key/v1";
 const INDEX_LABEL: &[u8] = b"DashPay/shielded/contact-index/v1";
-const TAG_LABEL: &[u8] = b"DashPay/shielded/contact-tag/v1";
 const ACCOUNT_BASE: u32 = 0x4000_0000;
 
 fn hmac(key: &[u8], msg: &[u8]) -> [u8; 32] {
@@ -189,37 +176,5 @@ fn main() {
     println!("reference (text)    : {}", String::from_utf8_lossy(reference));
     println!("reference (bytes)   : {}", hex::encode(reference));
     println!("memo (36 B)         : {}", hex::encode(&payment_ref));
-
-    // ContactTag memo (kind 4): the tag covers the rho of the note that carries it.
-    let payer = bob;
-    let contact_tag = |rho: &[u8; 32]| {
-        let mut msg = TAG_LABEL.to_vec();
-        msg.extend_from_slice(&payer);
-        msg.extend_from_slice(rho);
-        hmac(&shared_key, &msg)
-    };
-    // Both rho values are canonical Pallas base field encodings, as a note's rho must be.
-    let rho: [u8; 32] = core::array::from_fn(|i| 0x01 + i as u8);
-    assert!(bool::from(Rho::from_bytes(&rho).is_some()));
-    let tag = contact_tag(&rho);
-    let mut memo = 4u32.to_le_bytes().to_vec();
-    memo.extend_from_slice(&tag);
-    assert_eq!(memo.len(), 36);
-    // The same memo copied into another note: that note has another rho, whichever of the two
-    // is included first, so the tag the recipient recomputes for it differs and nothing is
-    // attributed.
-    let copy_rho: [u8; 32] = core::array::from_fn(|i| 0x11 + i as u8);
-    assert!(bool::from(Rho::from_bytes(&copy_rho).is_some()));
-    let tag_expected_for_copy = contact_tag(&copy_rho);
-    assert_ne!(tag_expected_for_copy, tag);
-    println!("\n== ContactTag memo (kind 4)");
-    println!("shared key          : {}", hex::encode(shared_key));
-    println!("payer identity      : {}", hex::encode(payer));
-    println!("note rho            : {}", hex::encode(rho));
-    println!("memo (36 B)         : {}", hex::encode(&memo));
-    println!("-- the same memo copied into a note with another rho does not verify");
-    println!("copy's rho          : {}", hex::encode(copy_rho));
-    println!("tag for copy's rho  : {}", hex::encode(tag_expected_for_copy));
-    println!("tag in copied memo  : {}", hex::encode(tag));
 }
 ```
