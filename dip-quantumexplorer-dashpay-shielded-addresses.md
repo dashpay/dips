@@ -102,8 +102,8 @@ m_Orchard / 32' / coin_type' / (0x40000000 + identity_index)'
 
 | Diversifier index `j` | Use |
 | --------------------- | --- |
-| `0` | The profile `shieldedAddress` |
-| `1` to `2^32 - 1` | Profile address rotations and other wallet-local receiving addresses; never given to a contact |
+| `0` | The first profile `shieldedAddress` an identity publishes |
+| `1` to `2^32 - 1` | Later profile addresses (rotations) and other wallet-local receiving addresses; never given to a contact |
 | `2^32` to `2^87 - 1` | Reserved |
 | `2^87` to `2^88 - 1` | Per-contact addresses, derived only as specified in [Per-Contact Diversifier Index](#per-contact-diversifier-index) |
 
@@ -131,7 +131,7 @@ The "dedicated tip account" the contract's description refers to is the identity
 Normative requirements:
 
 * The value is the raw 43-byte shielded payment address (11-byte diversifier `d` followed by the 32-byte diversified transmission key `pk_d`), exactly as used by shielded pool outputs. Clients MUST validate that the bytes decode to a valid shielded payment address before paying and MUST treat an undecodable value as no address rather than as an error in the profile.
-* The published address MUST be the address at diversifier index `0` of the publishing identity's identity shielded account. A rotated address MUST come from indices `1` to `2^32 - 1` of the same account. The profile address MUST NOT be handed out as a per-contact address, so that attribution by diversifier ([Client Behavior](#client-behavior)) stays meaningful.
+* The first address an identity publishes MUST be the address at diversifier index `0` of its identity shielded account. An address that replaces it (a rotation) MUST be the address at an index from `1` to `2^32 - 1` of the same account that the identity has not published before. A published address therefore always has an index below `2^32`. A profile address MUST NOT be handed out as a per-contact address, so that attribution by diversifier ([Client Behavior](#client-behavior)) stays meaningful.
 * Owners MAY rotate the published address at any time by updating the profile document; because shielded addresses never appear on chain, rotation is hygiene rather than necessity, and old addresses remain spendable-to and detected by the same viewing key.
 * Publishing is OPTIONAL. An identity that does not publish a profile shielded address still receives private payments from its contacts through per-contact addresses.
 
@@ -165,7 +165,7 @@ Normative requirements:
 * **Activation.** Writers MUST include the field only when the DashPay contract on the connected chain defines it. On a chain whose contract predates the field, a contact request carrying it is invalid as a whole.
 * **Consistency.** A wallet that supports this DIP SHOULD include the field on every contact request it creates. If it cannot derive the address at that moment, it SHOULD retry or defer the request rather than send it without the field, because the field's presence on some requests and absence on others is observable per contact.
 * **Acceptance.** A reader MUST use a decrypted value only if all of the following hold: the same DIP-15 shared key decrypts the request's `encryptedPublicKey` to a well-formed extended public key; the decrypted plaintext is exactly 43 bytes (so the padding is exactly five `0x05` bytes); it decodes as a valid shielded payment address; it is not an address of any account of the reader's own wallet; and it differs from the sender's current profile `shieldedAddress`. CBC provides no authentication, so these checks are what reject a value decrypted under the wrong key.
-* **Selection.** A reader uses the accepted address from the newest contact request from that sender that carries one. A later contact request without the field (for example, one sent by an older client) does not remove a previously accepted address.
+* **Selection.** A reader groups a sender's contact requests by the extended public key each decrypts to; DIP-15 uses one extended public key for each account of the sender. Within a group, requests are ordered by their DIP-15 version (the top four bits of `accountReference`), then by `$createdAt`, then by document id compared as a 32-byte big-endian number; the greatest is the newest. Creation times, which the sender supplies, therefore decide only between requests of equal version. The reader uses the accepted address of the newest request in the group that carries one: a request without the field (for example, one sent by an older client) is passed over and does not remove an address accepted from an older request. When a sender has several groups, the reader uses the group of the account it pays to under DIP-15.
 * **Change warning.** Readers SHOULD remember the first address accepted for each contact and SHOULD warn the user before the first payment after it changes, with the same weight as a change of the contact's DIP-15 extended public key.
 * The recipient of the contact request uses this address for shielded payments to the sender, in preference to the sender's public profile `shieldedAddress`.
 
@@ -229,17 +229,29 @@ Shielded pool note memos are 36 bytes: a little-endian `u32` kind tag followed b
 | ---- | ---- | ------- | --------- |
 | `2` | `PaymentRef` | Sender identity id (32 bytes) | "This payment is from identity X." **Unauthenticated**: anyone can write any identity id. Clients MUST render the sender as *claimed*. Clients SHOULD use it only when paying an identity that is not a contact, and SHOULD NOT add it by default. |
 | `3` | reserved | none | Reserved for a future document-reference kind |
-| `4` | `ContactTag` | `nonce (16 bytes) \|\| tag (16 bytes)` | Authenticated attribution between contacts, readable only by the two parties. |
+| `4` | `ContactTag` | `nonce (16 bytes) \|\| tag (16 bytes)` | Authenticated attribution between contacts, readable only by the two parties and bound to one payment. |
 
 `ContactTag` is computed as:
 
 ```text
-tag = HMAC-SHA256(key = S, msg = "DashPay/shielded/contact-tag/v1" || nonce || payerId)[0..16]
+tag = HMAC-SHA256(key = S,
+                  msg = "DashPay/shielded/contact-tag/v1" || nonce || payerId || address || value)[0..16]
 ```
 
-where `nonce` is 16 fresh random bytes per note, `payerId` is the 32-byte identifier of the paying identity, and `S` is the DIP-15 shared key of the contact request from the payee to the payer if one exists, otherwise of the contact request from the payer to the payee. A recipient verifies a `ContactTag` by recomputing it for each of its contacts with each shared key it holds for that contact; a match attributes the payment to that contact. Clients MUST NOT attribute a `ContactTag` that matches no contact.
+where:
 
-A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attribution that neither third parties nor holders of either side's viewing keys can forge or read, because it is keyed by a secret only the two contacts hold. `PaymentRef` remains for payments to non-contacts, where no shared secret exists.
+* `nonce` is 16 fresh random bytes for every note;
+* `payerId` is the 32-byte identifier of the paying identity;
+* `address` is the 43-byte raw shielded payment address the note pays, and `value` the note's value in credits as an unsigned 64-bit little-endian integer;
+* `S` is the DIP-15 shared key of a contact request between the two identities whose sender key and recipient key are both enabled: the newest such request from the payee to the payer if one exists, otherwise the newest such request from the payer to the payee, in the order defined under **Selection** in [Per-Contact Shielded Addresses](#per-contact-shielded-addresses).
+
+A recipient verifies a `ContactTag` by recomputing it, with the address and value of the note that carries it, for each of its contacts and each shared key it holds for that contact; a match attributes the payment to that contact. Normative requirements:
+
+* Clients MUST NOT attribute a `ContactTag` that matches no contact.
+* **One note per nonce.** A recipient MUST attribute at most one note for each pair of contact and `nonce`: the earliest in the pool's note order. A later note that carries a `nonce` already seen from that contact is a copy and MUST be left unattributed. Together with the address and value in the tag, this stops anyone who can read a memo (a holder of either side's viewing keys) from reusing it to make another payment appear to come from the contact.
+* **Disabled keys.** A shared key derives from two identity keys, the sender key and the recipient key of its contact request. A payer MUST compute tags only under a shared key whose two identity keys are both enabled. A recipient MUST NOT attribute a tag under a shared key if either of its identity keys was disabled before the block that included the note; a wallet that cannot tell when a note was included MUST stop accepting tags under that key once it learns of the disablement. Attribution already given to earlier notes stands.
+
+A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attribution that neither third parties nor holders of either side's viewing keys can forge, reuse, or interpret, because it is keyed by a secret only the two contacts hold and is valid for one note only. `PaymentRef` remains for payments to non-contacts, where no shared secret exists.
 
 ### Client Behavior
 
@@ -248,8 +260,8 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 
 | Index `j` | Attribution |
 | --------- | ----------- |
-| `0` | Profile address (or change; the OVK tells the wallet's own change apart). Anonymous unless it carries a verified `ContactTag` or a claimed `PaymentRef`. |
-| `1` to `2^32 - 1` | Earlier profile address or wallet-local address |
+| `0` | The first profile address (or change; the OVK tells the wallet's own change apart). Anonymous unless it carries a verified `ContactTag` or a claimed `PaymentRef`. |
+| `1` to `2^32 - 1` | A later profile address, attributed like index `0`, or a wallet-local address |
 | `2^87` and above, matching a sent contact request | That contact; shown as received via the address given to that contact, and marked as an earlier address if the request has been superseded |
 | `2^87` and above, matching none | Unattributed until the wallet's contact data is synchronized |
 
@@ -258,7 +270,7 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 * **Exiting to transparent funds**: a recipient who wants Core-chain or Platform-address funds unshields to themselves at a time and amount of their own choosing. Non-normative hygiene: unshield to fresh addresses, avoid amount-identical shield-then-unshield sequences close in time, and prefer round or denomination-friendly amounts.
 * **Watch-only delegation**: the pool's viewing keys provide detection-without-spend delegation; nothing in this DIP adds a delegation mechanism or requires one. An IVK-only delegate sees amounts and memos of incoming notes but cannot map per-contact indices to contacts; an FVK delegate can, and also sees every outgoing payment.
 * **Restore from seed**: the wallet derives the identity shielded account of every identity it discovers and rescans the pool. It rebuilds its map from per-contact indices to contacts by recomputing `j` for each contact request it has sent, including superseded ones. An index in the per-contact range that matches none of them was issued by an implementation that does not follow this DIP; the wallet MAY recover it by decrypting its own sent requests' `encryptedShieldedAddress` with the DIP-15 shared keys. Sender-side history comes from the OVK, which recovers each paid address; the wallet matches those against the addresses in every contact request it has received from each contact, including superseded ones.
-* **Key disablement.** If an identity key referenced by a contact request's `senderKeyIndex` or `recipientKeyIndex` is disabled, its holder may have leaked it, and anyone holding it can learn the per-contact address. Wallets SHOULD treat attribution through that address as unverified and SHOULD offer to rotate it using different keys.
+* **Key disablement.** If an identity key referenced by a contact request's `senderKeyIndex` or `recipientKeyIndex` is disabled, its holder may have leaked it, and anyone holding it can learn the per-contact address and compute that request's shared key. Wallets SHOULD treat attribution through that address as unverified from then on, MUST stop accepting `ContactTag` memos under that shared key ([Shielded Memo Kinds](#shielded-memo-kinds)), and SHOULD offer to rotate the address using different keys.
 
 ## Rationale
 
@@ -270,7 +282,8 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 * **A partitioned index space.** Placing per-contact indices at `2^87` and above keeps them disjoint from the profile address and from any sequential wallet-local addresses, including those of implementations that allocate from `1` upward.
 * **One account per identity.** Separate hardened accounts keep a wallet's identities unlinkable even to someone holding one identity's viewing key, and one IVK per identity covers its profile address and all its contacts. Keeping these addresses out of a wallet's ordinary accounts also keeps the account that receives change from ever being published.
 * **64 to 80 bytes, not exactly 64.** A fixed-size byte array is stored without a length prefix and a ranged one with one, so the choice can never be changed for stored documents. The range allows a future 80-byte encoding (for example an authentication tag, or up to 20 more bytes of plaintext) without any contract change; older readers ignore values they cannot decode.
-* **`ContactTag` rather than `PaymentRef` between contacts.** `PaymentRef` is plaintext and unauthenticated, and is readable by viewing-key holders on both sides. A tag keyed by the contacts' shared secret authenticates the payer, reveals nothing to anyone else, and lets contacts established before this DIP attribute payments without sending a new contact request.
+* **`ContactTag` rather than `PaymentRef` between contacts.** `PaymentRef` is plaintext and unauthenticated, and is readable by viewing-key holders on both sides. A tag keyed by the contacts' shared secret authenticates the payer, reveals nothing to anyone else, and lets contacts established before this DIP attribute payments without sending a new contact request. The tag covers the address and the amount it pays and is accepted once per nonce, because a memo is visible to viewing-key holders, who could otherwise attach a copied tag to a payment of their own.
+* **Version before creation time.** A contact request's creation time is supplied by its sender, so two requests can carry equal times or times that disagree with their versions. Ordering by the DIP-15 version first makes every reader pick the same request after a rotation.
 
 ## Backwards Compatibility
 
@@ -288,6 +301,7 @@ A 36-byte memo cannot carry a signature (65 bytes). `ContactTag` gives attributi
 * **Profile address hijacking.** Profile documents update under lower-security keys than identity keys; a compromised profile key can replace the published shielded address. Clients SHOULD alert users when a contact's profile shielded address changes and pin previously seen values. Per-contact shielded addresses ride the contact request (immutable, created by the contact's identity) and are unaffected by profile compromise.
 * **Weak authentication of per-contact addresses.** Anyone who *learns* a per-contact address can pay it: the contact, anyone holding either identity key of the contact request's DIP-15 key pair, and anyone holding the sender's viewing keys once a note has arrived on it. Diversifier attribution therefore means "received on the address given to this contact", not proof of the payer. `ContactTag` is the authenticated alternative.
 * **Address changes.** A new per-contact address from a contact looks the same whether the contact rotated it or someone controlling the contact's identity keys replaced it. The change warning in [Per-Contact Shielded Addresses](#per-contact-shielded-addresses) is the defense; clients SHOULD encourage out-of-band confirmation for large payments after a change.
+* **Copied `ContactTag` memos.** A memo can be read by whoever holds the viewing keys of the payer or the recipient. A `ContactTag` is bound to the address and amount of its note and accepted once per nonce, and it is refused under a shared key whose identity keys have been disabled, so a copied or stale tag attributes nothing.
 * **Spoofed `PaymentRef` memos.** The memo payload is written by the payer with no authentication; clients MUST NOT render it as a verified sender, and MUST NOT take any automatic action because of it.
 * **No consensus enforcement of uniqueness.** Consensus sees only ciphertext and cannot check that an address is unique per contact; the guarantee comes entirely from the index derivation in wallets.
 * **Payer-provable payments.** A payer to any shielded address can later prove they made the payment (they know the note plaintext). This is inherent to any receiving address and usually desirable (receipts).

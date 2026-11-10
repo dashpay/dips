@@ -8,6 +8,7 @@ Inputs common to all vectors:
 * `ownerId` = 32 bytes of `0x11`; Bob's identity = 32 bytes of `0x22`; Carol's identity = 32 bytes of `0x33`.
 * `accountReference` `0x01234567` for version 0 requests and `0x11234567` for the version 1 rotation (DIP-15 version in the top four bits).
 * For the encryption and memo vectors: DIP-15 shared key `000102...1f` (bytes `0x00` to `0x1f`), IV `a0a1...af`, nonce `5051...5f`. Real implementations MUST draw the IV and nonce at random.
+* The memo vector is Bob paying 100,000,000 credits to the owner's profile address (mainnet, identity index 0, diversifier index 0).
 
 In each account block, `fvk` is the 96-byte raw full viewing key, `profile addr` is the address at diversifier index 0, and `K` is the contact index key. Per-contact vectors are given for mainnet, identity index 0.
 
@@ -62,7 +63,9 @@ field (64 B)        : a0a1a2a3a4a5a6a7a8a9aaabacadaeafb00fd785cffaf9bd43b2518936
 shared key          : 000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f
 nonce               : 505152535455565758595a5b5c5d5e5f
 payer identity      : 2222222222222222222222222222222222222222222222222222222222222222
-memo (36 B)         : 04000000505152535455565758595a5b5c5d5e5f58738be29b7fc8cc695db81c21300795
+paid address (43 B) : e126993647eb0c9a4b476e2823380ead099e803ea52c980146e6fa42cfeb9d2ef8f7b1d6e764821d706397
+paid value          : 100000000
+memo (36 B)         : 04000000505152535455565758595a5b5c5d5e5f172b9d83e816820f3acf3b449e654921
 ```
 
 ## Generator
@@ -171,9 +174,14 @@ fn main() {
     // ContactTag memo (kind 4).
     let nonce: [u8; 16] = core::array::from_fn(|i| 0x50 + i as u8);
     let payer = bob;
+    // Bob pays the owner's profile address (diversifier index 0) 100,000,000 credits.
+    let paid_address = fvk.address_at(0u32, Scope::External).to_raw_address_bytes();
+    let paid_value: u64 = 100_000_000;
     let mut msg = TAG_LABEL.to_vec();
     msg.extend_from_slice(&nonce);
     msg.extend_from_slice(&payer);
+    msg.extend_from_slice(&paid_address);
+    msg.extend_from_slice(&paid_value.to_le_bytes());
     let mac = hmac(&shared_key, &msg);
     let mut memo = 4u32.to_le_bytes().to_vec();
     memo.extend_from_slice(&nonce);
@@ -183,6 +191,8 @@ fn main() {
     println!("shared key          : {}", hex::encode(shared_key));
     println!("nonce               : {}", hex::encode(nonce));
     println!("payer identity      : {}", hex::encode(payer));
+    println!("paid address (43 B) : {}", hex::encode(paid_address));
+    println!("paid value          : {paid_value}");
     println!("memo (36 B)         : {}", hex::encode(&memo));
 }
 ```
