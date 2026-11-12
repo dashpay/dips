@@ -214,7 +214,7 @@ The function depends only on the three inputs, not on the document that carries 
 
 ### Rotation and Existing Contacts
 
-**Rotation.** A wallet gives a contact a new per-contact address by sending a new contact request with the [DIP-15](dip-0015.md) version incremented and the same extended public key. The new `accountReference` yields a new index and a new address. DIP-15's four version bits allow 15 rotations per DashPay account.
+**Rotation.** A wallet gives a contact a new per-contact address by sending a new contact request with the [DIP-15](dip-0015.md) version incremented and the same extended public key. The new `accountReference` yields a new index and a new address. DIP-15's four version bits allow 15 increments per DashPay account, shared by rotations and collision retries. Wallets MUST NOT wrap the version from 15 to 0. If a rotation or collision retry would require a version above 15, the wallet MUST refuse that operation. Existing addresses remain usable for payments.
 
 * A reader receiving a contact request from a known sender whose decrypted extended public key is unchanged SHOULD treat it as an update of the shielded address only: no new acceptance prompt and no rebuild of the transparent payment account for that contact.
 * Previous per-contact addresses cannot be revoked and keep receiving. Wallets SHOULD continue to attribute receipts on them to the contact, marked as an earlier address.
