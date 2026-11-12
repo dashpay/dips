@@ -223,12 +223,11 @@ The function depends only on the three inputs, not on the document that carries 
 
 ### Shielded Memo Kinds
 
-Shielded pool note memos are 36 bytes: a little-endian `u32` kind tag followed by a 32-byte payload. Kinds `0` (empty) and `1` (UTF-8 text) are already established; unknown kinds round-trip untouched. This DIP registers:
+Shielded pool note memos are 36 bytes: a little-endian `u32` kind tag followed by a 32-byte payload. Kinds `0` (empty) and `1` (UTF-8 text) are already established; unknown kinds round-trip untouched. This DIP registers one kind:
 
 | Kind | Name | Payload | Semantics |
 | ---- | ---- | ------- | --------- |
 | `2` | `PaymentRef` | Reference (32 bytes) | "This payment is for X." A reference that the payee chose and gave to the payer, such as an invoice or order number. It names what is being paid, never who is paying. |
-| `3` | reserved | none | Reserved for a future document-reference kind |
 
 `PaymentRef` carries a reference that the payee issued for a payment it expects, so that the payee can match the note to its own records. Normative requirements:
 
@@ -320,7 +319,6 @@ Full vectors, and the program that generates them against the Orchard implementa
 
 * **Anonymous contact requests.** Contact requests that hide the relationship itself are specified in a separate DIP. They carry the sender's per-contact shielded address inside the encrypted request, and derive it with the function in [Per-Contact Diversifier Index](#per-contact-diversifier-index).
 * **Authenticated payer memo.** A memo kind that proves to a contact which contact paid, keyed by the DIP-15 shared key and bound to the note that carries it. It would turn attribution into proof, and would cover payments to a profile address.
-* **Document-reference memo kind.** Memo kind `3` is reserved for pointing a shielded payment at a larger encrypted context document, should an application need more than 32 bytes of payment context.
 * **A second encoding of `encryptedShieldedAddress`.** The 80-byte length is reserved for a future encoding within the same field, requiring no contract change.
 * **Post-quantum address exchange.** Protecting per-contact addresses against quantum adversaries would need a post-quantum key encapsulation, whose ciphertexts (over a kilobyte) do not fit this field; it would be a new field or document type.
 
