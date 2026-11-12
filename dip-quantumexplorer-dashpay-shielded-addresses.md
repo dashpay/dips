@@ -103,10 +103,10 @@ m_Orchard / 32' / coin_type' / (0x40000000 + identity_index)'
 | Diversifier index `j` | Use |
 | --------------------- | --- |
 | `0` | The first profile `shieldedAddress` an identity publishes |
-| `1` to `2^32 - 1` | Later profile addresses (rotations) and other wallet-local receiving addresses; never given to a contact |
-| `2^32` to `2^87 - 1` | Reserved |
+| `1` to `2^87 - 1` | Later profile addresses (rotations) and every other address the wallet uses for itself; never given to a contact |
 | `2^87` to `2^88 - 1` | Per-contact addresses, derived only as specified in [Per-Contact Diversifier Index](#per-contact-diversifier-index) |
 
+* A wallet that picks an index for its own use, whether in sequence or at random, MUST pick one from `1` to `2^87 - 1`. A wallet that draws an index at random MUST discard a draw of `0` and a draw of `2^87` or above, and draw again.
 * Wallets MUST NOT publish or hand out, for any purpose defined in this DIP, a shielded address from any other account. In particular, index `0` of a wallet's ordinary accounts receives change and MUST NOT appear in a profile.
 * Wallets MUST scan the identity shielded account of every identity they manage, and on restore from seed MUST derive and scan the identity shielded account of every identity they discover. Funds received there are ordinary funds of that identity, and wallets SHOULD present them as such.
 * An identity without a DIP-13 identity index (for example, one whose keys were imported rather than derived) has no identity shielded account; wallets MUST NOT set either shielded field defined in this DIP for it.
@@ -131,7 +131,7 @@ The "dedicated tip account" the contract's description refers to is the identity
 Normative requirements:
 
 * The value is the raw 43-byte shielded payment address (11-byte diversifier `d` followed by the 32-byte diversified transmission key `pk_d`), exactly as used by shielded pool outputs. Clients MUST validate that the bytes decode to a valid shielded payment address before paying and MUST treat an undecodable value as no address rather than as an error in the profile.
-* The first address an identity publishes MUST be the address at diversifier index `0` of its identity shielded account. An address that replaces it (a rotation) MUST be the address at an index from `1` to `2^32 - 1` of the same account that the identity has not published before. A published address therefore always has an index below `2^32`. A profile address MUST NOT be handed out as a per-contact address, so that attribution by diversifier ([Client Behavior](#client-behavior)) stays meaningful.
+* The first address an identity publishes MUST be the address at diversifier index `0` of its identity shielded account. An address that replaces it (a rotation) MUST be the address at an index from `1` to `2^87 - 1` of the same account that the identity has not published before. A published address therefore always has an index below `2^87`. A profile address MUST NOT be handed out as a per-contact address, so that attribution by diversifier ([Client Behavior](#client-behavior)) stays meaningful.
 * Owners MAY rotate the published address at any time by updating the profile document; because shielded addresses never appear on chain, rotation is hygiene rather than necessity, and old addresses remain spendable-to and detected by the same viewing key.
 * Publishing is OPTIONAL. An identity that does not publish a profile shielded address still receives private payments from its contacts through per-contact addresses.
 
@@ -248,7 +248,7 @@ No memo kind in this DIP names the payer. A payment to a profile address is anon
 | Index `j` | Attribution |
 | --------- | ----------- |
 | `0` | The first profile address (or change; the OVK tells the wallet's own change apart). Anonymous. |
-| `1` to `2^32 - 1` | A later profile address, attributed like index `0`, or a wallet-local address |
+| `1` to `2^87 - 1` | A later profile address, attributed like index `0`, or another address the wallet uses for itself |
 | `2^87` and above, matching a sent contact request | That contact; shown as received via the address given to that contact, and marked as an earlier address if the request has been superseded |
 | `2^87` and above, matching none | Unattributed until the wallet's contact data is synchronized |
 
@@ -267,7 +267,7 @@ No memo kind in this DIP names the payer. A payment to a profile address is anon
 * **Carried in the contact request itself.** Orchard key derivation is hardened only, so there is no public key from which a contact could derive fresh addresses, as DIP-15 contacts do on the Core chain; the recipient must mint the address and send it. The contact request is created atomically with the relationship, is immutable, and is immune to compromise of the key that updates the profile.
 * **Deterministic indices, not a counter.** A per-device counter lets two devices on one seed give the same index to two different contacts, and because contact requests are immutable the collision is permanent. Deriving the index from the contact request's own unique key gives the same answer on every device and after every restore, needs no stored state, and makes a version-bumped request a rotation automatically.
 * **Keyed by the full viewing key.** The FVK is available wherever the wallet scans, including seedless background sync, so attribution never needs the seed or a signer; an IVK-only delegate still cannot attribute.
-* **A partitioned index space.** Placing per-contact indices at `2^87` and above keeps them disjoint from the profile address and from any sequential wallet-local addresses, including those of implementations that allocate from `1` upward.
+* **A partitioned index space.** Per-contact indices have bit 87 set, and every index a wallet picks for itself has it clear. One bit keeps the two apart, whether the wallet allocates its own indices from `1` upward or draws them at random, and a random index below `2^87` still has 87 bits of entropy, so two draws do not meet in practice.
 * **One account per identity.** Separate hardened accounts keep a wallet's identities unlinkable even to someone holding one identity's viewing key, and one IVK per identity covers its profile address and all its contacts. Keeping these addresses out of a wallet's ordinary accounts also keeps the account that receives change from ever being published.
 * **64 to 80 bytes, not exactly 64.** A fixed-size byte array is stored without a length prefix and a ranged one with one, so the choice can never be changed for stored documents. The range allows a future 80-byte encoding (for example an authentication tag, or up to 20 more bytes of plaintext) without any contract change; older readers ignore values they cannot decode.
 * **No memo that names the payer.** An identity id written into a memo is unauthenticated, since anyone can write any id. A tag that authenticates the payer to a contact can be built from the DIP-15 shared key, but it has to cover a value unique to its note, which a wallet can compute only after its bundle builder has paired the note's output with a spend, and it needs rules for shared keys whose identity keys have been disabled. Its main use would be payments between contacts whose requests predate this DIP, and a new contact request that carries the field already serves them.
