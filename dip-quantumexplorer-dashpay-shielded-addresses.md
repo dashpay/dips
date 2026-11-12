@@ -227,11 +227,15 @@ The function depends only on the three inputs, not on the document that carries 
 
 ### Shielded Memo Kinds
 
-Shielded pool note memos are 36 bytes: a little-endian `u32` kind tag followed by a 32-byte payload. Kinds `0` (empty) and `1` (UTF-8 text) are already established; unknown kinds round-trip untouched. This DIP registers one kind:
+Shielded pool note memos are 36 bytes: a little-endian `u32` kind tag followed by a 32-byte payload. Kinds `0` (empty) and `1` (UTF-8 text) are already established. This DIP specifies their encoding and registers kind `2` (`PaymentRef`):
 
 | Kind | Name | Payload | Semantics |
 | ---- | ---- | ------- | --------- |
+| `0` | Empty | 32 zero bytes | No memo; all 36 bytes are zero. |
+| `1` | Text | UTF-8 text, padded on the right with `0x00` bytes to 32 bytes | A text memo of at most 32 bytes before padding. |
 | `2` | `PaymentRef` | Reference (32 bytes) | "This payment is for X." A reference that the payee chose and gave to the payer, such as an invoice or order number. It names what is being paid, never who is paying. |
+
+Writers MUST use the encoding in the table. Readers MUST remove trailing `0x00` bytes from a kind `1` payload before decoding it as UTF-8. A kind `0` memo with a nonzero payload, a kind `1` memo whose unpadded payload is not valid UTF-8, or a kind `2` memo with an all-zero payload MUST be treated as uninterpreted. Readers MUST preserve unknown kinds and uninterpreted memos unchanged when passing them on; they MUST NOT interpret them as empty, text, or a payment reference.
 
 `PaymentRef` carries a reference that the payee issued for a payment it expects, so that the payee can match the note to its own records. Normative requirements:
 
