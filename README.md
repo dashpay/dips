@@ -48,6 +48,7 @@ Number | Layer | Title | Owner | Type | Status
 [30](dip-0030.md) | Consensus | Replay Attack Prevention and State Transition Nonces | Samuel Westrich | Standard | Proposed
 [31](dip-0031.md) | Consensus | Platform Proof of Service | Ivan Shumkov, Pasta | Standard | Proposed
 [TBD](dip-quantumexplorer-dashpay-shielded-addresses.md) | Applications | DashPay Shielded Payment Addresses | Samuel Westrich | Standard | Draft
+[TBD](dip-quantumexplorer-anonymous-contact-requests.md) | Consensus | Private Document Types and Anonymous DashPay Contact Requests | Samuel Westrich | Standard | Draft
 
 ## License
 
