@@ -47,6 +47,7 @@ Number | Layer | Title | Owner | Type | Status
 [29](dip-0029.md) | Consensus | Randomness Beacon For LLMQ Selection | Virgile Bartolo | Standard | Proposed
 [30](dip-0030.md) | Consensus | Replay Attack Prevention and State Transition Nonces | Samuel Westrich | Standard | Proposed
 [31](dip-0031.md) | Consensus | Platform Proof of Service | Ivan Shumkov, Pasta | Standard | Proposed
+[35](dip-0035.md) | Consensus | Decentralized Masternode Shares | Pasta | Standard | Draft
 
 ## License
 
