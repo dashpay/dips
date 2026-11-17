@@ -18,3 +18,6 @@ payload and is distinct from the _transaction_ version.
 | 7 | Masternode Hard Fork Signal | [DIP 023: Enhanced Hard Fork Mechanism](https://github.com/dashpay/dips/blob/master/dip-0023.md) | 1 | Active |
 | 8 | Asset Lock | [DIP 027: Dash Core Credit Pool](https://github.com/dashpay/dips/blob/master/dip-0027.md) | 1 | Active |
 | 9 | Asset Unlock | [DIP 027: Dash Core Credit Pool](https://github.com/dashpay/dips/blob/master/dip-0027.md) | 1 | Active |
+| 10 | Provider Dissolution Transaction (ProDisTx) | [DIP 035: Decentralized Masternode Shares](https://github.com/dashpay/dips/blob/master/dip-0035.md) | 1 | Proposed |
+| 11 | Provider Update Share Transaction (ProUpShareTx) | [DIP 035: Decentralized Masternode Shares](https://github.com/dashpay/dips/blob/master/dip-0035.md) | 1 | Proposed |
+| 12 | Provider Update Shared Registrar Transaction (ProUpSharedRegTx) | [DIP 035: Decentralized Masternode Shares](https://github.com/dashpay/dips/blob/master/dip-0035.md) | 1 | Proposed |
