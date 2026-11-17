@@ -49,6 +49,7 @@ Number | Layer | Title | Owner | Type | Status
 [31](dip-0031.md) | Consensus | Platform Proof of Service | Ivan Shumkov, Pasta | Standard | Proposed
 [35](dip-0035.md) | Consensus | Decentralized Masternode Shares | Pasta | Standard | Proposed
 [TBD](dip-quantumexplorer-dashpay-shielded-addresses.md) | Applications | DashPay Shielded Payment Addresses | Samuel Westrich | Standard | Draft
+[TBD](dip-quantumexplorer-anonymous-contact-requests.md) | Consensus | Private Document Types and Anonymous DashPay Contact Requests | Samuel Westrich | Standard | Draft
 
 ## License
 
